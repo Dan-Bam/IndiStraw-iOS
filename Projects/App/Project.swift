@@ -10,8 +10,8 @@ let project = Project.makeModule(
             target: "Shared",
             path: .relativeToRoot("Projects/Shared")),
         TargetDependency.project(
-            target: "Core",
-            path: .relativeToRoot("Projects/Core"))
+            target: "DesignSystem",
+            path: .relativeToRoot("Projects/Core/DesignSystem"))
     ],
     resources: ["Resources/**"],
     infoPlist: .file(path: "Support/Info.plist")
