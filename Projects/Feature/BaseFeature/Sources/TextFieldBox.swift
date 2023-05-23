@@ -13,10 +13,11 @@ final class TextFieldBox: UITextField {
         
         layer.cornerRadius = 10
         backgroundColor = DesignSystemAsset.textBox.color
+        
         addView()
         setLayout()
     }
-        
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

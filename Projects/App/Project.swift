@@ -11,7 +11,13 @@ let project = Project.makeModule(
             path: .relativeToRoot("Projects/Shared")),
         TargetDependency.project(
             target: "DesignSystem",
-            path: .relativeToRoot("Projects/Core/DesignSystem"))
+            path: .relativeToRoot("Projects/Core/DesignSystem")),
+        TargetDependency.project(
+            target: "BaseFeature",
+            path: .relativeToRoot("Projects/Feature/BaseFeature")),
+        TargetDependency.project(
+            target: "SigninFeature",
+            path: .relativeToRoot("Projects/Feature/SigninFeature"))
     ],
     resources: ["Resources/**"],
     infoPlist: .file(path: "Support/Info.plist")

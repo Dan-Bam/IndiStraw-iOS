@@ -1,6 +1,7 @@
 import UIKit
 import Then
 import SnapKit
+import DesignSystem
 
 final class TextFieldBox: UITextField {
     private let eyeIconButton = UIButton().then {
@@ -13,10 +14,11 @@ final class TextFieldBox: UITextField {
         
         layer.cornerRadius = 10
         backgroundColor = DesignSystemAsset.textBox.color
+        
         addView()
         setLayout()
     }
-        
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
