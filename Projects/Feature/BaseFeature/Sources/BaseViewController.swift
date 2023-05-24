@@ -7,7 +7,7 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
     
     let viewModel: T
     
-    init(viewModel: T){
+    public init(viewModel: T){
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

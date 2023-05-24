@@ -4,8 +4,8 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class TextFieldBox: UITextField {
-    var iconTaped = false
+public class TextFieldBox: UITextField {
+    private var iconTaped = false
     
     private let disposeBag = DisposeBag()
     

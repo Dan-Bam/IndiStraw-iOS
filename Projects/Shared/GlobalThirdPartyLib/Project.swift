@@ -3,7 +3,7 @@ import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
     name: "GlobalThirdPartyLib",
-    product: .staticLibrary,
+    product: .framework,
     dependencies: [
         .SPM.SnapKit,
         .SPM.Then,

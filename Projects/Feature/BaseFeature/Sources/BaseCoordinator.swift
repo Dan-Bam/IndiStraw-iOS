@@ -1,11 +1,11 @@
 import UIKit
 
-public class BaseCoordinator: Coordinator {
+open class BaseCoordinator: Coordinator {
     public var navigationController: UINavigationController
     public var childCoordinators = [Coordinator]()
     public var parentCoordinator: Coordinator?
     
-    init(navigationController: UINavigationController){
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
@@ -14,7 +14,7 @@ public class BaseCoordinator: Coordinator {
     }
     
     
-    public func start() {
+    open func start() {
         fatalError("Start method should be implemented")
     }
     
