@@ -2,24 +2,24 @@ import UIKit
 import SnapKit
 import Then
 
-public class BaseVC<T: BaseViewModel>: UIViewController {
+open class BaseVC<T: BaseViewModel>: UIViewController {
     let bound = UIScreen.main.bounds
     
     let viewModel: T
     
-    init(viewModel: T){
+    public init(viewModel: T){
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     @available(*, unavailable)
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         setup()
         addView()
         setLayout()
@@ -36,10 +36,10 @@ public class BaseVC<T: BaseViewModel>: UIViewController {
         print("\(type(of: self)): \(#function)")
     }
 
-    func setup(){}
-    func addView(){}
-    func setLayout(){}
-    func configureVC(){}
+    open func setup(){}
+    open func addView(){}
+    open func setLayout(){}
+    open func configureVC(){}
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)

@@ -9,6 +9,7 @@ public extension TargetDependency {
 public extension TargetDependency.Feature {
     static let SigninFeature = TargetDependency.feature(name: "SigninFeature")
     static let BaseFeature = TargetDependency.feature(name: "BaseFeature")
+    static let RootFeature = TargetDependency.feature(name: "RootFeature")
 }
 
 public extension TargetDependency.Core {
@@ -17,4 +18,5 @@ public extension TargetDependency.Core {
 
 public extension TargetDependency.Shared {
     static let GlobalThirdPartyLib = TargetDependency.shared(name: "GlobalThirdPartyLib")
+    static let Utility = TargetDependency.shared(name: "Utility")
 }

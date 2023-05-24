@@ -1,5 +1,5 @@
 import UIKit
-import Shared
+import Swinject
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
