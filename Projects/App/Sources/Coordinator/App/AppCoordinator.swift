@@ -1,5 +1,5 @@
 import UIKit
-import Shared
+import BaseFeature
 
 final class AppCoordinator: Coordinator {
     var navigationController: UINavigationController
