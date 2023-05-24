@@ -6,11 +6,6 @@ let project = Project.makeModule(
     product: .staticLibrary,
     dependencies: [
         .Feature.BaseFeature,
-        .SPM.SnapKit,
-        .SPM.Then,
-        .SPM.RxSwift,
-        .SPM.RxCocoa,
-        .SPM.Alamofire,
-        .SPM.Swinject
+        .Shared.GlobalThirdPartyLib
     ]
 )
