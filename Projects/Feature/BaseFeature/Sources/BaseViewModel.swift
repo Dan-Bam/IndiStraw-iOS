@@ -1,9 +1,9 @@
 import Foundation
 
 open class BaseViewModel {
-    let coordinator: BaseCoordinator
+    let coordinator: Coordinator
     
-    public init(coordinator: BaseCoordinator){
+    public init(coordinator: Coordinator){
         self.coordinator = coordinator
     }
 }

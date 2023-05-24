@@ -15,7 +15,8 @@ open class RootCoordinator: Coordinator {
 
     public func start() {
         window?.rootViewController = navigationController
-        let rootController = RootViewController()
+        let vm = RootViewModel(coordinator: self)
+        let rootController = RootViewController(viewModel: vm)
         navigationController.setViewControllers([rootController], animated: true)
     }
 

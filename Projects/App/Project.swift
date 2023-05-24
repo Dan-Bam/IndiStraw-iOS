@@ -12,6 +12,7 @@ let project = Project.makeModule(
         
         .Core.DesignSystem,
         
+        .Shared.Utility,
         .Shared.GlobalThirdPartyLib
     ],
     resources: ["Resources/**"],

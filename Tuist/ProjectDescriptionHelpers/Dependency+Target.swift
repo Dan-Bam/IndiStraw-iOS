@@ -18,4 +18,5 @@ public extension TargetDependency.Core {
 
 public extension TargetDependency.Shared {
     static let GlobalThirdPartyLib = TargetDependency.shared(name: "GlobalThirdPartyLib")
+    static let Utility = TargetDependency.shared(name: "Utility")
 }
