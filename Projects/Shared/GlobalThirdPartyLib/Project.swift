@@ -2,13 +2,11 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "Shared",
-    product: .framework,
-    packages: [],
+    name: "GlobalThirdPartyLib",
+    product: .staticLibrary,
     dependencies: [
         .SPM.SnapKit,
         .SPM.Then,
-        .SPM.Kingfisher,
         .SPM.RxSwift,
         .SPM.RxCocoa,
         .SPM.Alamofire,

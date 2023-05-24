@@ -6,12 +6,12 @@ let project = Project.makeModule(
     platform: .iOS,
     product: .app,
     dependencies: [
-        TargetDependency.project(
-            target: "Shared",
-            path: .relativeToRoot("Projects/Shared")),
-        TargetDependency.project(
-            target: "DesignSystem",
-            path: .relativeToRoot("Projects/Core/DesignSystem"))
+        .Feature.BaseFeature,
+        .Feature.SigninFeature,
+        
+        .Core.DesignSystem,
+        
+        .Shared.GlobalThirdPartyLib
     ],
     resources: ["Resources/**"],
     infoPlist: .file(path: "Support/Info.plist")
