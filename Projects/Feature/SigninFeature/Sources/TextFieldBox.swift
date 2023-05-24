@@ -1,6 +1,4 @@
 import UIKit
-import Then
-import SnapKit
 import DesignSystem
 
 final class TextFieldBox: UITextField {
