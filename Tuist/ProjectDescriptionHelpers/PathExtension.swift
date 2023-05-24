@@ -5,6 +5,10 @@ public extension ProjectDescription.Path {
         return .relativeToRoot("Projects/Feature/\(path)")
     }
     
+    static func relativeToCore(_ path: String) -> Self {
+        return .relativeToRoot("Projects/Core/\(path)")
+    }
+    
     static func relativeToShared(_ path: String) -> Self {
         return .relativeToRoot("Projects/Shared/\(path)")
     }
@@ -13,6 +17,10 @@ public extension ProjectDescription.Path {
 public extension TargetDependency {
     static func feature(name: String) -> Self {
         return .project(target: name, path: .relativeToFeature(name))
+    }
+    
+    static func core(name: String) -> Self {
+        return .project(target: name, path: .relativeToCore(name))
     }
     
     static func shared(name: String) -> Self {
