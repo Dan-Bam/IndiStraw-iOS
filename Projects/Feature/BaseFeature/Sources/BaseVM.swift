@@ -1,6 +1,6 @@
 import Foundation
 
-class BaseViewModel {
+public class BaseViewModel {
     let coordinator: BaseCoordinator
     
     init(coordinator: BaseCoordinator){

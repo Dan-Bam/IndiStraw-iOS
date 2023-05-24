@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 import Then
 
-class BaseVC<T: BaseViewModel>: UIViewController {
+public class BaseVC<T: BaseViewModel>: UIViewController {
     let bound = UIScreen.main.bounds
     
     let viewModel: T
@@ -17,7 +17,7 @@ class BaseVC<T: BaseViewModel>: UIViewController {
     }
 
     @available(*, unavailable)
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setup()
@@ -27,7 +27,7 @@ class BaseVC<T: BaseViewModel>: UIViewController {
     }
     
     @available(*, unavailable)
-    override func viewDidDisappear(_ animated: Bool) {
+    public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         viewModel.coordinator.didFinish(coordinator: viewModel.coordinator)
     }
@@ -41,7 +41,7 @@ class BaseVC<T: BaseViewModel>: UIViewController {
     func setLayout(){}
     func configureVC(){}
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
 }
