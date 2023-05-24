@@ -6,6 +6,7 @@ let project = Project.makeModule(
     product: .staticLibrary,
     dependencies: [
         .Feature.BaseFeature,
+        .Shared.Utility,
         .Shared.GlobalThirdPartyLib
     ]
 )
