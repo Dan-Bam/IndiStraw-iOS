@@ -1,11 +1,11 @@
 import UIKit
 
-public class BaseCoordinator: Coordinator {
-    var navigationController: UINavigationController
-    var childCoordinators = [Coordinator]()
-    var parentCoordinator: Coordinator?
+open class BaseCoordinator: Coordinator {
+    public var navigationController: UINavigationController
+    public var childCoordinators = [Coordinator]()
+    public var parentCoordinator: Coordinator?
     
-    init(navigationController: UINavigationController){
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
@@ -14,27 +14,27 @@ public class BaseCoordinator: Coordinator {
     }
     
     
-    func start() {
+    open func start() {
         fatalError("Start method should be implemented")
     }
     
-    func start(coordinator: Coordinator) {
+    public func start(coordinator: Coordinator) {
         childCoordinators += [coordinator]
         coordinator.parentCoordinator = self
         coordinator.start()
     }
     
-    func didFinish(coordinator: Coordinator) {
+    public func didFinish(coordinator: Coordinator) {
         if let idx = childCoordinators.firstIndex(where: { $0 === coordinator }) {
             childCoordinators.remove(at: idx)
         }
     }
     
-    func navigate(to step: IndiStrawStep){
+    public func navigate(to step: IndiStrawStep){
         
     }
     
-    func removeChildCoordinators() {
+    public func removeChildCoordinators() {
         childCoordinators.forEach{ $0.removeChildCoordinators() }
         childCoordinators.removeAll()
     }

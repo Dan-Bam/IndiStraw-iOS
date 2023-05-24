@@ -1,11 +1,18 @@
 import UIKit
 import Then
 import SnapKit
+import RxSwift
+import RxCocoa
 
-final class TextFieldBox: UITextField {
+public class TextFieldBox: UITextField {
+    private var iconTaped = false
+    
+    private let disposeBag = DisposeBag()
+    
     private let eyeIconButton = UIButton().then {
         $0.setImage(UIImage(systemName: "eye"), for: .normal)
         $0.tintColor = DesignSystemAsset.exampleText.color
+        $0.isHidden = true
     }
     
     override init(frame: CGRect) {
@@ -15,8 +22,15 @@ final class TextFieldBox: UITextField {
         backgroundColor = DesignSystemAsset.textBox.color
         addView()
         setLayout()
-    }
+        self.isSecureTextEntry = true
         
+        eyeIconButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.iconTaped.toggle()
+                owner.isSecureTextEntry =  owner.iconTaped ? false : true
+            }.disposed(by: disposeBag)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -30,5 +44,9 @@ final class TextFieldBox: UITextField {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(12)
         }
+    }
+    
+    public func eyeIconButtonVisible() {
+        eyeIconButton.isHidden = false
     }
 }

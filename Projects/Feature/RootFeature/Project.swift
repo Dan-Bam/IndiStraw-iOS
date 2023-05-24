@@ -2,7 +2,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "SigninFeature",
+    name: "RootFeature",
     product: .staticLibrary,
     dependencies: [
         .Feature.BaseFeature,
