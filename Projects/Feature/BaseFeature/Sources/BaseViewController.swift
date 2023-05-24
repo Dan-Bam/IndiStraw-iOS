@@ -19,7 +19,7 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
     @available(*, unavailable)
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         setup()
         addView()
         setLayout()

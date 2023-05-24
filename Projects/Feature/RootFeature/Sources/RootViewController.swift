@@ -11,7 +11,6 @@ class RootViewController: BaseVC<RootViewModel> {
     }
     
     override func configureVC() {
-        view.backgroundColor = .black
     }
     
     override func addView() {
