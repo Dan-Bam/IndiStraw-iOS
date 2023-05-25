@@ -46,7 +46,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
     
     public override func setLayout() {
         inputIDTextField.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(150)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(140)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
