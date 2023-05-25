@@ -9,6 +9,7 @@ public class ButtonComponent: UIButton {
         self.backgroundColor = DesignSystemAsset.mainColor.color
         self.titleLabel?.textColor = .white
         self.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 18)
+        
     }
     
     required init?(coder: NSCoder) {
