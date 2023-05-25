@@ -9,7 +9,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
     }
     
     private let categoryButton = CategoryButton(configuration: .plain()).then {
-        $0.setTitle("# asdfasfdafas", for: .normal)
+        $0.setTitle("# 크라우드펀딩", for: .normal)
     }
     
     private let inputPasswordTextField = TextFieldBox().then {
@@ -79,7 +79,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         
         categoryButton.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.height.equalTo(40)
+            $0.height.equalTo(28)
         }
     }
 }
