@@ -7,7 +7,7 @@ class RootViewController: BaseVC<RootViewModel> {
     private let logoLabel = UILabel().then {
         $0.text = "Indi Straw"
         $0.textColor = .white
-        $0.font = UIFont(font: DesignSystemFontFamily.Suit.bold, size: 30)
+        $0.font = DesignSystemFontFamily.Suit.bold.font(size: 30)
     }
     
     private let signinButton = ButtonComponent().then {
@@ -17,7 +17,7 @@ class RootViewController: BaseVC<RootViewModel> {
     private let signupButton = UIButton().then {
         $0.setTitle("계정이 없으신가요? 회원가입 하러가기", for: .normal)
         $0.setTitleColor(DesignSystemAsset.exampleText.color, for: .normal)
-        $0.titleLabel?.font = UIFont(font: DesignSystemFontFamily.Suit.regular, size: 12)
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
     }
     
     override func configureVC() {
@@ -29,7 +29,7 @@ class RootViewController: BaseVC<RootViewModel> {
         let attributeString = NSMutableAttributedString(string: text)
         attributeString.addAttributes([
             .foregroundColor : UIColor.white,
-            .font : UIFont(font: DesignSystemFontFamily.Suit.bold, size: 12) as Any
+            .font : DesignSystemFontFamily.Suit.bold.font(size: 12) as Any
         ],
         range: (text as NSString).range(of: "회원가입"))
         

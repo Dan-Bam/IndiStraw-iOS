@@ -20,6 +20,8 @@ public class TextFieldBox: UITextField {
         
         layer.cornerRadius = 10
         backgroundColor = DesignSystemAsset.textBox.color
+        font = DesignSystemFontFamily.Suit.medium.font(size: 14)
+        textColor = DesignSystemAsset.exampleText.color
         addView()
         setLayout()
         self.isSecureTextEntry = true

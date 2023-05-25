@@ -7,7 +7,7 @@ public class ButtonComponent: UIButton {
         self.layer.cornerRadius = 10
         self.backgroundColor = DesignSystemAsset.mainColor.color
         self.titleLabel?.textColor = .white
-        self.titleLabel?.font = UIFont(font: DesignSystemFontFamily.Suit.medium, size: 18)
+        self.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 18)
     }
     
     required init?(coder: NSCoder) {
