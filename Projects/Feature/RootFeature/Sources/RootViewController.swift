@@ -47,7 +47,7 @@ class RootViewController: BaseVC<RootViewModel> {
     
     override func setLayout() {
         logoLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(287)
+            $0.bottom.equalTo(signinButton.snp.top).offset(-270)
             $0.centerX.equalToSuperview()
         }
         
