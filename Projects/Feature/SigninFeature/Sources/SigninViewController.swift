@@ -13,6 +13,10 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         $0.eyeIconButtonVisible()
     }
     
+    private let signinButton = ButtonComponent().then {
+        $0.setTitle("로그인", for: .normal)
+    }
+    
     public override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "로그인 하기"
@@ -21,7 +25,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
     }
     
     public override func addView() {
-        view.addSubviews(inputIDTextField, inputPasswordTextField)
+        view.addSubviews(inputIDTextField, inputPasswordTextField, signinButton)
     }
     
     public override func setLayout() {
@@ -34,6 +38,12 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         inputPasswordTextField.snp.makeConstraints {
             $0.top.equalTo(inputIDTextField.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(54)
+        }
+        
+        signinButton.snp.makeConstraints {
+            $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(129)
+            $0.leading.trailing.equalToSuperview().inset(33)
             $0.height.equalTo(54)
         }
     }
