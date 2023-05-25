@@ -1,6 +1,4 @@
 import UIKit
-import SnapKit
-import Then
 
 public class CategoryButton: UIButton {
     public override init(frame: CGRect) {
