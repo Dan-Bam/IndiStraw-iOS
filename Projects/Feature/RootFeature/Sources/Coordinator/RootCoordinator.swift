@@ -18,7 +18,6 @@ public class RootCoordinator: BaseCoordinator {
     }
 }
 
-
 extension RootCoordinator {
     private func signinIsRequired() {
         let vc = SigninCoordinator(navigationController: navigationController)
