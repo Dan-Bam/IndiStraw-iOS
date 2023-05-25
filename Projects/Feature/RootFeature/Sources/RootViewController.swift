@@ -14,11 +14,30 @@ class RootViewController: BaseVC<RootViewModel> {
         $0.setTitle("로그인", for: .normal)
     }
     
+    private let signupButton = UIButton().then {
+        $0.setTitle("계정이 없으신가요? 회원가입 하러가기", for: .normal)
+        $0.setTitleColor(DesignSystemAsset.exampleText.color, for: .normal)
+        $0.titleLabel?.font = UIFont(font: DesignSystemFontFamily.Suit.regular, size: 12)
+    }
+    
     override func configureVC() {
+        setSignupButtonAttributedTitle()
+    }
+    
+    private func setSignupButtonAttributedTitle() {
+        guard let text = signupButton.titleLabel?.text else { return }
+        let attributeString = NSMutableAttributedString(string: text)
+        attributeString.addAttributes([
+            .foregroundColor : UIColor.white,
+            .font : UIFont(font: DesignSystemFontFamily.Suit.bold, size: 12) as Any
+        ],
+        range: (text as NSString).range(of: "회원가입"))
+        
+        signupButton.setAttributedTitle(attributeString, for: .normal)
     }
     
     override func addView() {
-        view.addSubviews(logoLabel, signinButton)
+        view.addSubviews(logoLabel, signinButton, signupButton)
     }
     
     override func setLayout() {
@@ -28,9 +47,14 @@ class RootViewController: BaseVC<RootViewModel> {
         }
         
         signinButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(87)
+            $0.bottom.equalTo(signupButton.snp.top).offset(-33)
             $0.leading.trailing.equalToSuperview().inset(33)
             $0.height.equalTo(54)
+        }
+        
+        signupButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(39)
+            $0.centerX.equalToSuperview()
         }
     }
 }
