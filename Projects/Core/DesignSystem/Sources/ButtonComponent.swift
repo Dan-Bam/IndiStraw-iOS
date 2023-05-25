@@ -3,7 +3,6 @@ import UIKit
 public class ButtonComponent: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("asdf")
         
         self.layer.cornerRadius = 10
         self.backgroundColor = DesignSystemAsset.mainColor.color
