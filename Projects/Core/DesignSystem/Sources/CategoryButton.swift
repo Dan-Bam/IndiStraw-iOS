@@ -6,14 +6,12 @@ public class CategoryButton: UIButton {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        sizeToFit()
-        
         layer.cornerRadius = 10
         configuration?.contentInsets = NSDirectionalEdgeInsets(
             top: 5,
-            leading: 5,
+            leading: 3,
             bottom: 5,
-            trailing: 5
+            trailing: 3
         )
         backgroundColor = DesignSystemAsset.mainColor.color
         titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
