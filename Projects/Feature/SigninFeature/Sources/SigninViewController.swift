@@ -8,6 +8,10 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         $0.setPlaceholer(text: "아이디")
     }
     
+    private let categoryButton = CategoryButton(configuration: .plain()).then {
+        $0.setTitle("# asdfasfdafas", for: .normal)
+    }
+    
     private let inputPasswordTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "비밀번호")
         $0.eyeIconButtonVisible()
@@ -40,7 +44,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         view.addSubviews(
             inputIDTextField, inputPasswordTextField,
             findIDButton, findPasswordButton,
-            signinButton
+            signinButton, categoryButton
         )
     }
     
@@ -71,6 +75,11 @@ public class SigninViewController: BaseVC<SigninViewModel> {
             $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(129)
             $0.leading.trailing.equalToSuperview().inset(33)
             $0.height.equalTo(54)
+        }
+        
+        categoryButton.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.height.equalTo(40)
         }
     }
 }
