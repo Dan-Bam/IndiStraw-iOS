@@ -10,7 +10,7 @@ class RootViewController: BaseVC<RootViewModel> {
         $0.font = DesignSystemFontFamily.Suit.bold.font(size: 30)
     }
     
-    private let signinButton = ButtonComponent().then {
+    private lazy var signinButton = ButtonComponent().then {
         $0.setTitle("로그인", for: .normal)
     }
     
@@ -22,6 +22,10 @@ class RootViewController: BaseVC<RootViewModel> {
     
     override func configureVC() {
         setSignupButtonAttributedTitle()
+    }
+    
+    @objc func signinButtonDidTap(_ tap: UIButton) {
+        viewModel.pushSignin()
     }
     
     private func setSignupButtonAttributedTitle() {

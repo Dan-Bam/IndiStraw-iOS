@@ -5,7 +5,7 @@ import Then
 open class BaseVC<T: BaseViewModel>: UIViewController {
     let bound = UIScreen.main.bounds
     
-    let viewModel: T
+    public let viewModel: T
     
     public init(viewModel: T){
         self.viewModel = viewModel
