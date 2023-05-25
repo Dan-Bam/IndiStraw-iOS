@@ -12,6 +12,7 @@ class RootViewController: BaseVC<RootViewModel> {
     
     private lazy var signinButton = ButtonComponent().then {
         $0.setTitle("로그인", for: .normal)
+        $0.addTarget(self, action: #selector(signinButtonDidTap(_:)), for: .touchUpInside)
     }
     
     private let signupButton = UIButton().then {
@@ -25,6 +26,7 @@ class RootViewController: BaseVC<RootViewModel> {
     }
     
     @objc func signinButtonDidTap(_ tap: UIButton) {
+        print("hi")
         viewModel.pushSignin()
     }
     

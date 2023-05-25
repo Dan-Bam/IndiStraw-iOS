@@ -30,7 +30,7 @@ open class BaseCoordinator: Coordinator {
         }
     }
     
-    public func navigate(to step: IndiStrawStep){
+    open func navigate(to step: IndiStrawStep){
         
     }
     
