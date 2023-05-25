@@ -20,6 +20,7 @@ public class TextFieldBox: UITextField {
         layer.cornerRadius = 10
         backgroundColor = DesignSystemAsset.textBox.color
         font = DesignSystemFontFamily.Suit.medium.font(size: 14)
+        textColor = DesignSystemAsset.exampleText.color
         addView()
         setLayout()
         addLeftPadding()
@@ -30,6 +31,8 @@ public class TextFieldBox: UITextField {
                 owner.isSecureTextEntry =  owner.iconTaped ? false : true
             }.disposed(by: disposeBag)
     }
+    
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -64,8 +67,18 @@ public class TextFieldBox: UITextField {
     }
     
     public func eyeIconButtonVisible() {
+        rightViewMode = .always
         isSecureTextEntry = true
+        rightView = eyeIconButton
         eyeIconButton.isHidden = false
     }
 }
 
+extension TextFieldBox {
+    public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        var padding = super.rightViewRect(forBounds: bounds)
+        padding.origin.x -= 12
+        
+        return padding
+    }
+}
