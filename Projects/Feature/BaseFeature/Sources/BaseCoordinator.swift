@@ -5,7 +5,7 @@ open class BaseCoordinator: Coordinator {
     public var childCoordinators = [Coordinator]()
     public var parentCoordinator: Coordinator?
     
-    init(navigationController: UINavigationController) {
+    public init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
@@ -30,7 +30,7 @@ open class BaseCoordinator: Coordinator {
         }
     }
     
-    public func navigate(to step: IndiStrawStep){
+    open func navigate(to step: IndiStrawStep){
         
     }
     

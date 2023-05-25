@@ -1,11 +1,12 @@
 import UIKit
 import SnapKit
 import Then
+import DesignSystem
 
 open class BaseVC<T: BaseViewModel>: UIViewController {
     let bound = UIScreen.main.bounds
     
-    let viewModel: T
+    public let viewModel: T
     
     public init(viewModel: T){
         self.viewModel = viewModel
@@ -20,6 +21,11 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        
+        let backBarButtonItem = UIBarButtonItem(title: "뒤로가기", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .white
+        self.navigationItem.backBarButtonItem = backBarButtonItem
+        
         setup()
         addView()
         setLayout()

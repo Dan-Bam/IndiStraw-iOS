@@ -17,12 +17,13 @@ public class TextFieldBox: UITextField {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         layer.cornerRadius = 10
         backgroundColor = DesignSystemAsset.textBox.color
+        font = DesignSystemFontFamily.Suit.medium.font(size: 14)
+        textColor = DesignSystemAsset.exampleText.color
         addView()
         setLayout()
-        self.isSecureTextEntry = true
+        addLeftPadding()
         
         eyeIconButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -31,8 +32,21 @@ public class TextFieldBox: UITextField {
             }.disposed(by: disposeBag)
     }
     
+    
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func setPlaceholer(text: String) {
+        self.placeholder = text
+        guard let string = self.placeholder else {
+            return
+        }
+        attributedPlaceholder = NSAttributedString(
+            string: string,
+            attributes: [.foregroundColor: DesignSystemAsset.exampleText.color]
+        )
     }
     
     private func addView() {
@@ -46,7 +60,25 @@ public class TextFieldBox: UITextField {
         }
     }
     
+    private func addLeftPadding() {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: self.frame.height))
+        self.leftView = paddingView
+        self.leftViewMode = ViewMode.always
+    }
+    
     public func eyeIconButtonVisible() {
+        rightViewMode = .always
+        isSecureTextEntry = true
+        rightView = eyeIconButton
         eyeIconButton.isHidden = false
+    }
+}
+
+extension TextFieldBox {
+    public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        var padding = super.rightViewRect(forBounds: bounds)
+        padding.origin.x -= 12
+        
+        return padding
     }
 }

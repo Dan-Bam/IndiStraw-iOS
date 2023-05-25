@@ -1,7 +1,8 @@
 import UIKit
 import BaseFeature
+import RootFeature
 
-open class RootCoordinator: Coordinator {
+open class AppCoordinator: Coordinator {
     public var navigationController: UINavigationController
     public var childCoordinator: [Coordinator] = []
     public var parentCoordinator: Coordinator?
@@ -15,9 +16,8 @@ open class RootCoordinator: Coordinator {
 
     public func start() {
         window?.rootViewController = navigationController
-        let vm = RootViewModel(coordinator: self)
-        let rootController = RootViewController(viewModel: vm)
-        navigationController.setViewControllers([rootController], animated: true)
+        let rootController = RootCoordinator(navigationController: navigationController)
+        start(coordinator: rootController)
     }
 
     public func start(coordinator: Coordinator) {
