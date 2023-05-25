@@ -22,8 +22,7 @@ public class TextFieldBox: UITextField {
         font = DesignSystemFontFamily.Suit.medium.font(size: 14)
         addView()
         setLayout()
-        
-        setPlaceholerColor()
+        addLeftPadding()
         
         eyeIconButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -36,8 +35,8 @@ public class TextFieldBox: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setPlaceholerColor() {
-        print(placeholder)
+    public func setPlaceholer(text: String) {
+        self.placeholder = text
         guard let string = self.placeholder else {
             return
         }
@@ -58,8 +57,15 @@ public class TextFieldBox: UITextField {
         }
     }
     
+    private func addLeftPadding() {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: self.frame.height))
+        self.leftView = paddingView
+        self.leftViewMode = ViewMode.always
+    }
+    
     public func eyeIconButtonVisible() {
         isSecureTextEntry = true
         eyeIconButton.isHidden = false
     }
 }
+

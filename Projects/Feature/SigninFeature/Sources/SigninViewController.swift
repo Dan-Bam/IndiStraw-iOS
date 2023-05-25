@@ -5,7 +5,7 @@ import DesignSystem
 
 public class SigninViewController: BaseVC<SigninViewModel> {
     private let inputIDTextField = TextFieldBox().then {
-        $0.placeholder = "아이디"
+        $0.setPlaceholer(text: "아이디")
         $0.eyeIconButtonVisible()
     }
     
