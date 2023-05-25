@@ -17,14 +17,13 @@ public class TextFieldBox: UITextField {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         layer.cornerRadius = 10
         backgroundColor = DesignSystemAsset.textBox.color
         font = DesignSystemFontFamily.Suit.medium.font(size: 14)
-        textColor = DesignSystemAsset.exampleText.color
         addView()
         setLayout()
-        self.isSecureTextEntry = true
+        
+        setPlaceholerColor()
         
         eyeIconButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -35,6 +34,17 @@ public class TextFieldBox: UITextField {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setPlaceholerColor() {
+        print(placeholder)
+        guard let string = self.placeholder else {
+            return
+        }
+        attributedPlaceholder = NSAttributedString(
+            string: string,
+            attributes: [.foregroundColor: DesignSystemAsset.exampleText.color]
+        )
     }
     
     private func addView() {
@@ -49,6 +59,7 @@ public class TextFieldBox: UITextField {
     }
     
     public func eyeIconButtonVisible() {
+        isSecureTextEntry = true
         eyeIconButton.isHidden = false
     }
 }

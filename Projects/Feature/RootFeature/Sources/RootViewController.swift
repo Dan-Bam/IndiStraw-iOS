@@ -25,9 +25,8 @@ class RootViewController: BaseVC<RootViewModel> {
         setSignupButtonAttributedTitle()
     }
     
-    @objc func signinButtonDidTap(_ tap: UIButton) {
-        print("hi")
-        viewModel.pushSignin()
+    @objc func signinButtonDidTap(_ sender: UIButton) {
+        viewModel.pushSigninVC()
     }
     
     private func setSignupButtonAttributedTitle() {
