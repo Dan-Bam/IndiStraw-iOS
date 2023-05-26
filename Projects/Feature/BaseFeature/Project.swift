@@ -5,8 +5,5 @@ let project = Project.makeModule(
     name: "BaseFeature",
     product: .framework,
     dependencies: [
-        .Core.DesignSystem,
-        .SPM.SnapKit,
-        .SPM.Then
     ]
 )
