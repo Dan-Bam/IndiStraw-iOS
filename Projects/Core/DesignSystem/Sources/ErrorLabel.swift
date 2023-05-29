@@ -1,6 +1,6 @@
 import UIKit
 
-public class WarningLabel: UILabel {
+public class ErrorLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
