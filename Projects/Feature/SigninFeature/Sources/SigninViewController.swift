@@ -65,7 +65,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         }
         
         signinButton.snp.makeConstraints {
-            $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(129)
+            $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(57)
             $0.leading.trailing.equalToSuperview().inset(33)
             $0.height.equalTo(54)
         }

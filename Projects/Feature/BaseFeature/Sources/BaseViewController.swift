@@ -61,9 +61,12 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
             let targetHeight = keyboardHeight - bottomInset
             
             UIView.animate(
-                withDuration: 0.3
-                , animations: {
-                    self.view.transform = CGAffineTransform(translationX: 0, y: -54)
+                withDuration: 0.3,
+                animations: {
+                    self.view.transform = CGAffineTransform(
+                        translationX: 0,
+                        y: -75
+                    )
                 }
             )
         }
