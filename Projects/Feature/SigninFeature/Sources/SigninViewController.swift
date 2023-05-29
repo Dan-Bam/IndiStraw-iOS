@@ -13,6 +13,12 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         $0.eyeIconButtonVisible()
     }
     
+    private let errorLabel = ErrorLabel()
+    
+    private let signinButton = ButtonComponent().then {
+        $0.setTitle("로그인", for: .normal)
+    }
+    
     private let findIDButton = UIButton().then {
         $0.setTitle("아이디 찾기 |", for: .normal)
         $0.setTitleColor(DesignSystemAsset.exampleText.color, for: .normal)
@@ -23,10 +29,6 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         $0.setTitle("비밀번호 찾기", for: .normal)
         $0.setTitleColor(DesignSystemAsset.exampleText.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
-    }
-    
-    private let signinButton = ButtonComponent().then {
-        $0.setTitle("로그인", for: .normal)
     }
     
     public override func configureVC() {
@@ -40,7 +42,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         view.addSubviews(
             inputIDTextField, inputPasswordTextField,
             findIDButton, findPasswordButton,
-            signinButton
+            signinButton, errorLabel
         )
     }
     
@@ -57,20 +59,25 @@ public class SigninViewController: BaseVC<SigninViewModel> {
             $0.height.equalTo(54)
         }
         
+        errorLabel.snp.makeConstraints {
+            $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(7)
+            $0.leading.equalTo(inputPasswordTextField.snp.leading)
+        }
+        
+        signinButton.snp.makeConstraints {
+            $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(57)
+            $0.leading.trailing.equalToSuperview().inset(33)
+            $0.height.equalTo(54)
+        }
+        
         findPasswordButton.snp.makeConstraints {
-            $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(10)
-            $0.trailing.equalTo(inputPasswordTextField.snp.trailing)
+            $0.top.equalTo(signinButton.snp.bottom).offset(10)
+            $0.leading.equalTo(findIDButton.snp.trailing).offset(4)
         }
         
         findIDButton.snp.makeConstraints {
             $0.top.equalTo(findPasswordButton.snp.top)
-            $0.trailing.equalTo(findPasswordButton.snp.leading).offset(-4)
-        }
-        
-        signinButton.snp.makeConstraints {
-            $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(129)
-            $0.leading.trailing.equalToSuperview().inset(33)
-            $0.height.equalTo(54)
+            $0.trailing.equalTo(signinButton.snp.centerX)
         }
     }
 }
