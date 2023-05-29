@@ -30,6 +30,12 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
     }
     
     @available(*, unavailable)
+    public override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp), name: UIResponder.keyboardWillShowNotification, object: nil)
+           NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @available(*, unavailable)
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         viewModel.coordinator.didFinish(coordinator: viewModel.coordinator)
@@ -46,5 +52,24 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    
+    @objc func keyboardUp(notification: NSNotification) {
+        if let keyboardFrame:NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+            let bottomInset = self.view.safeAreaInsets.bottom
+            let targetHeight = keyboardHeight - bottomInset
+            
+            UIView.animate(
+                withDuration: 0.3
+                , animations: {
+                    self.view.transform = CGAffineTransform(translationX: 0, y: -54)
+                }
+            )
+        }
+    }
+    
+    @objc func keyboardDown() {
+        self.view.transform = .identity
     }
 }
