@@ -57,20 +57,20 @@ public class SigninViewController: BaseVC<SigninViewModel> {
             $0.height.equalTo(54)
         }
         
-        findPasswordButton.snp.makeConstraints {
-            $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(10)
-            $0.trailing.equalTo(inputPasswordTextField.snp.trailing)
-        }
-        
-        findIDButton.snp.makeConstraints {
-            $0.top.equalTo(findPasswordButton.snp.top)
-            $0.trailing.equalTo(findPasswordButton.snp.leading).offset(-4)
-        }
-        
         signinButton.snp.makeConstraints {
             $0.top.equalTo(inputPasswordTextField.snp.bottom).offset(129)
             $0.leading.trailing.equalToSuperview().inset(33)
             $0.height.equalTo(54)
+        }
+        
+        findPasswordButton.snp.makeConstraints {
+            $0.top.equalTo(signinButton.snp.bottom).offset(10)
+            $0.leading.equalTo(findIDButton.snp.trailing).offset(4)
+        }
+        
+        findIDButton.snp.makeConstraints {
+            $0.top.equalTo(findPasswordButton.snp.top)
+            $0.trailing.equalTo(signinButton.snp.centerX)
         }
     }
 }
