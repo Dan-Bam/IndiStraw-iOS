@@ -28,12 +28,16 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.plusButton.color
     }
     
+    private let continueButton = ButtonComponent().then {
+        $0.setTitle("계속하기", for: .normal)
+    }
+    
     override func configureVC() {
         title = "사용하실\n이미지를 넣어 주세요."
     }
     
     override func addView() {
-        view.addSubviews(inputProfileImageButton)
+        view.addSubviews(inputProfileImageButton, continueButton)
         inputProfileImageButton.addSubviews(backgroundCircleView, smallBackgroundCircleView)
         backgroundCircleView.addSubview(symbolImageView)
     }
@@ -59,6 +63,12 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel> {
         smallBackgroundCircleView.snp.makeConstraints {
             $0.trailing.bottom.equalToSuperview()
             $0.size.equalTo(40)
+        }
+        
+        continueButton.snp.makeConstraints {
+            $0.top.equalTo(inputProfileImageButton.snp.bottom).offset(156)
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(54)
         }
     }
 }
