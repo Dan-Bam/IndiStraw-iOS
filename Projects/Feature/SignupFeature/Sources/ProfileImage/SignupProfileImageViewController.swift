@@ -43,7 +43,6 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         
         self.dismiss(animated: false)
         self.present(self.imagePickerController, animated: true)
-
     }
     
     override func configureVC() {
@@ -60,6 +59,11 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
                     sheet.prefersGrabberVisible = true
                 }
                 owner.present(vc, animated: true)
+            }.disposed(by: disposeBag)
+        
+        continueButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushInputIDVC()
             }.disposed(by: disposeBag)
     }
     
