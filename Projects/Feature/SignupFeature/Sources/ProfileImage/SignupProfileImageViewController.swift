@@ -65,6 +65,11 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
                 }
                 owner.present(vc, animated: true)
             }.disposed(by: disposeBag)
+        
+        continueButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushInputIDVC()
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {

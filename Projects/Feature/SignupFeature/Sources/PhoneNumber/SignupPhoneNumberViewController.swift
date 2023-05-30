@@ -53,6 +53,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
                 owner.navigationItem.title = "인증번호를 입력해 주세요."
                 owner.continueButton.setTitle("인증번호 확인", for: .normal)
                 owner.updateAuthNumberTextFieldLayout()
+                owner.viewModel.pushProfileImageVC()
             }.disposed(by: disposeBag)
     }
     

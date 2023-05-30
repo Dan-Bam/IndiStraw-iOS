@@ -6,4 +6,5 @@ public enum IndiStrawStep {
     case selectPhotoIsRequired
     case inputNameIsRequired
     case inputPhoneNumberIsRequired
+    case inputIDIsRequired
 }
