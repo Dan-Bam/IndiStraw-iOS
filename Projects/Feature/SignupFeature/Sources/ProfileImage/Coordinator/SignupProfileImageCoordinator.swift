@@ -21,7 +21,7 @@ public class SignupProfileImageCoordinator: BaseCoordinator {
 
 extension SignupProfileImageCoordinator {
     func inputIDIsRequired() {
-        let vc = SignupInputIDCoordinator(navigationController: navigationController)
+        let vc = SignupIDCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.start()

@@ -1,7 +1,7 @@
 import Foundation
 import BaseFeature
 
-class SignupInputIDCoordinator: BaseCoordinator {
+class SignupIDCoordinator: BaseCoordinator {
     override func start() {
         let vm = SignupIDViewModel(coordinator: self)
         let vc = SignupIDViewController(viewModel: vm)
