@@ -2,7 +2,7 @@ import Foundation
 import BaseFeature
 import DesignSystem
 
-class SignupInputIDViewController: BaseVC<SignupInputIDViewModel> {
+class SignupIDViewController: BaseVC<SignupIDViewModel> {
     private let inputIDTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "아이디")
     }
