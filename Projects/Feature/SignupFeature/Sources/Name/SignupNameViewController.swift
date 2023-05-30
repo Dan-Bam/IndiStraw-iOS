@@ -1,8 +1,12 @@
 import UIKit
 import BaseFeature
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 class SignupNameViewController: BaseVC<SignupNameViewModel> {
+    private let disposeBag = DisposeBag()
+    
     private let inputNameTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "이름")
     }
@@ -13,6 +17,11 @@ class SignupNameViewController: BaseVC<SignupNameViewModel> {
     
     override func configureVC() {
         navigationItem.title = "이름을 입력해주세요."
+        
+        continueButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushInputPhoneNumberVC()
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
