@@ -4,7 +4,7 @@ import RxSwift
 import RxCocoa
 
 protocol SelectPhotoProtocol: AnyObject {
-    func selectionPhotoButtonDidTap()
+    func selectionPhotoBottomSheetButtonDidTap(type: PhotoType)
 }
 
 class SelectPhotoBottomSheet: UIViewController {
@@ -13,7 +13,8 @@ class SelectPhotoBottomSheet: UIViewController {
     private let disposeBag = DisposeBag()
     
     private let photoImageView = UIImageView().then {
-        $0.image = .init(systemName: "photo")?.withTintColor(.white)
+        $0.image = UIImage(systemName: "photo")
+        $0.tintColor = .white
         $0.sizeToFit()
     }
     
@@ -25,7 +26,8 @@ class SelectPhotoBottomSheet: UIViewController {
     private let selectionPhotoButton = UIButton()
     
     private let cameraImageView = UIImageView().then {
-        $0.image = .init(systemName: "camera")?.withTintColor(.white)
+        $0.image = .init(systemName: "camera")
+        $0.tintColor = .white
         $0.sizeToFit()
     }
     
@@ -52,7 +54,12 @@ class SelectPhotoBottomSheet: UIViewController {
         
         selectionPhotoButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.delegate?.selectionPhotoButtonDidTap()
+                owner.delegate?.selectionPhotoBottomSheetButtonDidTap(type: .photo)
+            }.disposed(by: disposeBag)
+        
+        selectionCameraButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.delegate?.selectionPhotoBottomSheetButtonDidTap(type: .camera)
             }.disposed(by: disposeBag)
     }
     
@@ -74,6 +81,7 @@ class SelectPhotoBottomSheet: UIViewController {
         }
         
         selectionPhotoLabel.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
             $0.leading.equalTo(photoImageView.snp.trailing).offset(16)
             $0.centerY.equalTo(photoImageView)
         }
@@ -89,6 +97,7 @@ class SelectPhotoBottomSheet: UIViewController {
         }
         
         selectionCameraLabel.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
             $0.leading.equalTo(cameraImageView.snp.trailing).offset(16)
             $0.centerY.equalTo(cameraImageView)
         }
