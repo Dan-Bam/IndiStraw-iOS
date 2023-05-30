@@ -20,7 +20,7 @@ class RootViewController: BaseVC<RootViewModel> {
     
     private let signupButton = UIButton().then {
         $0.setTitle("계정이 없으신가요? 회원가입 하러가기", for: .normal)
-        $0.setTitleColor(DesignSystemAsset.exampleText.color, for: .normal)
+        $0.setTitleColor(DesignSystemAsset.Colors.exampleText.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
     }
     

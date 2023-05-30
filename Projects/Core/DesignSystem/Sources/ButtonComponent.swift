@@ -5,7 +5,7 @@ public class ButtonComponent: UIButton {
         super.init(frame: frame)
         
         self.layer.cornerRadius = 10
-        self.backgroundColor = DesignSystemAsset.mainColor.color
+        self.backgroundColor = DesignSystemAsset.Colors.mainColor.color
         self.titleLabel?.textColor = .white
         self.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 18)
     }

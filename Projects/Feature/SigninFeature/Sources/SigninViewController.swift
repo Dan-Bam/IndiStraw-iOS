@@ -21,13 +21,13 @@ public class SigninViewController: BaseVC<SigninViewModel> {
     
     private let findIDButton = UIButton().then {
         $0.setTitle("아이디 찾기 |", for: .normal)
-        $0.setTitleColor(DesignSystemAsset.exampleText.color, for: .normal)
+        $0.setTitleColor(DesignSystemAsset.Colors.exampleText.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
     }
     
     private let findPasswordButton = UIButton().then {
         $0.setTitle("비밀번호 찾기", for: .normal)
-        $0.setTitleColor(DesignSystemAsset.exampleText.color, for: .normal)
+        $0.setTitleColor(DesignSystemAsset.Colors.exampleText.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
     }
     
