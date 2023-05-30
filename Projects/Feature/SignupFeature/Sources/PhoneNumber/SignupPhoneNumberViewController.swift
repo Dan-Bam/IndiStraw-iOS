@@ -20,24 +20,26 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     }
     
     private let againReciveAuthNumberButton = UIButton().then {
-        $0.setTitle("인증번호가 안오셨나요? 다시받기", for: .normal)
+        $0.setTitle("인증번호가 안오셨나요? 재전송", for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
     }
     
-    private func setSignupButtonAttributedTitle() {
+    private func setAgainReciveAuthNumberButtonAttributedTitle() {
         guard let text = againReciveAuthNumberButton.titleLabel?.text else { return }
         let attributeString = NSMutableAttributedString(string: text)
         attributeString.addAttributes([
             .foregroundColor : UIColor.white,
             .font : DesignSystemFontFamily.Suit.bold.font(size: 12) as Any
         ],
-        range: (text as NSString).range(of: "다시받기"))
+        range: (text as NSString).range(of: "재전송"))
         
         againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
     }
     
     override func configureVC() {
-        navigationItem.title = "이름을 입력해주세요."
+        navigationItem.title = "전화번호를 입력해주세요."
+        
+        setAgainReciveAuthNumberButtonAttributedTitle()
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -62,6 +64,11 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             $0.top.equalTo(inputNameTextField.snp.bottom).offset(78)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
+        }
+        
+        againReciveAuthNumberButton.snp.makeConstraints {
+            $0.top.equalTo(continueButton.snp.bottom).offset(15)
+            $0.centerX.equalToSuperview()
         }
     }
     
