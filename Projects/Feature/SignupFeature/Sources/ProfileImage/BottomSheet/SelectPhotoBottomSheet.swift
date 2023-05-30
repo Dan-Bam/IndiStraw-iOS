@@ -4,7 +4,7 @@ import RxSwift
 import RxCocoa
 
 protocol SelectPhotoProtocol: AnyObject {
-    func selectionPhotoButtonDidTap()
+    func selectionPhotoBottomSheetButtonDidTap(type: PhotoType)
 }
 
 class SelectPhotoBottomSheet: UIViewController {
@@ -54,7 +54,12 @@ class SelectPhotoBottomSheet: UIViewController {
         
         selectionPhotoButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.delegate?.selectionPhotoButtonDidTap()
+                owner.delegate?.selectionPhotoBottomSheetButtonDidTap(type: .photo)
+            }.disposed(by: disposeBag)
+        
+        selectionCameraButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.delegate?.selectionPhotoBottomSheetButtonDidTap(type: .camera)
             }.disposed(by: disposeBag)
     }
     
@@ -76,6 +81,7 @@ class SelectPhotoBottomSheet: UIViewController {
         }
         
         selectionPhotoLabel.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
             $0.leading.equalTo(photoImageView.snp.trailing).offset(16)
             $0.centerY.equalTo(photoImageView)
         }
@@ -91,6 +97,7 @@ class SelectPhotoBottomSheet: UIViewController {
         }
         
         selectionCameraLabel.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
             $0.leading.equalTo(cameraImageView.snp.trailing).offset(16)
             $0.centerY.equalTo(cameraImageView)
         }
