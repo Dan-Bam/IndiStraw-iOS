@@ -13,7 +13,8 @@ class SelectPhotoBottomSheet: UIViewController {
     private let disposeBag = DisposeBag()
     
     private let photoImageView = UIImageView().then {
-        $0.image = .init(systemName: "photo")?.withTintColor(.white)
+        $0.image = UIImage(systemName: "photo")
+        $0.tintColor = .white
         $0.sizeToFit()
     }
     
@@ -25,7 +26,8 @@ class SelectPhotoBottomSheet: UIViewController {
     private let selectionPhotoButton = UIButton()
     
     private let cameraImageView = UIImageView().then {
-        $0.image = .init(systemName: "camera")?.withTintColor(.white)
+        $0.image = .init(systemName: "camera")
+        $0.tintColor = .white
         $0.sizeToFit()
     }
     
