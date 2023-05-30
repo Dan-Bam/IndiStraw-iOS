@@ -1,8 +1,10 @@
 import UIKit
+import DesignSystem
 
 class SelectPhotoBottomSheet: UIViewController {
     private let photoImageView = UIImageView().then {
         $0.image = .init(systemName: "photo")?.withTintColor(.white)
+        $0.sizeToFit()
     }
     
     private let selectionPhotoLabel = UILabel().then {
@@ -14,6 +16,7 @@ class SelectPhotoBottomSheet: UIViewController {
     
     private let cameraImageView = UIImageView().then {
         $0.image = .init(systemName: "camera")?.withTintColor(.white)
+        $0.sizeToFit()
     }
     
     private let selectionCameraLabel = UILabel().then {
@@ -24,6 +27,7 @@ class SelectPhotoBottomSheet: UIViewController {
     private let selectionCameraButton = UIButton()
     
     override func viewDidLoad() {
+        view.backgroundColor = DesignSystemAsset.Colors.bottomSheet.color
         addView()
         setLayout()
     }
@@ -42,10 +46,12 @@ class SelectPhotoBottomSheet: UIViewController {
         
         photoImageView.snp.makeConstraints {
             $0.top.leading.bottom.equalToSuperview()
+            $0.size.equalTo(30)
         }
         
         selectionPhotoLabel.snp.makeConstraints {
             $0.leading.equalTo(photoImageView.snp.trailing).offset(16)
+            $0.centerY.equalTo(photoImageView)
         }
         
         selectionCameraButton.snp.makeConstraints {
@@ -55,10 +61,12 @@ class SelectPhotoBottomSheet: UIViewController {
         
         cameraImageView.snp.makeConstraints {
             $0.top.leading.bottom.equalToSuperview()
+            $0.size.equalTo(30)
         }
         
         selectionCameraLabel.snp.makeConstraints {
             $0.leading.equalTo(cameraImageView.snp.trailing).offset(16)
+            $0.centerY.equalTo(cameraImageView)
         }
     }
 }
