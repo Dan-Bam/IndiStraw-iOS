@@ -19,6 +19,23 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         $0.setTitle("계속하기", for: .normal)
     }
     
+    private let againReciveAuthNumberButton = UIButton().then {
+        $0.setTitle("인증번호가 안오셨나요? 다시받기", for: .normal)
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
+    }
+    
+    private func setSignupButtonAttributedTitle() {
+        guard let text = againReciveAuthNumberButton.titleLabel?.text else { return }
+        let attributeString = NSMutableAttributedString(string: text)
+        attributeString.addAttributes([
+            .foregroundColor : UIColor.white,
+            .font : DesignSystemFontFamily.Suit.bold.font(size: 12) as Any
+        ],
+        range: (text as NSString).range(of: "다시받기"))
+        
+        againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
+    }
+    
     override func configureVC() {
         navigationItem.title = "이름을 입력해주세요."
         
@@ -26,12 +43,12 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             .bind(with: self) { owner, _ in
                 owner.navigationItem.title = "인증번호를 입력해 주세요."
                 owner.continueButton.setTitle("인증번호 확인", for: .normal)
-                owner.addAuthNumberTextFieldLayout()
+                owner.updateAuthNumberTextFieldLayout()
             }.disposed(by: disposeBag)
     }
     
     override func addView() {
-        view.addSubviews(inputNameTextField, continueButton, inputAuthNumberTextField)
+        view.addSubviews(inputNameTextField, continueButton, inputAuthNumberTextField, againReciveAuthNumberButton)
     }
     
     override func setLayout() {
@@ -48,7 +65,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         }
     }
     
-    private func addAuthNumberTextFieldLayout() {
+    private func updateAuthNumberTextFieldLayout() {
         inputNameTextField.snp.updateConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(140)
         }
