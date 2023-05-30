@@ -1,6 +1,7 @@
 import UIKit
 import BaseFeature
 import SigninFeature
+import SignupFeature
 
 public class RootCoordinator: BaseCoordinator {
     public override func start() {
@@ -14,6 +15,10 @@ public class RootCoordinator: BaseCoordinator {
         switch step {
         case .signinIsRequired:
             signinIsRequired()
+        case .signupIsRequired:
+            signupIsRequired()
+        default:
+            return
         }
     }
 }
@@ -21,6 +26,13 @@ public class RootCoordinator: BaseCoordinator {
 extension RootCoordinator {
     private func signinIsRequired() {
         let vc = SigninCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
+    }
+    
+    private func signupIsRequired() {
+        let vc = SignupProfileImageCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.start()

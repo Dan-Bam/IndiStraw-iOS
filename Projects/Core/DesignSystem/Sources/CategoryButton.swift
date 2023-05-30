@@ -11,7 +11,7 @@ public class CategoryButton: UIButton {
             bottom: 5,
             trailing: 3
         )
-        backgroundColor = DesignSystemAsset.mainColor.color
+        backgroundColor = DesignSystemAsset.Colors.mainColor.color
         titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
         setTitleColor(.white, for: .normal)
     }

@@ -23,6 +23,9 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
         backBarButtonItem.tintColor = .white
         self.navigationItem.backBarButtonItem = backBarButtonItem
         
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        
         setup()
         addView()
         setLayout()

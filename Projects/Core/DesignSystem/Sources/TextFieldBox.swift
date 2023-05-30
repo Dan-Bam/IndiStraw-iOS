@@ -11,16 +11,16 @@ public class TextFieldBox: UITextField {
     
     private let eyeIconButton = UIButton().then {
         $0.setImage(UIImage(systemName: "eye"), for: .normal)
-        $0.tintColor = DesignSystemAsset.exampleText.color
+        $0.tintColor = DesignSystemAsset.Colors.exampleText.color
         $0.isHidden = true
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 10
-        backgroundColor = DesignSystemAsset.textBox.color
+        backgroundColor = DesignSystemAsset.Colors.textBox.color
         font = DesignSystemFontFamily.Suit.medium.font(size: 14)
-        textColor = DesignSystemAsset.exampleText.color
+        textColor = DesignSystemAsset.Colors.exampleText.color
         addView()
         setLayout()
         addLeftPadding()
@@ -45,7 +45,7 @@ public class TextFieldBox: UITextField {
         }
         attributedPlaceholder = NSAttributedString(
             string: string,
-            attributes: [.foregroundColor: DesignSystemAsset.exampleText.color]
+            attributes: [.foregroundColor: DesignSystemAsset.Colors.exampleText.color]
         )
     }
     

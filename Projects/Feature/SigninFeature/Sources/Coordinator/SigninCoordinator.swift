@@ -8,4 +8,15 @@ public class SigninCoordinator: BaseCoordinator {
         
         navigationController.pushViewController(vc, animated: true)
     }
+    
+    public override func navigate(to step: IndiStrawStep) {
+        switch step {
+        default:
+            return
+        }
+    }
+}
+
+extension SigninCoordinator {
+
 }

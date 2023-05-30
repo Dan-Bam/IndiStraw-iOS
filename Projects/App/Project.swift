@@ -9,6 +9,7 @@ let project = Project.makeModule(
         .Feature.BaseFeature,
         .Feature.RootFeature,
         .Feature.SigninFeature,
+        .Feature.SignupFeature,
         
         .Core.DesignSystem,
         
