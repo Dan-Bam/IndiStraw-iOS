@@ -1,7 +1,17 @@
 import UIKit
 import DesignSystem
+import RxSwift
+import RxCocoa
+
+protocol SelectPhotoProtocol: AnyObject {
+    func selectionPhotoButtonDidTap()
+}
 
 class SelectPhotoBottomSheet: UIViewController {
+    weak var delegate: SelectPhotoProtocol?
+    
+    private let disposeBag = DisposeBag()
+    
     private let photoImageView = UIImageView().then {
         $0.image = .init(systemName: "photo")?.withTintColor(.white)
         $0.sizeToFit()
@@ -26,10 +36,24 @@ class SelectPhotoBottomSheet: UIViewController {
     
     private let selectionCameraButton = UIButton()
     
+    init(delegate: any SelectPhotoProtocol) {
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         view.backgroundColor = DesignSystemAsset.Colors.bottomSheet.color
         addView()
         setLayout()
+        
+        selectionPhotoButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.delegate?.selectionPhotoButtonDidTap()
+            }.disposed(by: disposeBag)
     }
     
     private func addView() {
