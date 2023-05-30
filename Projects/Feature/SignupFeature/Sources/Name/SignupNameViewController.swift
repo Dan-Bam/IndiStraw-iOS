@@ -30,7 +30,7 @@ class SignupNameViewController: BaseVC<SignupNameViewModel> {
     
     override func setLayout() {
         inputNameTextField.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(96)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(171)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
