@@ -7,9 +7,25 @@ import Utility
 
 class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, SelectPhotoProtocol {
     private let disposeBag = DisposeBag()
+
+    private let inputProfileImageButton = UIButton()
     
-    private let inputProfileImageButton = UIButton().then {
+    private let photoImageButton = UIButton().then {
+        $0.clipsToBounds = true
+        $0.isUserInteractionEnabled = false
+        $0.isEnabled = true
+        $0.backgroundColor = DesignSystemAsset.Colors.exampleText.color
         $0.setImage(DesignSystemAsset.Images.inputPhoto.image, for: .normal)
+        $0.layer.cornerRadius = 62.5
+    }
+    
+    private let plusImageButton = UIButton().then {
+        $0.isUserInteractionEnabled = false
+        $0.setTitle("+", for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        $0.setTitleColor(.white, for: .normal)
+        $0.layer.cornerRadius = 20
+        $0.backgroundColor = DesignSystemAsset.Colors.plusButton.color
     }
     
     private let continueButton = ButtonComponent().then {
@@ -49,6 +65,9 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     
     override func addView() {
         view.addSubviews(inputProfileImageButton, continueButton)
+        inputProfileImageButton.addSubviews(photoImageButton, plusImageButton)
+        
+        view.bringSubviewToFront(inputProfileImageButton)
     }
     
     override func setLayout() {
@@ -57,6 +76,16 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
             $0.centerX.equalToSuperview()
             $0.width.equalTo(137)
             $0.height.equalTo(125)
+        }
+        
+        photoImageButton.snp.makeConstraints {
+            $0.top.leading.bottom.equalToSuperview()
+            $0.size.equalTo(125)
+        }
+        
+        plusImageButton.snp.makeConstraints {
+            $0.trailing.bottom.equalToSuperview()
+            $0.size.equalTo(40)
         }
         
         continueButton.snp.makeConstraints {
@@ -76,7 +105,7 @@ extension SignupProfileImageViewController: UIImagePickerControllerDelegate, UIN
         } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             newImage = possibleImage
         }
-        self.inputProfileImageButton.setImage(newImage, for: .normal)
+        self.photoImageButton.setImage(newImage, for: .normal)
         
         picker.dismiss(animated: true, completion: nil)
     }
