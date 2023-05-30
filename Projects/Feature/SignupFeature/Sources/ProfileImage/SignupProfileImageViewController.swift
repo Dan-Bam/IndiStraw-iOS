@@ -6,40 +6,30 @@ import RxCocoa
 import Utility
 
 class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel> {
-    private let inputProfileImageButton = UIButton()
+    private let disposeBag = DisposeBag()
     
-    private let symbolImageView = UIImageView().then {
-        $0.image = DesignSystemAsset.Images.photo.image
-        $0.tintColor = DesignSystemAsset.Colors.textBox.color
-    }
-    
-    private let backgroundCircleView = UIButton().then {
-        $0.contentMode = .scaleAspectFill
-        $0.layer.cornerRadius = 62.5
-        $0.backgroundColor = DesignSystemAsset.Colors.exampleText.color
-    }
-    
-    private let smallBackgroundCircleView = UIButton().then {
-        $0.setTitle("+", for: .normal)
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 26)
-        $0.setTitleColor(.white, for: .normal)
-        $0.isEnabled = false
-        $0.layer.cornerRadius = 20
-        $0.backgroundColor = DesignSystemAsset.Colors.plusButton.color
+    private let inputProfileImageButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Images.inputPhoto.image, for: .normal)
     }
     
     private let continueButton = ButtonComponent().then {
         $0.setTitle("계속하기", for: .normal)
     }
     
+    // MARK: - Method
+    
     override func configureVC() {
         title = "사용하실\n이미지를 넣어 주세요."
+        
+        inputProfileImageButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("asfdasf")
+                owner.viewModel.presentSelectPhotoSheet()
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
         view.addSubviews(inputProfileImageButton, continueButton)
-        inputProfileImageButton.addSubviews(backgroundCircleView, smallBackgroundCircleView)
-        backgroundCircleView.addSubview(symbolImageView)
     }
     
     override func setLayout() {
@@ -48,21 +38,6 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel> {
             $0.centerX.equalToSuperview()
             $0.width.equalTo(137)
             $0.height.equalTo(125)
-        }
-        
-        symbolImageView.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.size.equalTo(55)
-        }
-        
-        backgroundCircleView.snp.makeConstraints {
-            $0.top.leading.bottom.equalToSuperview()
-            $0.size.equalTo(125)
-        }
-        
-        smallBackgroundCircleView.snp.makeConstraints {
-            $0.trailing.bottom.equalToSuperview()
-            $0.size.equalTo(40)
         }
         
         continueButton.snp.makeConstraints {

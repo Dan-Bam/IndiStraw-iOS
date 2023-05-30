@@ -8,4 +8,20 @@ public class SignupProfileImageCoordinator: BaseCoordinator {
         
         navigationController.pushViewController(vc, animated: true)
     }
+    
+    public override func navigate(to step: IndiStrawStep) {
+        switch step {
+        case .selectPhotoIsRequired:
+            selectPhotoIsRequired()
+        default:
+            return
+        }
+    }
+}
+
+extension SignupProfileImageCoordinator {
+    func selectPhotoIsRequired() {
+        let vc = SelectPhotoBottomSheet()
+        navigationController.present(vc, animated: true)
+    }
 }
