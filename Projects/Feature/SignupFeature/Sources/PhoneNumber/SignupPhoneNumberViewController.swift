@@ -5,6 +5,8 @@ import RxSwift
 import RxCocoa
 
 class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
+    private var isValidAuth = true
+    
     private let disposeBag = DisposeBag()
     
     private let inputNameTextField = TextFieldBox().then {
@@ -13,6 +15,11 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     
     private let inputAuthNumberTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "인증번호")
+    }
+    
+    private let countLabel = UILabel().then {
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
     private let continueButton = ButtonComponent().then {
@@ -50,7 +57,8 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     }
     
     override func addView() {
-        view.addSubviews(inputNameTextField, continueButton, inputAuthNumberTextField, againReciveAuthNumberButton)
+        view.addSubviews(inputNameTextField, continueButton, inputAuthNumberTextField, againReciveAuthNumberButton, countLabel)
+        inputAuthNumberTextField.addSubview(countLabel)
     }
     
     override func setLayout() {
@@ -83,8 +91,36 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             $0.height.equalTo(54)
         }
         
+        countLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(14)
+        }
+        
         continueButton.snp.updateConstraints {
             $0.top.equalTo(inputNameTextField.snp.bottom).offset(111)
         }
+    }
+}
+
+extension SignupPhoneNumberViewController {
+    private func setupPossibleBackgroundTimer() {
+        let count = 180
+        
+        
+        isValidAuth = false
+        
+        Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
+            .take(count+1)
+            .map { count - $0 }
+            .bind(with: self) { owner, remainingSeconds in
+                let minutes = remainingSeconds / 60
+                let seconds = remainingSeconds % 60
+                owner.countLabel.text = String(format: "%02d:%02d", minutes, seconds)
+                
+                if remainingSeconds == 0 {
+                    owner.countLabel.text = "00:00"
+                    owner.isValidAuth = true
+                }
+            }.disposed(by: disposeBag)
     }
 }
