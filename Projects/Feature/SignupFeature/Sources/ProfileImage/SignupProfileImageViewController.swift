@@ -36,14 +36,18 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     
     // MARK: - Method
     
-    func selectionPhotoButtonDidTap() {
-        imagePickerController.sourceType = .photoLibrary
+    func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
+        switch type {
+        case .photo:
+            imagePickerController.sourceType = .photoLibrary
+        case .camera:
+            imagePickerController.sourceType = .camera
+        }
         imagePickerController.allowsEditing = true
         imagePickerController.modalPresentationStyle = .fullScreen
         
-        self.dismiss(animated: false)
-        self.present(self.imagePickerController, animated: true)
-
+        self.dismiss(animated: true)
+        self.present(imagePickerController, animated: true)
     }
     
     override func configureVC() {

@@ -1,4 +1,5 @@
 import UIKit
+import DesignSystem
 
 open class BaseVC<T: BaseViewModel>: UIViewController {
     let bound = UIScreen.main.bounds
@@ -24,7 +25,7 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
         self.navigationItem.backBarButtonItem = backBarButtonItem
         
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white, .font: DesignSystemFontFamily.Suit.bold.font(size: 24)]
         
         setup()
         addView()
@@ -61,7 +62,7 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
         if let keyboardFrame:NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardHeight = keyboardFrame.cgRectValue.height
             let bottomInset = self.view.safeAreaInsets.bottom
-            let targetHeight = keyboardHeight - bottomInset
+//            let targetHeight = keyboardHeight - bottomInset
             
             UIView.animate(
                 withDuration: 0.3,
