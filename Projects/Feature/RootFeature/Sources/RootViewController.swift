@@ -2,17 +2,20 @@ import UIKit
 import BaseFeature
 import DesignSystem
 import Utility
+import RxCocoa
+import RxSwift
 
 class RootViewController: BaseVC<RootViewModel> {
+    private let disposeBag = DisposeBag()
+    
     private let logoLabel = UILabel().then {
         $0.text = "Indi Straw"
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.bold.font(size: 30)
     }
     
-    private lazy var signinButton = ButtonComponent().then {
+    private let signinButton = ButtonComponent().then {
         $0.setTitle("로그인", for: .normal)
-        $0.addTarget(self, action: #selector(signinButtonDidTap(_:)), for: .touchUpInside)
     }
     
     private let signupButton = UIButton().then {
@@ -23,10 +26,16 @@ class RootViewController: BaseVC<RootViewModel> {
     
     override func configureVC() {
         setSignupButtonAttributedTitle()
-    }
-    
-    @objc func signinButtonDidTap(_ sender: UIButton) {
-        viewModel.pushSigninVC()
+        
+        signinButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushSigninVC()
+            }.disposed(by: disposeBag)
+        
+        signupButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushSignupVC()
+            }.disposed(by: disposeBag)
     }
     
     private func setSignupButtonAttributedTitle() {

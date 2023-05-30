@@ -1,5 +1,7 @@
 import BaseFeature
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel> {
     override func configureVC() {
