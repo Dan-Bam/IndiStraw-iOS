@@ -32,7 +32,7 @@ extension RootCoordinator {
     }
     
     private func signupIsRequired() {
-        let vc = SignupProfileImageCoordinator(navigationController: navigationController)
+        let vc = SignupNameCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.start()

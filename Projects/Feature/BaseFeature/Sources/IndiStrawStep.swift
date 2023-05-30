@@ -2,6 +2,8 @@ public enum IndiStrawStep {
     case signinIsRequired
     case signupIsRequired
     
-    //sheet
+    //signup
     case selectPhotoIsRequired
+    case inputNameIsRequired
+    case inputPhoneNumberIsRequired
 }
