@@ -47,7 +47,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     }
     
     override func configureVC() {
-        title = "사용하실\n이미지를 넣어 주세요."
+        navigationItem.title = "프로필 이미지"
         
         imagePickerController.delegate = self
 
