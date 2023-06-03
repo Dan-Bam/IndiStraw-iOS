@@ -1,8 +1,11 @@
 import Foundation
 import BaseFeature
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 class SignupIDViewController: BaseVC<SignupIDViewModel> {
+    private let disposeBag = DisposeBag()
     private let inputIDTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "아이디")
     }
@@ -12,6 +15,12 @@ class SignupIDViewController: BaseVC<SignupIDViewModel> {
     }
     override func configureVC() {
         navigationItem.title = "아이디를 입력해주세요"
+        
+        continueButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushPasswordVC()
+                
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
