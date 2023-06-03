@@ -1,8 +1,12 @@
 import UIKit
 import BaseFeature
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 class SignupPasswordViewController: BaseVC<SignupPasswordViewModel> {
+    private let disposeBag = DisposeBag()
+    
     private let inputPasswordTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "비밀번호")
     }
@@ -20,6 +24,17 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel> {
     
     override func configureVC() {
         navigationItem.title = "비밀번호를 입력해 주세요."
+        
+        confirmButton.rx.tap
+            .bind(with: self) { owner, _ in
+                let vc = PrivacyBottomSheet()
+                vc.modalPresentationStyle = .pageSheet
+                if let sheet = vc.sheetPresentationController {
+                    sheet.detents = [.medium(), .large()]
+                    sheet.prefersGrabberVisible = true
+                }
+                owner.present(vc, animated: true)
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
