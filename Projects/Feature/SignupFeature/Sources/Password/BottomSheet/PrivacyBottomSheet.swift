@@ -22,12 +22,13 @@ class PrivacyBottomSheet: UIViewController {
         $0.backgroundColor = DesignSystemAsset.Colors.line.color
     }
     
-    private let termsOfUseChildImageView = UIImageView().then {
-        $0.image = UIImage(systemName: "checkmark")?.withTintColor(DesignSystemAsset.Colors.exampleText.color)
-    }
-    
     private let termsOfUseWrapperButton = UIButton()
     
+    private let termsOfUseChildImageView = UIImageView().then {
+        $0.image = UIImage(systemName: "checkmark")
+        $0.tintColor = DesignSystemAsset.Colors.exampleText.color
+    }
+     
     private let termsOfUseChileLabel = UILabel().then {
         $0.text = "[필수] 이용약관 동의"
         $0.textColor = .white
@@ -44,7 +45,8 @@ class PrivacyBottomSheet: UIViewController {
     private let personalInformationWrapperButton = UIButton()
     
     private let personalInformationChildImageView = UIImageView().then {
-        $0.image = UIImage(systemName: "checkmark")?.withTintColor(DesignSystemAsset.Colors.exampleText.color)
+        $0.image = UIImage(systemName: "checkmark")
+        $0.tintColor = DesignSystemAsset.Colors.exampleText.color
     }
     
     private let personalInformationChildLabel = UILabel().then {
