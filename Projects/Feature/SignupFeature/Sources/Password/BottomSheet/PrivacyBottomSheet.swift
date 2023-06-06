@@ -3,14 +3,24 @@ import SnapKit
 import Then
 import DesignSystem
 import Utility
+import RxSwift
+import RxCocoa
+
+enum Colors {
+    static let mainColor = DesignSystemAsset.Colors.mainColor.color
+    static let exampleTextColor = DesignSystemAsset.Colors.exampleText.color
+}
 
 class PrivacyBottomSheet: UIViewController {
+    private let disposeBag = DisposeBag()
+    
     private let allAgreeWrapperButton = UIButton()
     
     private let allAgreeChildButton = UIButton().then {
         $0.layer.borderColor = DesignSystemAsset.Colors.exampleText.color.cgColor
         $0.layer.borderWidth = 2
         $0.layer.cornerRadius = 5
+        $0.tintColor = Colors.mainColor
     }
     
     private let allAgreeChildLabel = UILabel().then {
@@ -26,7 +36,7 @@ class PrivacyBottomSheet: UIViewController {
     
     private let termsOfUseChildImageView = UIImageView().then {
         $0.image = UIImage(systemName: "checkmark")
-        $0.tintColor = DesignSystemAsset.Colors.exampleText.color
+        $0.tintColor = Colors.exampleTextColor
     }
      
     private let termsOfUseChileLabel = UILabel().then {
@@ -46,7 +56,7 @@ class PrivacyBottomSheet: UIViewController {
     
     private let personalInformationChildImageView = UIImageView().then {
         $0.image = UIImage(systemName: "checkmark")
-        $0.tintColor = DesignSystemAsset.Colors.exampleText.color
+        $0.tintColor = Colors.exampleTextColor
     }
     
     private let personalInformationChildLabel = UILabel().then {
@@ -67,6 +77,18 @@ class PrivacyBottomSheet: UIViewController {
         view.backgroundColor = DesignSystemAsset.Colors.bottomSheet.color
         addView()
         setLayout()
+        
+        allAgreeWrapperButton.rx.tap
+            .map { [weak self] in
+                self?.allAgreeChildButton.isSelected.toggle()
+                return self?.allAgreeChildButton.isSelected ?? false
+            }
+            .bind(with: self) { owner, arg in
+                owner.allAgreeChildButton.setImage(arg ? UIImage(systemName: "checkmark") : .none, for: .normal)
+                owner.termsOfUseChildImageView.tintColor = arg ? Colors.mainColor : Colors.exampleTextColor
+                owner.personalInformationChildImageView.tintColor = arg ? Colors.mainColor : Colors.exampleTextColor
+            }.disposed(by: disposeBag)
+        
     }
     
     private func addView() {
@@ -94,6 +116,7 @@ class PrivacyBottomSheet: UIViewController {
         allAgreeChildLabel.snp.makeConstraints {
             $0.centerY.equalTo(allAgreeChildButton)
             $0.leading.equalTo(allAgreeChildButton.snp.trailing).offset(13)
+            $0.trailing.equalToSuperview()
         }
         
         separatorLine.snp.makeConstraints {
@@ -115,6 +138,7 @@ class PrivacyBottomSheet: UIViewController {
         termsOfUseChileLabel.snp.makeConstraints {
             $0.centerY.equalTo(termsOfUseChildImageView)
             $0.leading.equalTo(termsOfUseChildImageView.snp.trailing).offset(13)
+            $0.trailing.equalToSuperview()
         }
         
         termsOfUseSeeMoreButton.snp.makeConstraints {
@@ -135,6 +159,7 @@ class PrivacyBottomSheet: UIViewController {
         personalInformationChildLabel.snp.makeConstraints {
             $0.centerY.equalTo(personalInformationChildImageView)
             $0.leading.equalTo(personalInformationChildImageView.snp.trailing).offset(13)
+            $0.trailing.equalToSuperview()
         }
         
         personalInformationSeeMoreButton.snp.makeConstraints {
