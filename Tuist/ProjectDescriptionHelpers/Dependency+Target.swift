@@ -15,6 +15,7 @@ public extension TargetDependency.Feature {
 
 public extension TargetDependency.Core {
     static let DesignSystem = TargetDependency.core(name: "DesignSystem")
+    static let JwtStore = TargetDependency.core(name: "JwtStore")
 }
 
 public extension TargetDependency.Shared {
