@@ -7,4 +7,8 @@ public enum IndiStrawStep {
     case inputNameIsRequired
     case inputPhoneNumberIsRequired
     case inputIDIsRequired
+    case inputPasswordIsRequired
+    
+    //pop
+    case popToRootIsRequired
 }
