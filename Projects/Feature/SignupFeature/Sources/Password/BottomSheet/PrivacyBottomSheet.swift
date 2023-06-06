@@ -87,16 +87,12 @@ class PrivacyBottomSheet: UIViewController {
         
         allAgreeWrapperButton.rx.tap
             .asDriver()
-            .map { [weak self] in
-                self?.allAgreeWrapperButton.isSelected.toggle()
-                return self?.allAgreeWrapperButton.isSelected ?? false
-            }
             .drive(with: self) { owner, arg in
-                owner.allAgreeChildButton.setImage(arg ? UIImage(systemName: "checkmark") : .none, for: .normal)
-                owner.termsOfUseChildImageView.tintColor = arg ? Colors.mainColor : Colors.exampleTextColor
-                owner.personalInformationChildImageView.tintColor = arg ? Colors.mainColor : Colors.exampleTextColor
+                owner.allAgreeChildButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+                owner.termsOfUseChildImageView.tintColor = Colors.mainColor
+                owner.personalInformationChildImageView.tintColor = Colors.mainColor
                 
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
                     owner.delegate?.allAgreeButtonDidTap()
                 }
             }.disposed(by: disposeBag)
