@@ -4,7 +4,14 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 
-class SignupPasswordViewController: BaseVC<SignupPasswordViewModel> {
+class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeButtonDidTapProtocol {
+    func allAgreeButtonDidTap() {
+        dismiss(animated: true)
+        viewModel.popToRootVC()
+    }
+    
+    let vc = PrivacyBottomSheet()
+
     private let disposeBag = DisposeBag()
     
     private let inputPasswordTextField = TextFieldBox().then {
@@ -21,19 +28,18 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel> {
     
     private let errorLabel = ErrorLabel()
     
-    
     override func configureVC() {
         navigationItem.title = "비밀번호를 입력해 주세요."
+        vc.delegate = self
         
         confirmButton.rx.tap
             .bind(with: self) { owner, _ in
-                let vc = PrivacyBottomSheet()
-                vc.modalPresentationStyle = .pageSheet
-                if let sheet = vc.sheetPresentationController {
+                owner.vc.modalPresentationStyle = .pageSheet
+                if let sheet = owner.vc.sheetPresentationController {
                     sheet.detents = [.medium(), .large()]
                     sheet.prefersGrabberVisible = true
                 }
-                owner.present(vc, animated: true)
+                owner.present(owner.vc, animated: true)
             }.disposed(by: disposeBag)
     }
     

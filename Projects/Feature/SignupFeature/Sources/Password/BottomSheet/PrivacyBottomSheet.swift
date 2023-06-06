@@ -6,17 +6,24 @@ import Utility
 import RxSwift
 import RxCocoa
 
+protocol AllAgreeButtonDidTapProtocol: AnyObject {
+    func allAgreeButtonDidTap()
+}
+
 enum Colors {
     static let mainColor = DesignSystemAsset.Colors.mainColor.color
     static let exampleTextColor = DesignSystemAsset.Colors.exampleText.color
 }
 
 class PrivacyBottomSheet: UIViewController {
+    weak var delegate: AllAgreeButtonDidTapProtocol?
+    
     private let disposeBag = DisposeBag()
     
     private let allAgreeWrapperButton = UIButton()
     
     private let allAgreeChildButton = UIButton().then {
+        $0.isEnabled = false
         $0.layer.borderColor = DesignSystemAsset.Colors.exampleText.color.cgColor
         $0.layer.borderWidth = 2
         $0.layer.cornerRadius = 5
@@ -79,15 +86,21 @@ class PrivacyBottomSheet: UIViewController {
         setLayout()
         
         allAgreeWrapperButton.rx.tap
+            .asDriver()
             .map { [weak self] in
-                self?.allAgreeChildButton.isSelected.toggle()
-                return self?.allAgreeChildButton.isSelected ?? false
+                self?.allAgreeWrapperButton.isSelected.toggle()
+                return self?.allAgreeWrapperButton.isSelected ?? false
             }
-            .bind(with: self) { owner, arg in
+            .drive(with: self) { owner, arg in
                 owner.allAgreeChildButton.setImage(arg ? UIImage(systemName: "checkmark") : .none, for: .normal)
                 owner.termsOfUseChildImageView.tintColor = arg ? Colors.mainColor : Colors.exampleTextColor
                 owner.personalInformationChildImageView.tintColor = arg ? Colors.mainColor : Colors.exampleTextColor
+                
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                    owner.delegate?.allAgreeButtonDidTap()
+                }
             }.disposed(by: disposeBag)
+        
         
     }
     
