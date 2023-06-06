@@ -100,8 +100,6 @@ class PrivacyBottomSheet: UIViewController {
                     owner.delegate?.allAgreeButtonDidTap()
                 }
             }.disposed(by: disposeBag)
-        
-        
     }
     
     private func addView() {

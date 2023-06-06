@@ -6,3 +6,4 @@ public struct ManageTokenModel: Codable {
     public var accessTokenExpiredAt: String
     public var refreshTokenExpiredAt: String
 }
+
