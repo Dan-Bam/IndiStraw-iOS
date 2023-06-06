@@ -5,11 +5,6 @@ import RxSwift
 import RxCocoa
 
 class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeButtonDidTapProtocol {
-    func allAgreeButtonDidTap() {
-        dismiss(animated: true)
-        viewModel.popToRootVC()
-    }
-    
     let vc = PrivacyBottomSheet()
 
     private let disposeBag = DisposeBag()
@@ -27,6 +22,11 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     }
     
     private let errorLabel = ErrorLabel()
+    
+    func allAgreeButtonDidTap() {
+        dismiss(animated: true)
+        viewModel.popToRootVC()
+    }
     
     override func configureVC() {
         navigationItem.title = "비밀번호를 입력해 주세요."
