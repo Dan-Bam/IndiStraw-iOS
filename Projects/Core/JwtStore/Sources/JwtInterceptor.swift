@@ -1,5 +1,6 @@
 import Foundation
 import Alamofire
+import Utility
 
 public class JwtRequestInterceptor: RequestInterceptor {
     private let jwtStore: JwtStore
