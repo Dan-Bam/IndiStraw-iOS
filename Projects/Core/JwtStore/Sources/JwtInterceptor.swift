@@ -16,13 +16,13 @@ public class JwtRequestInterceptor: RequestInterceptor {
         }
         var urlRequest = urlRequest
         let accessToken = jwtStore.getToken(type: .accessToken)
-        print("accessToken = \(jwtStore.getToken(type: .accessExpiredTime))")
+        print("accessToken = \(jwtStore.getToken(type: .accessTokenExpiredAt))")
         urlRequest.addValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
         completion(.success(urlRequest))
     }
     
     public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        let accessExpiredTime = jwtStore.getToken(type: .accessExpiredTime).getStringToDate()
+        let accessExpiredTime = jwtStore.getToken(type: .accessTokenExpiredAt).getStringToDate()
         if accessExpiredTime.compare(Date().addingTimeInterval(32400)) == .orderedDescending {
             completion(.doNotRetryWithError(error))
             return
