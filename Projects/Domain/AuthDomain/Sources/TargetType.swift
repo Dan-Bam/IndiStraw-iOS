@@ -1,14 +1,14 @@
 import Foundation
 import Alamofire
 
-protocol TargetType: URLRequestConvertible {
+public protocol TargetType: URLRequestConvertible {
     var baseURL: String { get }
     var method: HTTPMethod { get }
     var path: String { get }
     var parameters: RequestParams { get }
 }
 
-extension TargetType {
+public extension TargetType {
 
     // URLRequestConvertible 구현
     func asURLRequest() throws -> URLRequest {
@@ -32,7 +32,7 @@ extension TargetType {
     }
 }
 
-enum RequestParams {
+public enum RequestParams {
     case query(_ parameter: Encodable?)
     case body(_ parameter: Encodable?)
 }

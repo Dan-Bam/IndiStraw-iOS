@@ -1,10 +1,10 @@
 import UIKit
 import Swinject
 import JwtStore
+import AuthDomain
 
 @main
 public class AppDelegate: UIResponder, UIApplicationDelegate {
-    static let container = Container()
     var assembler: Assembler!
 
     public func application(
@@ -13,8 +13,7 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         assembler = Assembler([
             JwtStoreAssembly()
-        ])
-        
+        ], container: DIContainer.shared)
         
         return true
     }
