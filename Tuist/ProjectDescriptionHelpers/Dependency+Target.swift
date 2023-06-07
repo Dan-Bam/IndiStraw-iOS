@@ -3,6 +3,7 @@ import ProjectDescription
 public extension TargetDependency {
     struct Feature {}
     struct Core {}
+    struct Domain {}
     struct Shared {}
 }
 
@@ -16,6 +17,10 @@ public extension TargetDependency.Feature {
 public extension TargetDependency.Core {
     static let DesignSystem = TargetDependency.core(name: "DesignSystem")
     static let JwtStore = TargetDependency.core(name: "JwtStore")
+}
+
+public extension TargetDependency.Domain {
+    static let AuthDomain = TargetDependency.domain(name: "AuthDomain")
 }
 
 public extension TargetDependency.Shared {

@@ -2,8 +2,12 @@ import UIKit
 import BaseFeature
 import Utility
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 public class SigninViewController: BaseVC<SigninViewModel> {
+    private let disposeBag = DisposeBag()
+    
     private let inputIDTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "아이디")
     }
@@ -33,6 +37,25 @@ public class SigninViewController: BaseVC<SigninViewModel> {
     
     public override func configureVC() {
         navigationItem.title = "로그인 하기"
+        
+        signinButton.rx.tap
+            .bind(with: self) { owner, _ in
+                guard let id = owner.inputIDTextField.text else { return owner.errorLabel.text = "아이디를 입력해주세요." }
+                guard let password = owner.inputPasswordTextField.text else { return owner.errorLabel.text = "비밀번호를 입력해주세요." }
+                
+                if owner.viewModel.isValidPassword(password: password) {
+                    owner.viewModel.requestToSignin(request: SigninRequest(id: id, password: password)) { result in
+                        switch result {
+                        case .success:
+                            print("success")
+                        case .failure:
+                            owner.errorLabel.text = "존재하지 않는 아이디입니다."
+                        }
+                    }
+                } else {
+                    owner.errorLabel.text = "올바르지 않은 비밀번호입니다."
+                }
+            }.disposed(by: disposeBag)
     }
     
     public override func addView() {

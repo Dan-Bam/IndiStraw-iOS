@@ -14,6 +14,8 @@ let project = Project.makeModule(
         .Core.JwtStore,
         .Core.DesignSystem,
         
+        .Domain.AuthDomain,
+        
         .Shared.Utility,
         .Shared.GlobalThirdPartyLib
     ],

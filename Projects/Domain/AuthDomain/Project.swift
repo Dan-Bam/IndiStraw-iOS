@@ -2,13 +2,11 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "SigninFeature",
+    name: "AuthDomain",
     product: .staticLibrary,
     dependencies: [
-        .Feature.BaseFeature,
-        .Core.DesignSystem,
-        .Domain.AuthDomain,
-        .Shared.Utility,
+        .Core.JwtStore,
         .Shared.GlobalThirdPartyLib
-    ]
+    ],
+    resources: ["Resources/**"]
 )
