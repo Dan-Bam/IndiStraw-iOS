@@ -2,11 +2,11 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "JwtStore",
-    product: .framework,
+    name: "AuthDomain",
+    product: .staticLibrary,
     dependencies: [
-        .Shared.GlobalThirdPartyLib,
-        .Shared.Utility
+        .Core.JwtStore,
+        .Shared.GlobalThirdPartyLib
     ],
     resources: ["Resources/**"]
 )
