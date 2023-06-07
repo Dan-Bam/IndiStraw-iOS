@@ -1,18 +1,19 @@
 import UIKit
 import Swinject
+import JwtStore
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-//    static let container = Container()
-//    var assembler: Assembler!
+public class AppDelegate: UIResponder, UIApplicationDelegate {
+    static let container = Container()
+    var assembler: Assembler!
 
-    func application(
+    public func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-//        assembler = Assembler([
-//            JwtStoreAssembly()
-//        ], container: AppDelegate.container)
+        assembler = Assembler([
+            JwtStoreAssembly()
+        ])
         
         
         return true
@@ -20,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: UISceneSession Lifecycle
 
-    func application(
+    public func application(
         _ application: UIApplication,
         configurationForConnecting connectingSceneSession: UISceneSession,
         options: UIScene.ConnectionOptions
@@ -28,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
 
-    func application(
+    public func application(
         _ application: UIApplication,
         didDiscardSceneSessions sceneSessions: Set<UISceneSession>
     ) {}
