@@ -1,4 +1,5 @@
 import Alamofire
+import AuthDomain
 
 enum SigninTarget {
     case signin(SigninRequest)
@@ -6,7 +7,7 @@ enum SigninTarget {
 
 extension SigninTarget: TargetType {
     var baseURL: String {
-        return "https://port-0-indistraw-account-otjl2cli73l2cy.sel4.cloudtype.app/api/v1/auth/"
+        return "https://port-0-indistraw-account-otjl2cli73l2cy.sel4.cloudtype.app/api/v1/auth"
     }
     
     var method: Alamofire.HTTPMethod {
