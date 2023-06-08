@@ -9,9 +9,9 @@ class SignupPhoneNumberViewModel: BaseViewModel {
     
     func requestDuplicatePhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
         AF.request(SignupTarget.sendAuthNumber(phoneNumber: phoneNumber))
-            .responseDecodable { [weak self] (response: AFDataResponse<ManageTokenModel>) in
+            .responseDecodable { (response: AFDataResponse<Data>) in
                 switch response.result {
-                case .success(let response):
+                case .success:
                     completion(.success(()))
                 case .failure(let error):
                     completion(.failure(error))
