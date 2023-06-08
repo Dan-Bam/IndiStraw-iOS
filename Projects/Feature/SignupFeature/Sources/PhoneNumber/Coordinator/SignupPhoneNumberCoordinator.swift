@@ -2,9 +2,9 @@ import Foundation
 import BaseFeature
 
 class SignupPhoneNumberCoordinator: BaseCoordinator {
-    override func start() {
+    func startSignupPhoneNumberVC(name: String) {
         let vm = SignupPhoneNumberViewModel(coordinator: self)
-        let vc = SignupPhoneNumberViewController(viewModel: vm)
+        let vc = SignupPhoneNumberViewController(viewModel: vm, name: name)
         
         navigationController.pushViewController(vc, animated: true)
     }

@@ -5,11 +5,13 @@ import RxSwift
 import RxCocoa
 
 class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
+    var name: String?
+    
     private var isValidAuth = true
     
     private let disposeBag = DisposeBag()
     
-    private let inputNameTextField = TextFieldBox().then {
+    private let inputPhoneNumberTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "전화번호")
     }
     
@@ -21,6 +23,8 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
+    
+    private let errorLabel = ErrorLabel()
     
     private let continueButton = ButtonComponent().then {
         $0.setTitle("계속하기", for: .normal)
@@ -43,6 +47,15 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
     }
     
+    init(viewModel: SignupPhoneNumberViewModel, name: String) {
+        super.init(viewModel: viewModel)
+        self.name = name
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func configureVC() {
         navigationItem.title = "전화번호를 입력해주세요."
         
@@ -50,27 +63,29 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.navigationItem.title = "인증번호를 입력해 주세요."
-                owner.continueButton.setTitle("인증번호 확인", for: .normal)
-                owner.updateAuthNumberTextFieldLayout()
-                owner.viewModel.pushProfileImageVC()
+                let phoneNumber = owner.inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+                if phoneNumber.isEmpty { return owner.errorLabel.text = "전화번호를 입력해주세요" }
+//                owner.navigationItem.title = "인증번호를 입력해 주세요."
+//                owner.continueButton.setTitle("인증번호 확인", for: .normal)
+//                owner.updateAuthNumberTextFieldLayout()
+                owner.viewModel.requestDuplicatePhoneNumber(phoneNumber: phoneNumber)
             }.disposed(by: disposeBag)
     }
     
     override func addView() {
-        view.addSubviews(inputNameTextField, continueButton, inputAuthNumberTextField, againReciveAuthNumberButton, countLabel)
+        view.addSubviews(inputPhoneNumberTextField, continueButton, inputAuthNumberTextField, againReciveAuthNumberButton, countLabel)
         inputAuthNumberTextField.addSubview(countLabel)
     }
     
     override func setLayout() {
-        inputNameTextField.snp.makeConstraints {
+        inputPhoneNumberTextField.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(171)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
         
         continueButton.snp.makeConstraints {
-            $0.top.equalTo(inputNameTextField.snp.bottom).offset(78)
+            $0.top.equalTo(inputPhoneNumberTextField.snp.bottom).offset(78)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
@@ -82,12 +97,12 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     }
     
     private func updateAuthNumberTextFieldLayout() {
-        inputNameTextField.snp.updateConstraints {
+        inputPhoneNumberTextField.snp.updateConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(140)
         }
         
         inputAuthNumberTextField.snp.makeConstraints {
-            $0.top.equalTo(inputNameTextField.snp.bottom).offset(20)
+            $0.top.equalTo(inputPhoneNumberTextField.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
@@ -98,7 +113,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         }
         
         continueButton.snp.updateConstraints {
-            $0.top.equalTo(inputNameTextField.snp.bottom).offset(111)
+            $0.top.equalTo(inputPhoneNumberTextField.snp.bottom).offset(111)
         }
     }
 }
