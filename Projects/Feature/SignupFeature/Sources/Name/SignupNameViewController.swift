@@ -15,17 +15,25 @@ class SignupNameViewController: BaseVC<SignupNameViewModel> {
         $0.setTitle("계속하기", for: .normal)
     }
     
+    private let errorLabel = ErrorLabel()
+    
     override func configureVC() {
         navigationItem.title = "이름을 입력해주세요."
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.viewModel.pushInputPhoneNumberVC()
+                let name = owner.inputNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+                if name.isEmpty {
+                    owner.errorLabel.text = "이름을 입력해주세요."
+                } else {
+                    print("name = \(name)")
+                    owner.viewModel.pushInputPhoneNumberVC(name: name)
+                }
             }.disposed(by: disposeBag)
     }
     
     override func addView() {
-        view.addSubviews(inputNameTextField, continueButton)
+        view.addSubviews(inputNameTextField, continueButton, errorLabel)
     }
     
     override func setLayout() {
@@ -33,6 +41,11 @@ class SignupNameViewController: BaseVC<SignupNameViewModel> {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(171)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
+        }
+        
+        errorLabel.snp.makeConstraints {
+            $0.top.equalTo(inputNameTextField.snp.bottom).offset(7)
+            $0.leading.equalTo(inputNameTextField.snp.leading)
         }
         
         continueButton.snp.makeConstraints {

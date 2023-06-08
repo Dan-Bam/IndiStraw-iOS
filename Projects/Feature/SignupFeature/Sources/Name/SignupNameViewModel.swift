@@ -2,7 +2,7 @@ import Foundation
 import BaseFeature
 
 class SignupNameViewModel: BaseViewModel {
-    func pushInputPhoneNumberVC() {
-        coordinator.navigate(to: .inputPhoneNumberIsRequired)
+    func pushInputPhoneNumberVC(name: String) {
+        coordinator.navigate(to: .inputPhoneNumberIsRequired(name: name))
     }
 }

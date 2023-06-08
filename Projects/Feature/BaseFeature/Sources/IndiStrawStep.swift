@@ -5,7 +5,7 @@ public enum IndiStrawStep {
     //signup
     case selectPhotoIsRequired
     case inputNameIsRequired
-    case inputPhoneNumberIsRequired
+    case inputPhoneNumberIsRequired(name: String)
     case inputIDIsRequired
     case inputPasswordIsRequired
     

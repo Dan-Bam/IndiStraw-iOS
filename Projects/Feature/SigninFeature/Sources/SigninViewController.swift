@@ -40,8 +40,10 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         
         signinButton.rx.tap
             .bind(with: self) { owner, _ in
-                guard let id = owner.inputIDTextField.text else { return owner.errorLabel.text = "아이디를 입력해주세요." }
-                guard let password = owner.inputPasswordTextField.text else { return owner.errorLabel.text = "비밀번호를 입력해주세요." }
+                let id = owner.inputIDTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+                let password = owner.inputPasswordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+                if id.isEmpty { return owner.errorLabel.text = "아이디를 입력해주세요." }
+                if password.isEmpty { return owner.errorLabel.text = "비밀번호를 입력해주세요." }
                 
                 if owner.viewModel.isValidPassword(password: password) {
                     owner.viewModel.requestToSignin(request: SigninRequest(id: id, password: password)) { result in
