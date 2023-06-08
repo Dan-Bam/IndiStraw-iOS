@@ -118,7 +118,6 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         
         errorLabel.snp.updateConstraints {
             $0.top.equalTo(inputPhoneNumberTextField.snp.bottom).offset(81)
-//            $0.leading.equalTo(inputPhoneNumberTextField.snp.leading)
         }
         
         countLabel.snp.makeConstraints {
