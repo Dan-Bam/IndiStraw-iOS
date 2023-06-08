@@ -65,10 +65,10 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             .bind(with: self) { owner, _ in
                 let phoneNumber = owner.inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
                 if phoneNumber.isEmpty { return owner.errorLabel.text = "전화번호를 입력해주세요" }
-                owner.errorLabel.text = ""
-                owner.updateAuthNumberTextFieldLayout()
+//                owner.errorLabel.text = ""
                 owner.navigationItem.title = "인증번호를 입력해 주세요."
                 owner.continueButton.setTitle("인증번호 확인", for: .normal)
+                owner.updateAuthNumberTextFieldLayout()
                 owner.viewModel.requestDuplicatePhoneNumber(phoneNumber: phoneNumber)
             }.disposed(by: disposeBag)
     }
@@ -117,8 +117,8 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         }
         
         errorLabel.snp.makeConstraints {
-            $0.top.equalTo(inputAuthNumberTextField.snp.bottom).offset(7)
-            $0.leading.equalTo(inputAuthNumberTextField.snp.leading)
+            $0.top.equalTo(inputPhoneNumberTextField.snp.bottom).offset(27)
+            $0.leading.equalTo(inputPhoneNumberTextField.snp.leading)
         }
         
         countLabel.snp.makeConstraints {
