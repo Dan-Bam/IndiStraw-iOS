@@ -65,15 +65,18 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             .bind(with: self) { owner, _ in
                 let phoneNumber = owner.inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
                 if phoneNumber.isEmpty { return owner.errorLabel.text = "전화번호를 입력해주세요" }
-//                owner.navigationItem.title = "인증번호를 입력해 주세요."
-//                owner.continueButton.setTitle("인증번호 확인", for: .normal)
-//                owner.updateAuthNumberTextFieldLayout()
+                owner.updateAuthNumberTextFieldLayout()
+                owner.navigationItem.title = "인증번호를 입력해 주세요."
+                owner.continueButton.setTitle("인증번호 확인", for: .normal)
                 owner.viewModel.requestDuplicatePhoneNumber(phoneNumber: phoneNumber)
             }.disposed(by: disposeBag)
     }
     
     override func addView() {
-        view.addSubviews(inputPhoneNumberTextField, continueButton, inputAuthNumberTextField, againReciveAuthNumberButton, countLabel)
+        view.addSubviews(
+            inputPhoneNumberTextField, continueButton,
+            inputAuthNumberTextField, againReciveAuthNumberButton,
+            countLabel, errorLabel)
         inputAuthNumberTextField.addSubview(countLabel)
     }
     
@@ -82,6 +85,11 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(171)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
+        }
+        
+        errorLabel.snp.makeConstraints {
+            $0.top.equalTo(inputPhoneNumberTextField.snp.bottom).offset(7)
+            $0.leading.equalTo(inputPhoneNumberTextField.snp.leading)
         }
         
         continueButton.snp.makeConstraints {
