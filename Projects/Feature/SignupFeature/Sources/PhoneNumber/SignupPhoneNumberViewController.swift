@@ -3,6 +3,7 @@ import BaseFeature
 import DesignSystem
 import RxSwift
 import RxCocoa
+import Utility
 
 class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     var name: String?
@@ -47,6 +48,18 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
     }
     
+    func requestAuthButtonDidTap(phoneNumber: String) {
+        LoadingIndicator.showLoading(text: "")
+        
+        guard phoneNumber.hasPrefix("010") else {
+            errorLabel.text = "전화번호 형식이 올바르지 않습니다."
+            LoadingIndicator.hideLoading()
+            return
+        }
+        
+        viewModel.requestDuplicatePhoneNumber(phoneNumber: phoneNumber)
+    }
+    
     init(viewModel: SignupPhoneNumberViewModel, name: String) {
         super.init(viewModel: viewModel)
         self.name = name
@@ -63,14 +76,33 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                let phoneNumber = owner.inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-                if phoneNumber.isEmpty { return owner.errorLabel.text = "전화번호를 입력해주세요" }
-                owner.errorLabel.text = nil
-                owner.navigationItem.title = "인증번호를 입력해 주세요."
-                owner.continueButton.setTitle("인증번호 확인", for: .normal)
-                owner.updateAuthNumberTextFieldLayout()
-                owner.viewModel.requestDuplicatePhoneNumber(phoneNumber: phoneNumber)
+                owner.requestAuthNumber()
             }.disposed(by: disposeBag)
+    }
+    
+    func requestAuthNumber() {
+        let phoneNumber = inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        if phoneNumber.isEmpty { return errorLabel.text = "전화번호를 입력해주세요" }
+        guard phoneNumber.hasPrefix("010") else {
+            errorLabel.text = "전화번호 형식이 올바르지 않아요."
+            LoadingIndicator.hideLoading()
+            return
+        }
+        
+        viewModel.requestDuplicatePhoneNumber(phoneNumber: phoneNumber) { [weak self] response in
+            switch response {
+            case .success:
+                print("asdf")
+                DispatchQueue.main.async {
+                    self?.errorLabel.text = nil
+                    self?.navigationItem.title = "인증번호를 입력해 주세요."
+                    self?.continueButton.setTitle("인증번호 확인", for: .normal)
+                    self?.updateAuthNumberTextFieldLayout()
+                }
+            case .failure(let error):
+                print("asdf")
+            }
+        }
     }
     
     override func addView() {
