@@ -41,12 +41,10 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         attributeString.addAttributes([
             .foregroundColor : UIColor.white,
             .font : DesignSystemFontFamily.Suit.bold.font(size: 12) as Any
-        ],
-        range: (text as NSString).range(of: "재전송"))
-        
+        ], range: (text as NSString).range(of: "재전송"))
         againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
     }
-
+    
     override func configureVC() {
         navigationItem.title = "전화번호를 입력해주세요."
         
@@ -100,7 +98,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             }
         }
     }
-
+    
     private func checkAuthCode() {
         let authCode = inputAuthNumberTextField.text!
         let phoneNumber = inputPhoneNumberTextField.text!
