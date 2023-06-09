@@ -27,22 +27,23 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     
     private let continueButton = ButtonComponent().then {
         $0.tag = 0
+        $0.isEnabled = false
         $0.setTitle("계속하기", for: .normal)
     }
     
-    private let againReciveAuthNumberButton = UIButton().then {
+    private let resendAuthNumberButton = UIButton().then {
         $0.setTitle("인증번호가 안오셨나요? 재전송", for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
     }
     
     private func setAgainReciveAuthNumberButtonAttributedTitle() {
-        guard let text = againReciveAuthNumberButton.titleLabel?.text else { return }
+        guard let text = resendAuthNumberButton.titleLabel?.text else { return }
         let attributeString = NSMutableAttributedString(string: text)
         attributeString.addAttributes([
             .foregroundColor : UIColor.white,
             .font : DesignSystemFontFamily.Suit.bold.font(size: 12) as Any
         ], range: (text as NSString).range(of: "재전송"))
-        againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
+        resendAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
     }
     
     override func configureVC() {
@@ -57,6 +58,11 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
                 } else {
                     owner.checkAuthCode()
                 }
+            }.disposed(by: disposeBag)
+        
+        resendAuthNumberButton.rx.tap
+            .bind(with: self) { owner, _ in
+                
             }.disposed(by: disposeBag)
         
         bindUI()
@@ -130,6 +136,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             .map { $0.count >= 11 }
             .bind(with: self) { owner, isValid in
                 if isValid {
+                    owner.continueButton.isEnabled = true
                     owner.inputPhoneNumberTextField.isEnabled = false
                     owner.inputPhoneNumberTextField.resignFirstResponder()
                 }
@@ -139,7 +146,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     override func addView() {
         view.addSubviews(
             inputPhoneNumberTextField, continueButton,
-            inputAuthNumberTextField, againReciveAuthNumberButton,
+            inputAuthNumberTextField, resendAuthNumberButton,
             countLabel, errorLabel)
         inputAuthNumberTextField.addSubview(countLabel)
     }
@@ -162,7 +169,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             $0.height.equalTo(54)
         }
         
-        againReciveAuthNumberButton.snp.makeConstraints {
+        resendAuthNumberButton.snp.makeConstraints {
             $0.top.equalTo(continueButton.snp.bottom).offset(15)
             $0.centerX.equalToSuperview()
         }

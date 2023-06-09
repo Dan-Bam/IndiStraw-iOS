@@ -4,6 +4,10 @@ import AuthDomain
 import JwtStore
 import Alamofire
 
+enum SignupPhoneNumberErrorType {
+    
+}
+
 class SignupPhoneNumberViewModel: BaseViewModel {
     var container = DIContainer.shared.resolve(JwtStore.self)!
 
