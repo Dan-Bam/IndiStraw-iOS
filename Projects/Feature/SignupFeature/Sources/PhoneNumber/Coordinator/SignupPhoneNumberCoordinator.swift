@@ -3,8 +3,8 @@ import BaseFeature
 
 class SignupPhoneNumberCoordinator: BaseCoordinator {
     func startSignupPhoneNumberVC(name: String) {
-        let vm = SignupPhoneNumberViewModel(coordinator: self)
-        let vc = SignupPhoneNumberViewController(viewModel: vm, name: name)
+        let vm = SignupPhoneNumberViewModel(coordinator: self, name: name)
+        let vc = SignupPhoneNumberViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
     }

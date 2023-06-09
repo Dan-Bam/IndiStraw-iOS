@@ -6,8 +6,6 @@ import RxCocoa
 import Utility
 
 class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
-    var name: String?
-    
     private var isValidAuth = true
     
     private let disposeBag = DisposeBag()
@@ -28,6 +26,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     private let errorLabel = ErrorLabel()
     
     private let continueButton = ButtonComponent().then {
+        $0.tag = 0
         $0.setTitle("계속하기", for: .normal)
     }
     
@@ -48,26 +47,15 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
     }
     
-    func requestAuthButtonDidTap(phoneNumber: String) {
-        LoadingIndicator.showLoading(text: "")
-        
-        guard phoneNumber.hasPrefix("010") else {
-            errorLabel.text = "전화번호 형식이 올바르지 않습니다."
-            LoadingIndicator.hideLoading()
-            return
-        }
-        
-        viewModel.requestDuplicatePhoneNumber(phoneNumber: phoneNumber)
-    }
-    
-    init(viewModel: SignupPhoneNumberViewModel, name: String) {
-        super.init(viewModel: viewModel)
-        self.name = name
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    func requestAuthButtonDidTap(phoneNumber: String) {
+//        LoadingIndicator.showLoading(text: "")
+//
+//        guard phoneNumber.hasPrefix("010") else {
+//            errorLabel.text = "전화번호 형식이 아닙니다."
+//            LoadingIndicator.hideLoading()
+//            return
+//        }
+//    }
     
     override func configureVC() {
         navigationItem.title = "전화번호를 입력해주세요."
@@ -76,11 +64,16 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.requestAuthNumber()
+                if owner.continueButton.tag == 0 {
+                    owner.checkDuplicationPhoneNumber()
+                } else {
+                    // 인증번호 확인 요청
+                    owner.checkAuthCode()
+                }
             }.disposed(by: disposeBag)
     }
     
-    func requestAuthNumber() {
+    func checkDuplicationPhoneNumber() {
         let phoneNumber = inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         if phoneNumber.isEmpty { return errorLabel.text = "전화번호를 입력해주세요" }
         guard phoneNumber.hasPrefix("010") else {
@@ -89,20 +82,46 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             return
         }
         
-        viewModel.requestDuplicatePhoneNumber(phoneNumber: phoneNumber) { [weak self] response in
+        viewModel.requestToCheckDuplicationPhoneNumber(phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success:
+                self?.requestToSendAuthNumber(phoneNumber: phoneNumber)
+            case .failure:
+                self?.errorLabel.text = "이미 등록된 전화번호 입니다."
+            }
+        }
+    }
+    
+    func requestToSendAuthNumber(phoneNumber: String) {
+        viewModel.requestToSendAuthNumber(phoneNumber: phoneNumber) { [weak self] response in
             switch response {
             case .success:
-                print("asdf")
                 DispatchQueue.main.async {
+                    self?.continueButton.tag = 1
                     self?.errorLabel.text = nil
                     self?.navigationItem.title = "인증번호를 입력해 주세요."
                     self?.continueButton.setTitle("인증번호 확인", for: .normal)
                     self?.updateAuthNumberTextFieldLayout()
                 }
-            case .failure(let error):
-                print("asdf")
+            case .failure:
+                return
             }
         }
+    }
+
+    private func checkAuthCode() {
+        let authCode = inputAuthNumberTextField.text!
+        let phoneNumber = inputPhoneNumberTextField.text!
+        
+        viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success:
+                self?.viewModel.pushProfileImageVC()
+            case .failure:
+                self?.errorLabel.text = "인증번호가 틀렸습니다."
+            }
+        }
+        
     }
     
     override func addView() {
