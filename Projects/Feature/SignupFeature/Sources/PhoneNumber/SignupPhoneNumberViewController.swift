@@ -98,6 +98,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             }
         }
     }
+
     
     private func checkAuthCode() {
         let authCode = inputAuthNumberTextField.text!
