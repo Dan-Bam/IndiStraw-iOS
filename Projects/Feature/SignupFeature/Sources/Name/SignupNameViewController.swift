@@ -26,7 +26,6 @@ class SignupNameViewController: BaseVC<SignupNameViewModel> {
                 if name.isEmpty {
                     owner.errorLabel.text = "이름을 입력해주세요."
                 } else {
-                    print("name = \(name)")
                     owner.viewModel.pushInputPhoneNumberVC(name: name)
                 }
             }.disposed(by: disposeBag)
