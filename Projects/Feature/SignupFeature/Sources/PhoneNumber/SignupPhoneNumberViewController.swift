@@ -46,17 +46,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         
         againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
     }
-    
-//    func requestAuthButtonDidTap(phoneNumber: String) {
-//        LoadingIndicator.showLoading(text: "")
-//
-//        guard phoneNumber.hasPrefix("010") else {
-//            errorLabel.text = "전화번호 형식이 아닙니다."
-//            LoadingIndicator.hideLoading()
-//            return
-//        }
-//    }
-    
+
     override func configureVC() {
         navigationItem.title = "전화번호를 입력해주세요."
         
@@ -67,7 +57,6 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
                 if owner.continueButton.tag == 0 {
                     owner.checkDuplicationPhoneNumber()
                 } else {
-                    // 인증번호 확인 요청
                     owner.checkAuthCode()
                 }
             }.disposed(by: disposeBag)
@@ -75,7 +64,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         bindUI()
     }
     
-    func checkDuplicationPhoneNumber() {
+    private func checkDuplicationPhoneNumber() {
         let phoneNumber = inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         if phoneNumber.isEmpty { return errorLabel.text = "전화번호를 입력해주세요" }
         guard phoneNumber.hasPrefix("010") else {
@@ -94,7 +83,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         }
     }
     
-    func requestToSendAuthNumber(phoneNumber: String) {
+    private func requestToSendAuthNumber(phoneNumber: String) {
         viewModel.requestToSendAuthNumber(phoneNumber: phoneNumber) { [weak self] response in
             switch response {
             case .success:
@@ -104,6 +93,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
                     self?.navigationItem.title = "인증번호를 입력해 주세요."
                     self?.continueButton.setTitle("인증번호 확인", for: .normal)
                     self?.updateAuthNumberTextFieldLayout()
+                    self?.setupPossibleBackgroundTimer()
                 }
             case .failure:
                 return
@@ -116,8 +106,6 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         let phoneNumber = inputPhoneNumberTextField.text!
         
         viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
-            
-            print("result! = \(result)")
             switch result {
             case .success:
                 self?.viewModel.pushProfileImageVC()
@@ -209,7 +197,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
 
 extension SignupPhoneNumberViewController {
     private func setupPossibleBackgroundTimer() {
-        let count = 180
+        let count = 300
         
         isValidAuth = false
         

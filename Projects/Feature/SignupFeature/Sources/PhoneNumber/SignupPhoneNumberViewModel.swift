@@ -14,14 +14,12 @@ class SignupPhoneNumberViewModel: BaseViewModel {
         super.init(coordinator: coordinator)
     }
     
-    
     func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
         AF.request(SignupTarget.sendAuthNumber(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
                 switch response.result {
                 case .success:
-                    print("statusCode = \(response.response?.statusCode)")
                     print("success")
                     completion(.success(()))
                 case .failure(let error):
@@ -37,7 +35,6 @@ class SignupPhoneNumberViewModel: BaseViewModel {
             .responseData { response in
                 switch response.result {
                 case .success:
-                    print("statusCode = \(response.response?.statusCode)")
                     completion(.success(()))
                 case .failure(let error):
                     completion(.failure(error))
@@ -52,7 +49,6 @@ class SignupPhoneNumberViewModel: BaseViewModel {
             .responseData { response in
                 switch response.result {
                 case .success:
-                    print("statusCode = \(response.response?.statusCode)")
                     completion(.success(()))
                 case .failure(let error):
                     completion(.failure(error))
