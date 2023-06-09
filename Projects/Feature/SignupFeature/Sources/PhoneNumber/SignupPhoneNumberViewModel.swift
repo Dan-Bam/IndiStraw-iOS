@@ -17,6 +17,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
     
     func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
         AF.request(SignupTarget.sendAuthNumber(phoneNumber: phoneNumber))
+            .validate()
             .responseData { response in
                 switch response.result {
                 case .success:
@@ -32,6 +33,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
     
     func requestToCheckDuplicationPhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
         AF.request(SignupTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber))
+            .validate()
             .responseData { response in
                 switch response.result {
                 case .success:
@@ -46,6 +48,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
     
     func requestToCheckAuthNumber(authCode: String, phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
         AF.request(SignupTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
+            .validate()
             .responseData { response in
                 switch response.result {
                 case .success:

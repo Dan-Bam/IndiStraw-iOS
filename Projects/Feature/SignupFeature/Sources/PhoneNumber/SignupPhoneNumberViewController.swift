@@ -71,6 +71,8 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
                     owner.checkAuthCode()
                 }
             }.disposed(by: disposeBag)
+        
+        bindUI()
     }
     
     func checkDuplicationPhoneNumber() {
@@ -114,6 +116,8 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         let phoneNumber = inputPhoneNumberTextField.text!
         
         viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
+            
+            print("result! = \(result)")
             switch result {
             case .success:
                 self?.viewModel.pushProfileImageVC()
@@ -121,7 +125,28 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
                 self?.errorLabel.text = "인증번호가 틀렸습니다."
             }
         }
+    }
+    
+    private func bindUI() {
+        let maxLength = 4
         
+        inputAuthNumberTextField.rx.text.orEmpty
+            .map { text -> String in
+                let truncatedText = String(text.prefix(maxLength))
+                return truncatedText
+            }
+            .bind(with: self, onNext: { owner, text in
+                owner.inputAuthNumberTextField.text = text
+            }).disposed(by: disposeBag)
+        
+        inputPhoneNumberTextField.rx.text.orEmpty
+            .map { $0.count >= 11 }
+            .bind(with: self) { owner, isValid in
+                if isValid {
+                    owner.inputPhoneNumberTextField.isEnabled = false
+                    owner.inputPhoneNumberTextField.resignFirstResponder()
+                }
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
@@ -185,7 +210,6 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
 extension SignupPhoneNumberViewController {
     private func setupPossibleBackgroundTimer() {
         let count = 180
-        
         
         isValidAuth = false
         
