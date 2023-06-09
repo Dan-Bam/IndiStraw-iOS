@@ -3,10 +3,9 @@ import BaseFeature
 import DesignSystem
 import RxSwift
 import RxCocoa
+import Utility
 
 class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
-    var name: String?
-    
     private var isValidAuth = true
     
     private let disposeBag = DisposeBag()
@@ -27,6 +26,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     private let errorLabel = ErrorLabel()
     
     private let continueButton = ButtonComponent().then {
+        $0.tag = 0
         $0.setTitle("계속하기", for: .normal)
     }
     
@@ -41,19 +41,8 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         attributeString.addAttributes([
             .foregroundColor : UIColor.white,
             .font : DesignSystemFontFamily.Suit.bold.font(size: 12) as Any
-        ],
-        range: (text as NSString).range(of: "재전송"))
-        
+        ], range: (text as NSString).range(of: "재전송"))
         againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
-    }
-    
-    init(viewModel: SignupPhoneNumberViewModel, name: String) {
-        super.init(viewModel: viewModel)
-        self.name = name
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     override func configureVC() {
@@ -63,13 +52,87 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                let phoneNumber = owner.inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-                if phoneNumber.isEmpty { return owner.errorLabel.text = "전화번호를 입력해주세요" }
-                owner.errorLabel.text = nil
-                owner.navigationItem.title = "인증번호를 입력해 주세요."
-                owner.continueButton.setTitle("인증번호 확인", for: .normal)
-                owner.updateAuthNumberTextFieldLayout()
-                owner.viewModel.requestDuplicatePhoneNumber(phoneNumber: phoneNumber)
+                if owner.continueButton.tag == 0 {
+                    owner.checkDuplicationPhoneNumber()
+                } else {
+                    owner.checkAuthCode()
+                }
+            }.disposed(by: disposeBag)
+        
+        bindUI()
+    }
+    
+    private func checkDuplicationPhoneNumber() {
+        let phoneNumber = inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        if phoneNumber.isEmpty { return errorLabel.text = "전화번호를 입력해주세요" }
+        guard phoneNumber.hasPrefix("010") else {
+            errorLabel.text = "전화번호 형식이 올바르지 않아요."
+            LoadingIndicator.hideLoading()
+            return
+        }
+        
+        viewModel.requestToCheckDuplicationPhoneNumber(phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success:
+                self?.requestToSendAuthNumber(phoneNumber: phoneNumber)
+            case .failure:
+                self?.errorLabel.text = "이미 등록된 전화번호 입니다."
+            }
+        }
+    }
+    
+    private func requestToSendAuthNumber(phoneNumber: String) {
+        viewModel.requestToSendAuthNumber(phoneNumber: phoneNumber) { [weak self] response in
+            switch response {
+            case .success:
+                DispatchQueue.main.async {
+                    self?.continueButton.tag = 1
+                    self?.errorLabel.text = nil
+                    self?.navigationItem.title = "인증번호를 입력해 주세요."
+                    self?.continueButton.setTitle("인증번호 확인", for: .normal)
+                    self?.updateAuthNumberTextFieldLayout()
+                    self?.setupPossibleBackgroundTimer()
+                }
+            case .failure:
+                return
+            }
+        }
+    }
+
+    
+    private func checkAuthCode() {
+        let authCode = inputAuthNumberTextField.text!
+        let phoneNumber = inputPhoneNumberTextField.text!
+        
+        viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success:
+                self?.viewModel.pushProfileImageVC()
+            case .failure:
+                self?.errorLabel.text = "인증번호가 틀렸습니다."
+            }
+        }
+    }
+    
+    private func bindUI() {
+        let maxLength = 4
+        
+        inputAuthNumberTextField.rx.text.orEmpty
+            .map { text -> String in
+                let truncatedText = String(text.prefix(maxLength))
+                return truncatedText
+            }
+            .bind(with: self, onNext: { owner, text in
+                owner.inputAuthNumberTextField.text = text
+            }).disposed(by: disposeBag)
+        
+        inputPhoneNumberTextField.rx.text.orEmpty
+            .map { $0.count >= 11 }
+            .bind(with: self) { owner, isValid in
+                if isValid {
+                    owner.inputPhoneNumberTextField.isEnabled = false
+                    owner.inputPhoneNumberTextField.resignFirstResponder()
+                }
             }.disposed(by: disposeBag)
     }
     
@@ -133,8 +196,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
 
 extension SignupPhoneNumberViewController {
     private func setupPossibleBackgroundTimer() {
-        let count = 180
-        
+        let count = 300
         
         isValidAuth = false
         
