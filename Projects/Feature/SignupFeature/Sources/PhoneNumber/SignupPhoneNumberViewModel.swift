@@ -12,6 +12,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
             .responseData { response in
                 switch response.result {
                 case .success:
+                    print("statusCode = \(response.response?.statusCode)")
                     print("success")
                     completion(.success(()))
                 case .failure(let error):

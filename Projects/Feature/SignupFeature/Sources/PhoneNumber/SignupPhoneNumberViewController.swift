@@ -28,6 +28,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     private let errorLabel = ErrorLabel()
     
     private let continueButton = ButtonComponent().then {
+        $0.tag = 0
         $0.setTitle("계속하기", for: .normal)
     }
     
@@ -76,7 +77,12 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.requestAuthNumber()
+                
+                if continueButton.tag == 0 {
+                    owner.requestAuthNumber()
+                } else {
+                    
+                }
             }.disposed(by: disposeBag)
     }
     
@@ -94,6 +100,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             case .success:
                 print("asdf")
                 DispatchQueue.main.async {
+                    self?.continueButton.tag = 1
                     self?.errorLabel.text = nil
                     self?.navigationItem.title = "인증번호를 입력해 주세요."
                     self?.continueButton.setTitle("인증번호 확인", for: .normal)
@@ -104,6 +111,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             }
         }
     }
+
     
     override func addView() {
         view.addSubviews(
