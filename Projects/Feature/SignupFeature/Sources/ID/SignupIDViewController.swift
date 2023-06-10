@@ -6,6 +6,7 @@ import RxCocoa
 
 class SignupIDViewController: BaseVC<SignupIDViewModel> {
     private let disposeBag = DisposeBag()
+    
     private let inputIDTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "아이디")
     }
@@ -13,13 +14,30 @@ class SignupIDViewController: BaseVC<SignupIDViewModel> {
     private let continueButton = ButtonComponent().then {
         $0.setTitle("계속하기", for: .normal)
     }
+    
+    private var errorLabel = ErrorLabel()
+    
     override func configureVC() {
         navigationItem.title = "아이디를 입력해주세요"
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.viewModel.pushPasswordVC()
-                
+                let id = owner.inputIDTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+                if id.isEmpty {
+                    owner.errorLabel.text = "아이디를 입력해주세요."
+                } else if !(6...15).contains(id.count) {
+                    owner.errorLabel.text = "6~15 글자로 입력해주세요."
+                } else {
+                    owner.viewModel.requestToCheckDuplicationID(id: id) { result in
+                        switch result {
+                        case .success:
+                            owner.viewModel.pushPasswordVC()
+                        case .failure:
+                            owner.errorLabel.text = "이미 있는 아이디입니다."
+                        }
+                    }
+                    
+                }
             }.disposed(by: disposeBag)
     }
     
