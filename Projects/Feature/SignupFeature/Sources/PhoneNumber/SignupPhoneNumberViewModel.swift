@@ -4,8 +4,9 @@ import AuthDomain
 import JwtStore
 import Alamofire
 
-enum SignupPhoneNumberErrorType {
-    
+enum SignupPhoneNumberErrorType: Error {
+    case cantSendAuthNumber
+    case tooManyRequestException
 }
 
 class SignupPhoneNumberViewModel: BaseViewModel {
@@ -18,18 +19,19 @@ class SignupPhoneNumberViewModel: BaseViewModel {
         super.init(coordinator: coordinator)
     }
     
-    func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+    func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, SignupPhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(SignupTarget.sendAuthNumber(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
-                switch response.result {
-                case .success:
-                    print("statusCode = \(response.response?.statusCode)")
-                    print("success")
+                switch response.response?.statusCode {
+                case 204:
                     completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                    print("Error - inputPhoneNumber = \(error.localizedDescription)")
+                case 429:
+                    completion(.failure(.tooManyRequestException))
+                case 400:
+                    completion(.failure(.cantSendAuthNumber))
+                default:
+                    completion(.failure(.cantSendAuthNumber))
                 }
             }
     }

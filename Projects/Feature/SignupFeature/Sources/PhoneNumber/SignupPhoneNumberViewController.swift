@@ -6,9 +6,9 @@ import RxCocoa
 import Utility
 
 class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
-    private var isValidAuth = true
+    private var disposeBag = DisposeBag()
     
-    private let disposeBag = DisposeBag()
+    private var timerDisposable: Disposable?
     
     private let inputPhoneNumberTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "전화번호")
@@ -62,7 +62,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         
         resendAuthNumberButton.rx.tap
             .bind(with: self) { owner, _ in
-                
+                owner.resendButtonDidTap()
             }.disposed(by: disposeBag)
         
         bindUI()
@@ -105,6 +105,19 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         }
     }
 
+    private func resendButtonDidTap() {
+        let phoneNumber = inputPhoneNumberTextField.text!
+        viewModel.requestToSendAuthNumber(phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success:
+                self?.setupPossibleBackgroundTimer()
+            case .failure(.cantSendAuthNumber):
+                self?.errorLabel.text = "인증번호 전송에 실패했습니다."
+            case .failure(.tooManyRequestException):
+                self?.errorLabel.text = "최대 요청횟수를 초과했습니다. 1시간 이후에 다시 시도해주세요"
+            }
+        }
+    }
     
     private func checkAuthCode() {
         let authCode = inputAuthNumberTextField.text!
@@ -133,7 +146,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             }).disposed(by: disposeBag)
         
         inputPhoneNumberTextField.rx.text.orEmpty
-            .map { $0.count >= 11 }
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count >= 11 }
             .bind(with: self) { owner, isValid in
                 if isValid {
                     owner.continueButton.isEnabled = true
@@ -203,11 +216,10 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
 
 extension SignupPhoneNumberViewController {
     private func setupPossibleBackgroundTimer() {
+        timerDisposable?.dispose()
         let count = 300
         
-        isValidAuth = false
-        
-        Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
+        timerDisposable = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
             .take(count+1)
             .map { count - $0 }
             .bind(with: self) { owner, remainingSeconds in
@@ -217,8 +229,8 @@ extension SignupPhoneNumberViewController {
                 
                 if remainingSeconds == 0 {
                     owner.countLabel.text = "00:00"
-                    owner.isValidAuth = true
                 }
-            }.disposed(by: disposeBag)
+            }
+        timerDisposable?.disposed(by: disposeBag)
     }
 }
