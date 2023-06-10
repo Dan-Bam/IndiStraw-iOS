@@ -183,11 +183,6 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
-        
-        resendAuthNumberButton.snp.makeConstraints {
-            $0.top.equalTo(continueButton.snp.bottom).offset(15)
-            $0.centerX.equalToSuperview()
-        }
     }
     
     private func updateAuthNumberTextFieldLayout() {
@@ -212,6 +207,11 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         
         continueButton.snp.updateConstraints {
             $0.top.equalTo(inputPhoneNumberTextField.snp.bottom).offset(111)
+        }
+        
+        resendAuthNumberButton.snp.makeConstraints {
+            $0.top.equalTo(continueButton.snp.bottom).offset(15)
+            $0.centerX.equalToSuperview()
         }
     }
 }
