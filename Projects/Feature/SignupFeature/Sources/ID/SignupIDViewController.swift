@@ -42,7 +42,7 @@ class SignupIDViewController: BaseVC<SignupIDViewModel> {
     }
     
     override func addView() {
-        view.addSubviews(inputIDTextField, continueButton)
+        view.addSubviews(inputIDTextField, continueButton, errorLabel)
     }
     
     override func setLayout() {
@@ -50,6 +50,11 @@ class SignupIDViewController: BaseVC<SignupIDViewModel> {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(171)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
+        }
+        
+        errorLabel.snp.makeConstraints {
+            $0.top.equalTo(inputIDTextField.snp.bottom).offset(7)
+            $0.leading.equalTo(inputIDTextField.snp.leading)
         }
         
         continueButton.snp.makeConstraints {
