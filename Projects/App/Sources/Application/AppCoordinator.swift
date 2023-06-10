@@ -1,6 +1,7 @@
 import UIKit
 import BaseFeature
 import RootFeature
+import SignupFeature
 
 open class AppCoordinator: Coordinator {
     public var navigationController: UINavigationController

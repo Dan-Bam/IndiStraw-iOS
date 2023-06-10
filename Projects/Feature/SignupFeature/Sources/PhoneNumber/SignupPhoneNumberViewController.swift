@@ -6,9 +6,9 @@ import RxCocoa
 import Utility
 
 class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
-    private var isValidAuth = true
+    private var disposeBag = DisposeBag()
     
-    private let disposeBag = DisposeBag()
+    private var timerDisposable: Disposable?
     
     private let inputPhoneNumberTextField = TextFieldBox().then {
         $0.setPlaceholer(text: "전화번호")
@@ -27,22 +27,23 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     
     private let continueButton = ButtonComponent().then {
         $0.tag = 0
+        $0.isEnabled = false
         $0.setTitle("계속하기", for: .normal)
     }
     
-    private let againReciveAuthNumberButton = UIButton().then {
+    private let resendAuthNumberButton = UIButton().then {
         $0.setTitle("인증번호가 안오셨나요? 재전송", for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
     }
     
     private func setAgainReciveAuthNumberButtonAttributedTitle() {
-        guard let text = againReciveAuthNumberButton.titleLabel?.text else { return }
+        guard let text = resendAuthNumberButton.titleLabel?.text else { return }
         let attributeString = NSMutableAttributedString(string: text)
         attributeString.addAttributes([
             .foregroundColor : UIColor.white,
             .font : DesignSystemFontFamily.Suit.bold.font(size: 12) as Any
         ], range: (text as NSString).range(of: "재전송"))
-        againReciveAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
+        resendAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
     }
     
     override func configureVC() {
@@ -57,6 +58,11 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
                 } else {
                     owner.checkAuthCode()
                 }
+            }.disposed(by: disposeBag)
+        
+        resendAuthNumberButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.resendButtonDidTap()
             }.disposed(by: disposeBag)
         
         bindUI()
@@ -99,6 +105,19 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         }
     }
 
+    private func resendButtonDidTap() {
+        let phoneNumber = inputPhoneNumberTextField.text!
+        viewModel.requestToSendAuthNumber(phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success:
+                self?.setupPossibleBackgroundTimer()
+            case .failure(.cantSendAuthNumber):
+                self?.errorLabel.text = "인증번호 전송에 실패했습니다."
+            case .failure(.tooManyRequestException):
+                self?.errorLabel.text = "최대 요청횟수를 초과했습니다. 1시간 후에 다시 시도해주세요."
+            }
+        }
+    }
     
     private func checkAuthCode() {
         let authCode = inputAuthNumberTextField.text!
@@ -108,8 +127,10 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             switch result {
             case .success:
                 self?.viewModel.pushProfileImageVC()
-            case .failure:
+            case .failure(.cantSendAuthNumber):
                 self?.errorLabel.text = "인증번호가 틀렸습니다."
+            case .failure(.tooManyRequestException):
+                self?.errorLabel.text = "최대 인증확인 요청 횟수를 초과했습니다. 1시간 후에 다시 시도해주세요"
             }
         }
     }
@@ -127,9 +148,10 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             }).disposed(by: disposeBag)
         
         inputPhoneNumberTextField.rx.text.orEmpty
-            .map { $0.count >= 11 }
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count >= 11 }
             .bind(with: self) { owner, isValid in
                 if isValid {
+                    owner.continueButton.isEnabled = true
                     owner.inputPhoneNumberTextField.isEnabled = false
                     owner.inputPhoneNumberTextField.resignFirstResponder()
                 }
@@ -139,7 +161,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     override func addView() {
         view.addSubviews(
             inputPhoneNumberTextField, continueButton,
-            inputAuthNumberTextField, againReciveAuthNumberButton,
+            inputAuthNumberTextField, resendAuthNumberButton,
             countLabel, errorLabel)
         inputAuthNumberTextField.addSubview(countLabel)
     }
@@ -160,11 +182,6 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             $0.top.equalTo(inputPhoneNumberTextField.snp.bottom).offset(78)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
-        }
-        
-        againReciveAuthNumberButton.snp.makeConstraints {
-            $0.top.equalTo(continueButton.snp.bottom).offset(15)
-            $0.centerX.equalToSuperview()
         }
     }
     
@@ -191,16 +208,20 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         continueButton.snp.updateConstraints {
             $0.top.equalTo(inputPhoneNumberTextField.snp.bottom).offset(111)
         }
+        
+        resendAuthNumberButton.snp.makeConstraints {
+            $0.top.equalTo(continueButton.snp.bottom).offset(15)
+            $0.centerX.equalToSuperview()
+        }
     }
 }
 
 extension SignupPhoneNumberViewController {
     private func setupPossibleBackgroundTimer() {
+        timerDisposable?.dispose()
         let count = 300
         
-        isValidAuth = false
-        
-        Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
+        timerDisposable = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
             .take(count+1)
             .map { count - $0 }
             .bind(with: self) { owner, remainingSeconds in
@@ -210,8 +231,8 @@ extension SignupPhoneNumberViewController {
                 
                 if remainingSeconds == 0 {
                     owner.countLabel.text = "00:00"
-                    owner.isValidAuth = true
                 }
-            }.disposed(by: disposeBag)
+            }
+        timerDisposable?.disposed(by: disposeBag)
     }
 }
