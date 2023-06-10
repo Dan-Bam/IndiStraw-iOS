@@ -1,15 +1,15 @@
 import Foundation
 import BaseFeature
 
-public class SignupIDCoordiantor: BaseCoordinator {
-    public  override func start() {
+class SignupIDCoordiantor: BaseCoordinator {
+    override func start() {
         let vm = SignupIDViewModel(coordinator: self)
         let vc = SignupIDViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
     }
     
-    public  override func navigate(to step: IndiStrawStep) {
+    override func navigate(to step: IndiStrawStep) {
         switch step {
         case .inputPasswordIsRequired:
             inputPasswordIsRequired()
