@@ -114,7 +114,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             case .failure(.cantSendAuthNumber):
                 self?.errorLabel.text = "인증번호 전송에 실패했습니다."
             case .failure(.tooManyRequestException):
-                self?.errorLabel.text = "최대 요청횟수를 초과했습니다. 1시간 이후에 다시 시도해주세요"
+                self?.errorLabel.text = "최대 요청횟수를 초과했습니다. 1시간 후에 다시 시도해주세요."
             }
         }
     }
@@ -127,8 +127,10 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
             switch result {
             case .success:
                 self?.viewModel.pushProfileImageVC()
-            case .failure:
+            case .failure(.cantSendAuthNumber):
                 self?.errorLabel.text = "인증번호가 틀렸습니다."
+            case .failure(.tooManyRequestException):
+                self?.errorLabel.text = "최대 인증확인 요청 횟수를 초과했습니다. 1시간 후에 다시 시도해주세요"
             }
         }
     }
