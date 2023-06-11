@@ -23,12 +23,29 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     
     private let errorLabel = ErrorLabel()
     
+    func isPasswordMatch() {
+        
+    }
+    
+    func showEmptyPasswordError(password: String, checkPassword: String) -> Bool {
+        if password.isEmpty {
+            errorLabel.text = "비밀번호를 입력해주세요."
+        } else if checkPassword.isEmpty {
+            errorLabel.text = "비밀번호 확인을 입력해주세요."
+        }
+    }
+    
     override func configureVC() {
         navigationItem.title = "비밀번호를 입력해 주세요."
         vc.delegate = self
         
         confirmButton.rx.tap
             .bind(with: self) { owner, _ in
+                let password = owner.inputPasswordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+                let checkPassword = owner.inputCheckPasswordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                owner.showEmptyPasswordError(password: password, checkPassword: checkPassword)
+                
                 owner.vc.modalPresentationStyle = .pageSheet
                 if let sheet = owner.vc.sheetPresentationController {
                     sheet.detents = [.medium(), .large()]
