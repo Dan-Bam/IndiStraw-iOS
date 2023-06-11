@@ -23,11 +23,6 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     
     private let errorLabel = ErrorLabel()
     
-    func allAgreeButtonDidTap() {
-        dismiss(animated: true)
-        viewModel.popToRootVC()
-    }
-    
     override func configureVC() {
         navigationItem.title = "비밀번호를 입력해 주세요."
         vc.delegate = self
@@ -42,6 +37,7 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
                 owner.present(owner.vc, animated: true)
             }.disposed(by: disposeBag)
     }
+    
     
     override func addView() {
         view.addSubviews(inputPasswordTextField, inputCheckPasswordTextField,
@@ -71,5 +67,12 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
+    }
+}
+
+extension SignupPasswordViewController {
+    func allAgreeButtonDidTap() {
+        dismiss(animated: true)
+        viewModel.popToRootVC()
     }
 }
