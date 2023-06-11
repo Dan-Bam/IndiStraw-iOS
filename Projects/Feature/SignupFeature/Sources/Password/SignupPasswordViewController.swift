@@ -23,16 +23,42 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     
     private let errorLabel = ErrorLabel()
     
-    func isPasswordMatch() {
+    func isPasswordMatch(password: String, checkPassword: String) -> Bool {
+        if password.elementsEqual(checkPassword) {
+            return true
+        }
         
+        return false
     }
     
     func showEmptyPasswordError(password: String, checkPassword: String) -> Bool {
         if password.isEmpty {
             errorLabel.text = "비밀번호를 입력해주세요."
+            return false
         } else if checkPassword.isEmpty {
             errorLabel.text = "비밀번호 확인을 입력해주세요."
+            return false
         }
+        
+        return true
+    }
+    
+    func isValidPassword(password: String) -> Bool {
+        guard viewModel.isValidPassword(password: password) else {
+            errorLabel.text = "길이는 8~20, 숫자와 대소문자, 특수문자를 포함해주세요"
+            return false
+        }
+        
+        return true
+    }
+    
+    func presentBottomSheet() {
+        vc.modalPresentationStyle = .pageSheet
+        if let sheet = vc.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(vc, animated: true)
     }
     
     override func configureVC() {
@@ -44,14 +70,10 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
                 let password = owner.inputPasswordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
                 let checkPassword = owner.inputCheckPasswordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
                 
-                owner.showEmptyPasswordError(password: password, checkPassword: checkPassword)
-                
-                owner.vc.modalPresentationStyle = .pageSheet
-                if let sheet = owner.vc.sheetPresentationController {
-                    sheet.detents = [.medium(), .large()]
-                    sheet.prefersGrabberVisible = true
+                if owner.showEmptyPasswordError(password: password, checkPassword: checkPassword) && owner.isPasswordMatch(password: password, checkPassword: checkPassword) && owner.isValidPassword(password: password) {
+                    owner.presentBottomSheet()
                 }
-                owner.present(owner.vc, animated: true)
+                
             }.disposed(by: disposeBag)
     }
     
