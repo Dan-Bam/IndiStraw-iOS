@@ -25,6 +25,7 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     
     func isPasswordMatch(password: String, checkPassword: String) -> Bool {
         if password.elementsEqual(checkPassword) {
+            errorLabel.text = "비밀번호가 일치하지 않습니다."
             return true
         }
         
