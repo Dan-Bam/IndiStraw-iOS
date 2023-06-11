@@ -38,7 +38,6 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
             }.disposed(by: disposeBag)
     }
     
-    
     override func addView() {
         view.addSubviews(inputPasswordTextField, inputCheckPasswordTextField,
                          confirmButton, errorLabel)
