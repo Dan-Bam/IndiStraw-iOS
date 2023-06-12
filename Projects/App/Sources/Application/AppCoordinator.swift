@@ -1,7 +1,6 @@
 import UIKit
 import BaseFeature
 import RootFeature
-import SignupFeature
 
 open class AppCoordinator: Coordinator {
     public var navigationController: UINavigationController
@@ -17,7 +16,7 @@ open class AppCoordinator: Coordinator {
 
     public func start() {
         window?.rootViewController = navigationController
-        let rootController = SignupPaswordCoordinator(navigationController: navigationController)
+        let rootController = RootCoordinator(navigationController: navigationController)
         start(coordinator: rootController)
     }
 
