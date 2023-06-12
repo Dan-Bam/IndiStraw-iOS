@@ -13,7 +13,6 @@ class SignupPasswordViewModel: BaseViewModel {
         return passwordTest.evaluate(with: password)
     }
     
-    
     func requestToUploadImage(image: UIImage?) {
         AF.upload(
             multipartFormData: SignupTarget.uploadImage(image: image).multipart,
