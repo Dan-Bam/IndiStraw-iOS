@@ -31,7 +31,7 @@ class SignupIDViewController: BaseVC<SignupIDViewModel> {
                     owner.viewModel.requestToCheckDuplicationID(id: id) { result in
                         switch result {
                         case .success:
-                            owner.viewModel.pushPasswordVC()
+                            owner.viewModel.pushPasswordVC(id: id)
                         case .failure:
                             owner.errorLabel.text = "이미 있는 아이디입니다."
                         }
