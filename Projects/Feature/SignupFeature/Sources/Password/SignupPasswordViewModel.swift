@@ -35,10 +35,10 @@ class SignupPasswordViewModel: BaseViewModel {
             with: SignupTarget.uploadImage(image: image)
         )
         .validate()
-        .responseData { [weak self] response in
+        .responseDecodable(of: ProfileImageModel.self) { [weak self] response in
                 switch response.result {
                 case .success(let data):
-                    print("data = ㅁㄴㅇㄹㄴㅁㄹㅇ")
+                    print("data = \(data.file)")
 //                    self?.pushInputIDVC()
                 case .failure(let error):
                     print("Error - ImageUpload = \(error.localizedDescription)")
