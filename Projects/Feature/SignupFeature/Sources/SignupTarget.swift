@@ -11,7 +11,7 @@ enum SignupTarget {
     case uploadImage(image: UIImage?)
 }
 
-extension SignupTarget: TargetType {
+extension SignupTarget: BaseRouter {
     var baseURL: String {
         return "https://port-0-indistraw-account-otjl2cli73l2cy.sel4.cloudtype.app/api/v1"
     }
@@ -39,8 +39,8 @@ extension SignupTarget: TargetType {
             return "/auth/send/phone-number/\(phoneNumber)"
         case .checkAuthNumber(authCode: let authCode, phoneNumber: let phoneNumber):
             return "/auth/auth-code/\(authCode)/phone-number/\(phoneNumber)"
-        case .uploadImage(image: let image):
-            return "/file"
+        case .uploadImage:
+            return "/file/"
         }
     }
     
@@ -54,9 +54,9 @@ extension SignupTarget: TargetType {
                 "phoneNumber": request.phoneNumber,
                 "profileUrl": request.profileUrl
             ]
-            return .body(body)
+            return .requestBody(body)
         default:
-            return .query(nil)
+            return .requestPlain
         }
     }
     
@@ -66,7 +66,7 @@ extension SignupTarget: TargetType {
             let multiPart = MultipartFormData()
             
             let imageData = image?.pngData() ?? Data()
-            multiPart.append(imageData, withName: "file", fileName: "Image.png", mimeType: "image/png")
+            multiPart.append(imageData, withName: "file", fileName: "\(imageData).png", mimeType: "image/png")
             
             return multiPart
         default: return MultipartFormData()

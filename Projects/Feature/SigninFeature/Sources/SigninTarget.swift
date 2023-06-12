@@ -1,11 +1,13 @@
 import Alamofire
+import Foundation
 import AuthDomain
 
 enum SigninTarget {
     case signin(SigninRequest)
 }
 
-extension SigninTarget: TargetType {
+extension SigninTarget: BaseRouter {
+    
     var multipart: Alamofire.MultipartFormData {
         return MultipartFormData()
     }
@@ -28,7 +30,12 @@ extension SigninTarget: TargetType {
     
     var parameters: RequestParams {
         switch self {
-        case .signin(let request): return .body(request)
+        case .signin(let request):
+            let body: [String : Any] = [
+                "id": request.id,
+                "password": request.password,
+            ]
+            return .requestBody(body)
         }
     }
     

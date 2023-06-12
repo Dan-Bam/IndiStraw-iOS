@@ -14,6 +14,8 @@ class SignupPasswordViewModel: BaseViewModel {
         self.phoneNumber = phoneNumber
         self.profileImage = profileImage
         super.init(coordinator: coordinator)
+        requestToUploadImage(image: profileImage)
+        
     }
     func popToRootVC() {
         coordinator.navigate(to: .popToRootIsRequired)
@@ -29,7 +31,9 @@ class SignupPasswordViewModel: BaseViewModel {
     func requestToUploadImage(image: UIImage?) {
         AF.upload(
             multipartFormData: SignupTarget.uploadImage(image: image).multipart,
-            with: SignupTarget.uploadImage(image: image)).responseDecodable(of: ProfileImageModel.self) { [weak self] response in
+            with: SignupTarget.uploadImage(image: image))
+        .validate()
+        .responseDecodable(of: ProfileImageModel.self) { [weak self] response in
                 switch response.result {
                 case .success(let data):
                     print("data = \(data.imageUrl)")
