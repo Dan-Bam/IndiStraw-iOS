@@ -13,7 +13,7 @@ enum SignupTarget {
 
 extension SignupTarget: BaseRouter {
     var baseURL: String {
-        return "https://port-0-indistraw-msa-server-1maxx2klgvs8aq4.sel3.cloudtype.app"
+        return " https://port-0-indistraw-account-otjl2cli73l2cy.sel4.cloudtype.app/api/v1"
     }
     
     var method: Alamofire.HTTPMethod {
