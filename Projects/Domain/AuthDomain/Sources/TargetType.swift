@@ -36,6 +36,7 @@ public extension TargetType {
 public enum RequestParams {
     case query(_ parameter: Encodable?)
     case body(_ parameter: Encodable?)
+    case requestParameters(_ parameter: [String : Any])
 }
 
 extension Encodable {

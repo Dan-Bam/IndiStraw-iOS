@@ -1,9 +1,9 @@
-import Foundation
+import UIKit
 import BaseFeature
 
 class SignupPaswordCoordinator: BaseCoordinator {
-    override func start() {
-        let vm = SignupPasswordViewModel(coordinator: self)
+    func startSignupPaswordCoordinator(id: String, name: String, phoneNumber: String, profileImage: UIImage?) {
+        let vm = SignupPasswordViewModel(coordinator: self, id: id, name: name, phoneNumber: phoneNumber, profileImage: profileImage)
         let vc = SignupPasswordViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)

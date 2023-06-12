@@ -47,7 +47,14 @@ extension SignupTarget: TargetType {
     var parameters: RequestParams {
         switch self {
         case .signup(let request):
-            return .body(request)
+            let body: [String : Any] = [
+                "id": request.id,
+                "password": request.password,
+                "name": request.name,
+                "phoneNumber": request.phoneNumber,
+                "profileUrl": request.profileUrl
+            ]
+            return .body(body)
         default:
             return .query(nil)
         }

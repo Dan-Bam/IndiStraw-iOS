@@ -17,7 +17,7 @@ class SignupIDViewModel: BaseViewModel {
     }
     
     func pushPasswordVC(id: String) {
-        coordinator.navigate(to: .inputPasswordIsRequired(id: id, name: name, phoneNumber: phoneNumber))
+        coordinator.navigate(to: .inputPasswordIsRequired(id: id, name: name, phoneNumber: phoneNumber, profileImage: image))
     }
     
     func requestToCheckDuplicationID(id: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
