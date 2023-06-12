@@ -11,8 +11,8 @@ public class SignupProfileImageCoordinator: BaseCoordinator {
     
     public override func navigate(to step: IndiStrawStep) {
         switch step {
-        case .inputIDIsRequired:
-            inputIDIsRequired()
+        case .inputIDIsRequired(let image, let name, let phoneNumber):
+            inputIDIsRequired(image: image, name: name, phoneNumber: phoneNumber)
         default:
             return
         }
@@ -20,10 +20,10 @@ public class SignupProfileImageCoordinator: BaseCoordinator {
 }
 
 extension SignupProfileImageCoordinator {
-    func inputIDIsRequired() {
+    func inputIDIsRequired(image: UIImage?, name: String, phoneNumber: String) {
         let vc = SignupIDCoordiantor(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
-        vc.start()
+        vc.startSignupIDCoordiantor(image: image, name: name, phoneNumber: phoneNumber)
     }
 }

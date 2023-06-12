@@ -28,6 +28,8 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         $0.backgroundColor = DesignSystemAsset.Colors.plusButton.color
     }
     
+    private let errorLabel = ErrorLabel()
+    
     private let continueButton = ButtonComponent().then {
         $0.setTitle("계속하기", for: .normal)
     }
@@ -68,7 +70,8 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.viewModel.pushInputIDVC()
+                let image = owner.photoImageButton.currentImage
+                owner.viewModel.pushInputIDVC(image: image)
             }.disposed(by: disposeBag)
     }
     

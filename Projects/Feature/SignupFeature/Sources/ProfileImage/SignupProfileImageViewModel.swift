@@ -13,21 +13,8 @@ class SignupProfileImageViewModel: BaseViewModel {
         super.init(coordinator: coordinator)
     }
     
-    func requestToUploadImage(image: UIImage) {
-        AF.upload(
-            multipartFormData: SignupTarget.uploadImage(image: image).multipart,
-            with: SignupTarget.uploadImage(image: image)).responseDecodable(of: ProfileImageModel.self) { [weak self] response in
-                switch response.result {
-                case .success(let data):
-                    self?.pushInputIDVC()
-                case .failure(let error):
-                    print("Error - ImageUpload = \(error.localizedDescription)")
-                }
-            }
-    }
-    
-    func pushInputIDVC() {
-        coordinator.navigate(to: .inputIDIsRequired)
+    func pushInputIDVC(image: UIImage?) {
+        coordinator.navigate(to: .inputIDIsRequired(image: image, name: name, phoneNumber: phoneNumber))
     }
 }
     

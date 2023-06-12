@@ -8,7 +8,7 @@ enum SignupTarget {
     case checkIdDuplication(id: String)
     case sendAuthNumber(phoneNumber: String)
     case checkAuthNumber(authCode: String, phoneNumber: String)
-    case uploadImage(image: UIImage)
+    case uploadImage(image: UIImage?)
 }
 
 extension SignupTarget: TargetType {
@@ -58,7 +58,7 @@ extension SignupTarget: TargetType {
         case .uploadImage(let image):
             let multiPart = MultipartFormData()
             
-            let imageData = image.pngData() ?? Data()
+            let imageData = image?.pngData() ?? Data()
             multiPart.append(imageData, withName: "file", fileName: "Image.png", mimeType: "image/png")
             
             return multiPart
