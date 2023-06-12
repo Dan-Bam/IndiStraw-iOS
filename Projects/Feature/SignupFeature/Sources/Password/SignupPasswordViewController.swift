@@ -6,6 +6,8 @@ import RxCocoa
 
 class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeButtonDidTapProtocol {
     let vc = PrivacyBottomSheet()
+    
+    var isValidPassword = false
 
     private let disposeBag = DisposeBag()
     
@@ -23,34 +25,42 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     
     private let errorLabel = ErrorLabel()
     
-    func isPasswordMatch(password: String, checkPassword: String) -> Bool {
-        if password.elementsEqual(checkPassword) {
-            errorLabel.text = "비밀번호가 일치하지 않습니다."
-            return true
-        }
-        
-        return false
-    }
-    
-    func showEmptyPasswordError(password: String, checkPassword: String) -> Bool {
+    func showEmptyPasswordError(password: String, checkPassword: String) {
         if password.isEmpty {
             errorLabel.text = "비밀번호를 입력해주세요."
-            return false
+            isValidPassword = false
         } else if checkPassword.isEmpty {
             errorLabel.text = "비밀번호 확인을 입력해주세요."
-            return false
+            isValidPassword = false
+        } else {
+            isValidPassword(password: password, checkPassword: checkPassword)
         }
-        
-        return true
     }
     
-    func isValidPassword(password: String) -> Bool {
+    func isValidPassword(password: String, checkPassword: String) {
         guard viewModel.isValidPassword(password: password) else {
-            errorLabel.text = "길이는 8~20, 숫자와 대소문자, 특수문자를 포함해주세요"
-            return false
+            errorLabel.text = "숫자와 대소문자, 특수문자를 포함해주세요."
+            isValidPassword = false
+            return
         }
         
-        return true
+        guard (8...20).contains(password.count) else {
+            errorLabel.text = "8~20자 사이로 입력해주세요."
+            isValidPassword = false
+            return
+        }
+        
+        isPasswordMatch(password: password, checkPassword: checkPassword)
+    }
+    
+    func isPasswordMatch(password: String, checkPassword: String) {
+        if password.elementsEqual(checkPassword) {
+            errorLabel.text = "비밀번호가 일치하지 않습니다."
+            isValidPassword = false
+            return
+        }
+        
+        isValidPassword = true
     }
     
     func presentBottomSheet() {
@@ -70,8 +80,9 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
             .bind(with: self) { owner, _ in
                 let password = owner.inputPasswordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
                 let checkPassword = owner.inputCheckPasswordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+                owner.showEmptyPasswordError(password: password, checkPassword: checkPassword)
                 
-                if owner.showEmptyPasswordError(password: password, checkPassword: checkPassword) && owner.isPasswordMatch(password: password, checkPassword: checkPassword) && owner.isValidPassword(password: password) {
+                if owner.isValidPassword {
                     owner.presentBottomSheet()
                 }
                 
