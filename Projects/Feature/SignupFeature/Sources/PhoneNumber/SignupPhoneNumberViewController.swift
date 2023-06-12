@@ -27,7 +27,6 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     
     private let continueButton = ButtonComponent().then {
         $0.tag = 0
-        $0.isEnabled = false
         $0.setTitle("계속하기", for: .normal)
     }
     
