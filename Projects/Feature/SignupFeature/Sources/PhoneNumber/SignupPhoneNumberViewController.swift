@@ -11,10 +11,12 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
     private var timerDisposable: Disposable?
     
     private let inputPhoneNumberTextField = TextFieldBox().then {
+        $0.keyboardType = .numberPad
         $0.setPlaceholer(text: "전화번호")
     }
     
     private let inputAuthNumberTextField = TextFieldBox().then {
+        $0.keyboardType = .numberPad
         $0.setPlaceholer(text: "인증번호")
     }
     
