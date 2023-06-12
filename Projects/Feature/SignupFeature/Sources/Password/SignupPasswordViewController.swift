@@ -39,6 +39,7 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     
     func isValidPassword(password: String, checkPassword: String) {
         guard viewModel.isValidPassword(password: password) else {
+//            print("false ? =\(viewModel.isValidPassword(password: password))")
             errorLabel.text = "숫자와 대소문자, 특수문자를 포함해주세요."
             isValidPassword = false
             return

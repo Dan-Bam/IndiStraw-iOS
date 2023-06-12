@@ -1,15 +1,15 @@
 import Foundation
 import BaseFeature
 
-class SignupPaswordCoordinator: BaseCoordinator {
-    override func start() {
+public class SignupPaswordCoordinator: BaseCoordinator {
+    public override func start() {
         let vm = SignupPasswordViewModel(coordinator: self)
         let vc = SignupPasswordViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
     }
     
-    override func navigate(to step: IndiStrawStep) {
+    public override func navigate(to step: IndiStrawStep) {
         switch step {
         case .popToRootIsRequired:
             popToRootIsRequired()
