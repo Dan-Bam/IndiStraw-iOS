@@ -1,8 +1,6 @@
 import UIKit
 import BaseFeature
 import RootFeature
-import SignupFeature
-import DesignSystem
 
 open class AppCoordinator: Coordinator {
     public var navigationController: UINavigationController
@@ -18,10 +16,8 @@ open class AppCoordinator: Coordinator {
 
     public func start() {
         window?.rootViewController = navigationController
-        let rootController = SignupPaswordCoordinator(navigationController: navigationController)
-        
-        rootController.startSignupPaswordCoordinator(id: "", name: "", phoneNumber: "", profileImage: DesignSystemAsset.Images.inputPhoto.image)
-//        start(coordinator: rootController)
+        let rootController = RootCoordinator(navigationController: navigationController)
+        start(coordinator: rootController)
     }
 
     public func start(coordinator: Coordinator) {

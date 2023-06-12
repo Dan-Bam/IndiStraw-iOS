@@ -90,6 +90,22 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
         present(vc, animated: true)
     }
     
+    func requestToSignup(password: String, data: ProfileImageModel) {
+        viewModel.requestToSignup(
+            id: id,
+            password: password,
+            name: name,
+            phoneNumber: phoneNumber,
+            profileUrl: data.file) { [weak self] result in
+                switch result {
+                case .success:
+                    self?.presentBottomSheet()
+                case .failure:
+                    self?.errorLabel.text = "회원가입에 실패했습니다."
+                }
+            }
+    }
+    
     override func configureVC() {
         navigationItem.title = "비밀번호를 입력해 주세요."
         vc.delegate = self
@@ -101,10 +117,13 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
                 owner.showEmptyPasswordError(password: password, checkPassword: checkPassword)
                 
                 if owner.isValidPassword {
-                    owner.viewModel.requestToUploadImage(image: profileImage, password: password) { result in
+                    owner.viewModel.requestToUploadImage(image: owner.profileImage, password: password) { result in
                         switch result {
                         case .success(let data):
-                            owner.viewModel.requestToSignup(id: id, password: password, name: name, phoneNumber: phoneNumber, profileUrl: data.profileUrl)
+                            owner.requestToSignup(
+                                password: password,
+                                data: data
+                            )
                         case .failure:
                             owner.errorLabel.text = "회원가입에 실패했습니다."
                         }

@@ -51,7 +51,7 @@ class SignupPasswordViewModel: BaseViewModel {
         ).responseData { response in
             switch response.result {
             case .success:
-                print("success")
+                print("success - signup")
                 completion(.success(()))
             case .failure(let error):
                 print("Error - signup - \(error.localizedDescription)")
