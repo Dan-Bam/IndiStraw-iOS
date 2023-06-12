@@ -14,6 +14,7 @@ class SignupPasswordViewModel: BaseViewModel {
         self.phoneNumber = phoneNumber
         self.profileImage = profileImage
         super.init(coordinator: coordinator)
+        print(profileImage)
         requestToUploadImage(image: profileImage)
         
     }
@@ -31,12 +32,13 @@ class SignupPasswordViewModel: BaseViewModel {
     func requestToUploadImage(image: UIImage?) {
         AF.upload(
             multipartFormData: SignupTarget.uploadImage(image: image).multipart,
-            with: SignupTarget.uploadImage(image: image))
+            with: SignupTarget.uploadImage(image: image)
+        )
         .validate()
-        .responseDecodable(of: ProfileImageModel.self) { [weak self] response in
+        .responseData { [weak self] response in
                 switch response.result {
                 case .success(let data):
-                    print("data = \(data.imageUrl)")
+                    print("data = ㅁㄴㅇㄹㄴㅁㄹㅇ")
 //                    self?.pushInputIDVC()
                 case .failure(let error):
                     print("Error - ImageUpload = \(error.localizedDescription)")

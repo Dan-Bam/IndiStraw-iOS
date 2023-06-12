@@ -13,7 +13,7 @@ enum SignupTarget {
 
 extension SignupTarget: BaseRouter {
     var baseURL: String {
-        return "https://port-0-indistraw-account-otjl2cli73l2cy.sel4.cloudtype.app/api/v1"
+        return "https://port-0-indistraw-msa-server-1maxx2klgvs8aq4.sel3.cloudtype.app"
     }
     
     var method: Alamofire.HTTPMethod {
@@ -66,8 +66,8 @@ extension SignupTarget: BaseRouter {
             let multiPart = MultipartFormData()
             
             let imageData = image?.pngData() ?? Data()
-            multiPart.append(imageData, withName: "file", fileName: "\(imageData).png", mimeType: "image/png")
-            
+            multiPart.append(imageData, withName: "file", fileName: "image.png", mimeType: "image/png")
+
             return multiPart
         default: return MultipartFormData()
         }
