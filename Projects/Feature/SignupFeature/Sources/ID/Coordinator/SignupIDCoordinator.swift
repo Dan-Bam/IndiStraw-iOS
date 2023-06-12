@@ -1,9 +1,9 @@
-import Foundation
+import UIKit
 import BaseFeature
 
 class SignupIDCoordiantor: BaseCoordinator {
-    override func start() {
-        let vm = SignupIDViewModel(coordinator: self)
+    func startSignupIDCoordiantor(image: UIImage?, name: String, phoneNumber: String) {
+        let vm = SignupIDViewModel(coordinator: self, image: image, name: name, phoneNumber: phoneNumber)
         let vc = SignupIDViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
