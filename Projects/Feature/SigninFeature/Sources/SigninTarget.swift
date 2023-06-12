@@ -6,6 +6,10 @@ enum SigninTarget {
 }
 
 extension SigninTarget: TargetType {
+    var multipart: Alamofire.MultipartFormData {
+        return MultipartFormData()
+    }
+    
     var baseURL: String {
         return "https://port-0-indistraw-account-otjl2cli73l2cy.sel4.cloudtype.app/api/v1/auth"
     }

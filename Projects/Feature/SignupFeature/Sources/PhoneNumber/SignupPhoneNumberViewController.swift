@@ -126,7 +126,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel> {
         viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
             switch result {
             case .success:
-                self?.viewModel.pushProfileImageVC()
+                self?.viewModel.pushProfileImageVC(phoneNumber: phoneNumber)
             case .failure(.cantSendAuthNumber):
                 self?.errorLabel.text = "인증번호가 틀렸습니다."
             case .failure(.tooManyRequestException):

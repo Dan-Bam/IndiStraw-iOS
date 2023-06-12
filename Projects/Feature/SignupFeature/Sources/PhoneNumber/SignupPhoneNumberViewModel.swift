@@ -67,7 +67,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func pushProfileImageVC() {
-        coordinator.navigate(to: .selectPhotoIsRequired)
+    func pushProfileImageVC(phoneNumber: String) {
+        coordinator.navigate(to: .selectPhotoIsRequired(name: name, phoneNumber: phoneNumber))
     }
 }

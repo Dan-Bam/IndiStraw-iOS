@@ -11,8 +11,8 @@ class SignupPhoneNumberCoordinator: BaseCoordinator {
     
     override func navigate(to step: IndiStrawStep) {
         switch step {
-        case .selectPhotoIsRequired:
-            selectPhotoIsRequired()
+        case .selectPhotoIsRequired(let name, let phoneNumber):
+            selectPhotoIsRequired(name: name, phoneNumber: phoneNumber)
         default:
             return
         }
@@ -20,10 +20,10 @@ class SignupPhoneNumberCoordinator: BaseCoordinator {
 }
 
 extension SignupPhoneNumberCoordinator {
-    func selectPhotoIsRequired() {
+    func selectPhotoIsRequired(name: String, phoneNumber: String) {
         let vc = SignupProfileImageCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
-        vc.start()
+        vc.startSignupProfileImageCoordinator(name: name, phoneNumber: phoneNumber)
     }
 }

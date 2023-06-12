@@ -3,8 +3,14 @@ import BaseFeature
 import Alamofire
 
 class SignupProfileImageViewModel: BaseViewModel {
-    func pushInputIDVC() {
-        coordinator.navigate(to: .inputIDIsRequired)
+    
+    var name: String
+    var phoneNumber: String
+    
+    init(coordinator: Coordinator, name: String, phoneNumber: String) {
+        self.name = name
+        self.phoneNumber = phoneNumber
+        super.init(coordinator: coordinator)
     }
     
     func requestToUploadImage(image: UIImage) {
@@ -18,6 +24,10 @@ class SignupProfileImageViewModel: BaseViewModel {
                     print("Error - ImageUpload = \(error.localizedDescription)")
                 }
             }
+    }
+    
+    func pushInputIDVC() {
+        coordinator.navigate(to: .inputIDIsRequired)
     }
 }
     

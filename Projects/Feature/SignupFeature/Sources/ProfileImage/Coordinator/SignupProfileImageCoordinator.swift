@@ -2,8 +2,8 @@ import UIKit
 import BaseFeature
 
 public class SignupProfileImageCoordinator: BaseCoordinator {
-    public override func start() {
-        let vm = SignupProfileImageViewModel(coordinator: self)
+    public func startSignupProfileImageCoordinator(name: String, phoneNumber: String) {
+        let vm = SignupProfileImageViewModel(coordinator: self, name: name, phoneNumber: phoneNumber)
         let vc = SignupProfileImageViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
