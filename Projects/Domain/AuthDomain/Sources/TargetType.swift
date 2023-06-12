@@ -6,6 +6,7 @@ public protocol TargetType: URLRequestConvertible {
     var method: HTTPMethod { get }
     var path: String { get }
     var parameters: RequestParams { get }
+    var multipart: MultipartFormData { get }
 }
 
 public extension TargetType {
