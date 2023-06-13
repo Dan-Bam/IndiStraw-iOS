@@ -5,7 +5,8 @@ let project = Project.makeModule(
     name: "DesignSystem",
     product: .framework,
     dependencies: [
-        .Shared.GlobalThirdPartyLib
+        .Shared.GlobalThirdPartyLib,
+        .Shared.Utility
     ],
     resources: ["Resources/**"]
 )
