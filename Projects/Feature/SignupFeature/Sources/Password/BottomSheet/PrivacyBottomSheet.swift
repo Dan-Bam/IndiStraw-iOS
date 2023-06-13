@@ -56,7 +56,7 @@ class PrivacyBottomSheet: UIViewController {
         $0.setTitle("자세히보기", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
-        $0.setUnderline()
+        $0.setUnderline(color: DesignSystemAsset.Colors.exampleText.color)
     }
     
     private let personalInformationWrapperButton = UIButton()
@@ -76,7 +76,7 @@ class PrivacyBottomSheet: UIViewController {
         $0.setTitle("자세히보기", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
-        $0.setUnderline()
+        $0.setUnderline(color: DesignSystemAsset.Colors.exampleText.color)
     }
     
     

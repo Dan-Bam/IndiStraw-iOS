@@ -57,7 +57,7 @@ class InputPhoneNumberComponent: UIView {
     
     func setLayout() {
         inputPhoneNumberTextField.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(171)
+            $0.top.equalTo(self.safeAreaLayoutGuide).inset(171)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
