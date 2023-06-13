@@ -52,12 +52,20 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
             }
     }
     
-
-    
     override func configureVC() {
         navigationItem.title = "비밀번호를 입력해 주세요."
         bottomSheet.delegate = self
         component.delegate = self
+    }
+    
+    override func addView() {
+        view.addSubview(component)
+    }
+    
+    override func setLayout() {
+        component.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 }
 
