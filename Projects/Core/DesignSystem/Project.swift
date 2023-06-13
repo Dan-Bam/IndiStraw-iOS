@@ -3,9 +3,10 @@ import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
     name: "DesignSystem",
-    product: .framework,
+    product: .staticLibrary,
     dependencies: [
-        .Shared.GlobalThirdPartyLib
+        .Shared.GlobalThirdPartyLib,
+            .Shared.Utility
     ],
     resources: ["Resources/**"]
 )
