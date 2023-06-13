@@ -6,7 +6,6 @@ import RxCocoa
 import Utility
 
 class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel>, InputPhoneNumberComponentProtocol  {
-    
     let component = InputPhoneNumberComponent()
     
     override func configureVC() {

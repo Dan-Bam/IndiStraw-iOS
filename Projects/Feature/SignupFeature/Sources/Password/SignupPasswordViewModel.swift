@@ -3,20 +3,6 @@ import BaseFeature
 import Alamofire
 
 class SignupPasswordViewModel: BaseViewModel {
-//    var id: String
-//    var name: String
-//    var phoneNumber: String
-//    var profileImage: UIImage?
-//
-//    init(coordinator: Coordinator, id: String, name: String, phoneNumber: String, profileImage: UIImage?) {
-//        self.id = id
-//        self.name = name
-//        self.phoneNumber = phoneNumber
-//        self.profileImage = profileImage
-//        super.init(coordinator: coordinator)
-//        print(profileImage)
-//    }
-    
     func isValidPassword(password: String) -> Bool {
         let passwordRegEx = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]+$"
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
@@ -29,7 +15,7 @@ class SignupPasswordViewModel: BaseViewModel {
             with: SignupTarget.uploadImage(image: image)
         )
         .validate()
-        .responseDecodable(of: ProfileImageModel.self) { [weak self] response in
+        .responseDecodable(of: ProfileImageModel.self) { response in
                 switch response.result {
                 case .success(let data):
                     print("data = \(data.file)")
