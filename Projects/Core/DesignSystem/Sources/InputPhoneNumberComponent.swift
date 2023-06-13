@@ -147,7 +147,6 @@ public class InputPhoneNumberComponent: UIView {
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count >= 11 }
             .bind(with: self) { owner, isValid in
                 if isValid {
-                    owner.continueButton.isEnabled = true
                     owner.inputPhoneNumberTextField.isEnabled = false
                     owner.inputPhoneNumberTextField.resignFirstResponder()
                 }

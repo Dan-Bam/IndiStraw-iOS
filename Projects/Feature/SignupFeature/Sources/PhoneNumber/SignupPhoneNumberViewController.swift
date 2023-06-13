@@ -24,7 +24,9 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel>, Input
             $0.edges.equalToSuperview()
         }
     }
-    
+}
+
+extension SignupPhoneNumberViewController {
     func checkDuplicationPhoneNumber(phoneNumber: String) {
         viewModel.requestToCheckDuplicationPhoneNumber(phoneNumber: phoneNumber) { [weak self] result in
             switch result {
