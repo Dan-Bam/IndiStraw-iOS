@@ -7,6 +7,7 @@ let project = Project.makeModule(
     dependencies: [
         .Feature.BaseFeature,
         .Feature.SigninFeature,
+        .Feature.SignupFeature,
         .Core.DesignSystem,
         .Shared.Utility,
         .Shared.GlobalThirdPartyLib

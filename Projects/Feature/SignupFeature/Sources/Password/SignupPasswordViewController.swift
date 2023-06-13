@@ -7,6 +7,11 @@ import RxCocoa
 class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeButtonDidTapProtocol {
     let vc = PrivacyBottomSheet()
     
+    var id: String
+    var name: String
+    var phoneNumber: String
+    var profileImage: UIImage?
+    
     var isValidPassword = false
 
     private let disposeBag = DisposeBag()
@@ -24,6 +29,19 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     }
     
     private let errorLabel = ErrorLabel()
+    
+    init(viewModel: SignupPasswordViewModel, id: String, name: String, phoneNumber: String, profileImage: UIImage?) {
+        self.id = id
+        self.name = name
+        self.phoneNumber = phoneNumber
+        self.profileImage = profileImage
+        
+        super.init(viewModel: viewModel)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     func showEmptyPasswordError(password: String, checkPassword: String) {
         if password.isEmpty {
@@ -72,6 +90,22 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
         present(vc, animated: true)
     }
     
+    func requestToSignup(password: String, data: ProfileImageModel) {
+        viewModel.requestToSignup(
+            id: id,
+            password: password,
+            name: name,
+            phoneNumber: phoneNumber,
+            profileUrl: data.file) { [weak self] result in
+                switch result {
+                case .success:
+                    self?.presentBottomSheet()
+                case .failure:
+                    self?.errorLabel.text = "회원가입에 실패했습니다."
+                }
+            }
+    }
+    
     override func configureVC() {
         navigationItem.title = "비밀번호를 입력해 주세요."
         vc.delegate = self
@@ -83,7 +117,17 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
                 owner.showEmptyPasswordError(password: password, checkPassword: checkPassword)
                 
                 if owner.isValidPassword {
-                    owner.presentBottomSheet()
+                    owner.viewModel.requestToUploadImage(image: owner.profileImage, password: password) { result in
+                        switch result {
+                        case .success(let data):
+                            owner.requestToSignup(
+                                password: password,
+                                data: data
+                            )
+                        case .failure:
+                            owner.errorLabel.text = "회원가입에 실패했습니다."
+                        }
+                    }
                 }
                 
             }.disposed(by: disposeBag)

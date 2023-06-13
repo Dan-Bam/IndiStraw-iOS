@@ -11,8 +11,8 @@ class SignupIDCoordiantor: BaseCoordinator {
     
     override func navigate(to step: IndiStrawStep) {
         switch step {
-        case .inputPasswordIsRequired:
-            inputPasswordIsRequired()
+        case .inputPasswordIsRequired(let id, let name, let phoneNumber, let profileImage):
+            inputPasswordIsRequired(id: id, name: name, phoneNumber: phoneNumber, profileImage: profileImage)
         default:
             return
         }
@@ -20,10 +20,10 @@ class SignupIDCoordiantor: BaseCoordinator {
 }
 
 extension SignupIDCoordiantor {
-    func inputPasswordIsRequired() {
+    func inputPasswordIsRequired(id: String, name: String, phoneNumber: String, profileImage: UIImage?) {
         let vc = SignupPaswordCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
-        vc.start()
+        vc.startSignupPaswordCoordinator(id: id, name: name, phoneNumber: phoneNumber, profileImage: profileImage)
     }
 }
