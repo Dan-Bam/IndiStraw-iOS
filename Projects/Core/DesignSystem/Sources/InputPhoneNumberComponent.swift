@@ -50,6 +50,7 @@ public class InputPhoneNumberComponent: UIView {
         
         addView()
         setLayout()
+        bindUI()
         
         setAgainReciveAuthNumberButtonAttributedTitle()
         
@@ -66,23 +67,21 @@ public class InputPhoneNumberComponent: UIView {
             .bind(with: self) { owner, _ in
                 owner.resendButtonDidTap()
             }.disposed(by: disposeBag)
-        
-        bindUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addView() {
+    private func addView() {
         self.addSubviews(
-            inputPhoneNumberTextField, continueButton,
-            inputAuthNumberTextField, resendAuthNumberButton,
-            countLabel, errorLabel)
+            inputPhoneNumberTextField, errorLabel,
+            continueButton, inputAuthNumberTextField,
+            resendAuthNumberButton)
         inputAuthNumberTextField.addSubview(countLabel)
     }
     
-    func setLayout() {
+    private func setLayout() {
         inputPhoneNumberTextField.snp.makeConstraints {
             $0.top.equalTo(self.safeAreaLayoutGuide).inset(171)
             $0.leading.trailing.equalToSuperview().inset(32)
@@ -153,7 +152,7 @@ public class InputPhoneNumberComponent: UIView {
             }.disposed(by: disposeBag)
     }
     
-    func setAgainReciveAuthNumberButtonAttributedTitle() {
+    private func setAgainReciveAuthNumberButtonAttributedTitle() {
         guard let text = resendAuthNumberButton.titleLabel?.text else { return }
         let attributeString = NSMutableAttributedString(string: text)
         attributeString.addAttributes([
