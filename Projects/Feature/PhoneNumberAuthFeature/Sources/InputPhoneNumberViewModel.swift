@@ -3,7 +3,7 @@ import BaseFeature
 import Alamofire
 import AuthDomain
 
-class InputPhoneNumberViewModel: BaseViewModel {
+public class InputPhoneNumberViewModel: BaseViewModel {
     func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(PhoneNumberAuthTarget.sendAuthNumber(phoneNumber: phoneNumber))
             .validate()
