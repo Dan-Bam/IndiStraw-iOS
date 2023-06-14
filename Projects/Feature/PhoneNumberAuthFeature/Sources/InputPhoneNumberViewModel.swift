@@ -3,9 +3,10 @@ import BaseFeature
 import Alamofire
 import AuthDomain
 
-class InputPhoneNumberViewModel: BaseViewModel {
+public class InputPhoneNumberViewModel: BaseViewModel {
+    
     func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
-        AF.request(FindPasswordTarget.sendAuthNumber(phoneNumber: phoneNumber))
+        AF.request(PhoneNumberAuthTarget.sendAuthNumber(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
                 switch response.response?.statusCode {
@@ -22,7 +23,7 @@ class InputPhoneNumberViewModel: BaseViewModel {
     }
     
     func requestToCheckDuplicationPhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
-        AF.request(FindPasswordTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber))
+        AF.request(PhoneNumberAuthTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
                 switch response.result {
@@ -36,7 +37,7 @@ class InputPhoneNumberViewModel: BaseViewModel {
     }
     
     func requestToCheckAuthNumber(authCode: String, phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
-        AF.request(FindPasswordTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
+        AF.request(PhoneNumberAuthTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
                 switch response.response?.statusCode {
@@ -52,7 +53,11 @@ class InputPhoneNumberViewModel: BaseViewModel {
             }
     }
     
+    func pushFindId(phoneNumber: String) {
+        coordinator.navigate(to: .findIdIsRequired(phoneNumber: phoneNumber))
+    }
+    
     func pushChangePassword(phoneNumber: String) {
-        coordinator.navigate(to: .findPassword_changePassword(phoneNumber: phoneNumber))
+        coordinator.navigate(to: .changePasswordIsRequired(phoneNumber: phoneNumber))
     }
 }

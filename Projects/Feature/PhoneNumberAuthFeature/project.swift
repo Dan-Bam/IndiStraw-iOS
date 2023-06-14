@@ -2,11 +2,12 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "SigninFeature",
+    name: "PhoneNumberAuthFeature",
     product: .staticLibrary,
     dependencies: [
         .Feature.BaseFeature,
-        .Feature.PhoneNumberAuthFeature,
+        .Feature.FindIdFeature,
+        .Feature.FindPasswordFeature,
         
         .Core.DesignSystem,
         

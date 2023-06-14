@@ -22,8 +22,8 @@ public class SigninViewModel: BaseViewModel {
             }
     }
     
-    func pushFindPassword() {
-        coordinator.navigate(to: .findPassword_phoneNumberIsRequired)
+    func pushPhoneNumberAuth(type: FindAccountType) {
+        coordinator.navigate(to: .phoneNumberAuthIsRequired(type: type))
     }
     
     func isValidPassword(password: String) -> Bool {
