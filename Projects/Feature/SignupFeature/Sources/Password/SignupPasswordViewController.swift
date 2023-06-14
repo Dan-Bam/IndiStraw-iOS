@@ -85,7 +85,7 @@ extension SignupPasswordViewController {
         }
     }
     
-    func requestToUploadImage(password: String) {
+    func confirmButtonDidTap(password: String) {
         viewModel.requestToUploadImage(image: profileImage, password: password) { [weak self] result in
             switch result {
             case .success(let data):
