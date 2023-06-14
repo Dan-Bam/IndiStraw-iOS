@@ -32,22 +32,13 @@ extension ChangePasswordViewController {
     }
     
     func confirmButtonDidTap(password: String) {
-//        viewModel.requestToUploadImage(image: profileImage, password: password) { [weak self] result in
-//            switch result {
-//            case .success(let data):
-//                self?.requestToSignup(
-//                    password: password,
-//                    data: data
-//                )
-//            case .failure:
-//                self?.component.errorLabel.text = "회원가입에 실패했습니다."
-//            }
-//        }
-//        viewModel.requestToChangePassword(newPassword: password) { [weak self] result in
-//            switch result {
-//            case .success:
-//
-//            }
-//        }
+        viewModel.requestToChangePassword(newPassword: password) { [weak self] result in
+            switch result {
+            case .success:
+                self?.viewModel.popToRootVC()
+            case .failure:
+                self?.component.errorLabel.text = "비밀번호 변경에 실패했습니다."
+            }
+        }
     }
 }

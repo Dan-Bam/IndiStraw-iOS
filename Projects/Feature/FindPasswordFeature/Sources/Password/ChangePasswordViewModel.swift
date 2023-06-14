@@ -36,4 +36,8 @@ class ChangePasswordViewModel: BaseViewModel {
             }
         }
     }
+    
+    func popToRootVC() {
+        coordinator.navigate(to: .popToRootIsRequired)
+    }
 }

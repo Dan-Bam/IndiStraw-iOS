@@ -8,4 +8,19 @@ class ChangePasswordCoordinator: BaseCoordinator {
         
         navigationController.pushViewController(vc, animated: true)
     }
+    
+    override func navigate(to step: IndiStrawStep) {
+        switch step {
+        case .popToRootIsRequired:
+            popToRootIsRequired()
+        default:
+            return
+        }
+    }
+}
+
+extension ChangePasswordCoordinator {
+    func popToRootIsRequired() {
+        navigationController.popToRootViewController(animated: true)
+    }
 }
