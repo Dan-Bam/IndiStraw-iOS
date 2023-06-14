@@ -12,6 +12,7 @@ let project = Project.makeModule(
         .Feature.SignupFeature,
         .Feature.FindPasswordFeature,
         .Feature.FindIdFeature,
+        .Feature.PhoneNumberAuthFeature,
         
         .Core.JwtStore,
         .Core.DesignSystem,
