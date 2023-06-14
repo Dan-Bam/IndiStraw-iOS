@@ -22,6 +22,10 @@ public class SigninViewModel: BaseViewModel {
             }
     }
     
+    func pushFindPassword() {
+        coordinator.navigate(to: .findPassword_phoneNumberIsRequired)
+    }
+    
     func isValidPassword(password: String) -> Bool {
         let passwordRegEx = "^(?=.[0-9])(?=.[a-zA-Z])(?=.[!@#$%^&?~])[0-9a-zA-Z!@#$%^&*?~]+$"
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)

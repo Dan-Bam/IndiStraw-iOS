@@ -6,7 +6,7 @@ import Then
 
 public protocol InputPasswordComponentProtocol: AnyObject {
     func isValidPassword(password: String)
-    func requestToUploadImage(password: String)
+    func confirmButtonDidTap(password: String)
 }
 
 public class InputPasswordComponent: UIView {
@@ -43,7 +43,7 @@ public class InputPasswordComponent: UIView {
                 owner.showEmptyPasswordError(password: password, checkPassword: checkPassword)
                 
                 if owner.isValidPassword {
-                    owner.delegate?.requestToUploadImage(password: password)
+                    owner.delegate?.confirmButtonDidTap(password: password)
                 }
             }.disposed(by: disposeBag)
     }

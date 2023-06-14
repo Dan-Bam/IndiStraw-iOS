@@ -1,21 +1,11 @@
 import Foundation
 import BaseFeature
-import AuthDomain
-import JwtStore
 import Alamofire
+import AuthDomain
 
-class SignupPhoneNumberViewModel: BaseViewModel {
-    var container = DIContainer.shared.resolve(JwtStore.self)!
-    
-    var name: String
-    
-    init(coordinator: Coordinator, name: String) {
-        self.name = name
-        super.init(coordinator: coordinator)
-    }
-    
+class InputPhoneNumberViewModel: BaseViewModel {
     func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
-        AF.request(SignupTarget.sendAuthNumber(phoneNumber: phoneNumber))
+        AF.request(FindPasswordTarget.sendAuthNumber(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
                 switch response.response?.statusCode {
@@ -32,7 +22,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
     }
     
     func requestToCheckDuplicationPhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
-        AF.request(SignupTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber))
+        AF.request(FindPasswordTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
                 switch response.result {
@@ -46,7 +36,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
     }
     
     func requestToCheckAuthNumber(authCode: String, phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
-        AF.request(SignupTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
+        AF.request(FindPasswordTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
                 switch response.response?.statusCode {
@@ -62,7 +52,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func pushProfileImageVC(phoneNumber: String) {
-        coordinator.navigate(to: .selectPhotoIsRequired(name: name, phoneNumber: phoneNumber))
+    func pushChangePassword(phoneNumber: String) {
+        coordinator.navigate(to: .findPassword_changePassword(phoneNumber: phoneNumber))
     }
 }
