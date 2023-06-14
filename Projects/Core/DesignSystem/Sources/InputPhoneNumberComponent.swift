@@ -17,7 +17,7 @@ public class InputPhoneNumberComponent: UIView {
     
     var timerDisposable: Disposable?
     
-    let inputPhoneNumberTextField = TextFieldBox().then {
+    public let inputPhoneNumberTextField = TextFieldBox().then {
         $0.keyboardType = .numberPad
         $0.setPlaceholer(text: "전화번호")
     }
@@ -32,7 +32,7 @@ public class InputPhoneNumberComponent: UIView {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
-    public  let errorLabel = ErrorLabel()
+    public let errorLabel = ErrorLabel()
     
     public let continueButton = ButtonComponent().then {
         $0.tag = 0
