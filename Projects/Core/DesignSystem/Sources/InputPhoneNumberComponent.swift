@@ -1,6 +1,8 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import SnapKit
+import Then
 import Utility
 
 public protocol InputPhoneNumberComponentProtocol: AnyObject {
@@ -40,7 +42,7 @@ public class InputPhoneNumberComponent: UIView {
     }
     
     let resendAuthNumberButton = UIButton().then {
-        $0.setTitle("인증번호가 안오셨나요? 재전송", for: .normal)
+        $0.setTitle("인증번호가 안오셨나요? 다시받기", for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
     }
     
@@ -51,8 +53,6 @@ public class InputPhoneNumberComponent: UIView {
         addView()
         setLayout()
         bindUI()
-        
-        setAgainReciveAuthNumberButtonAttributedTitle()
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -75,8 +75,8 @@ public class InputPhoneNumberComponent: UIView {
     
     private func addView() {
         self.addSubviews(
-            inputPhoneNumberTextField, errorLabel,
-            continueButton, inputAuthNumberTextField,
+            inputPhoneNumberTextField, continueButton,
+            inputAuthNumberTextField, errorLabel,
             resendAuthNumberButton)
         inputAuthNumberTextField.addSubview(countLabel)
     }
@@ -128,6 +128,8 @@ public class InputPhoneNumberComponent: UIView {
             $0.top.equalTo(continueButton.snp.bottom).offset(15)
             $0.centerX.equalToSuperview()
         }
+        
+        setAgainReciveAuthNumberButtonAttributedTitle()
     }
     
     private func bindUI() {
@@ -158,7 +160,7 @@ public class InputPhoneNumberComponent: UIView {
         attributeString.addAttributes([
             .foregroundColor : UIColor.white,
             .font : DesignSystemFontFamily.Suit.bold.font(size: 12) as Any
-        ], range: (text as NSString).range(of: "재전송"))
+        ], range: (text as NSString).range(of: "다시받기"))
         resendAuthNumberButton.setAttributedTitle(attributeString, for: .normal)
     }
     
