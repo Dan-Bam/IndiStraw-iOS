@@ -8,4 +8,22 @@ public class InputPhoneNumberCoordinator: BaseCoordinator {
         
         navigationController.pushViewController(vc, animated: true)
     }
+    
+    public override func navigate(to step: IndiStrawStep) {
+        switch step {
+        case .findPassword_changePassword(let phoneNumber):
+            findPassword_changePassword(phoneNumber: phoneNumber)
+        default:
+            return
+        }
+    }
+}
+
+extension InputPhoneNumberCoordinator {
+    func findPassword_changePassword(phoneNumber: String) {
+        let vc = ChangePasswordCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
+    }
 }

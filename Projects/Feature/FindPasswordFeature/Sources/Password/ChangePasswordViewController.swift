@@ -43,10 +43,11 @@ extension ChangePasswordViewController {
 //                self?.component.errorLabel.text = "회원가입에 실패했습니다."
 //            }
 //        }
-        viewModel.requestToChangePassword(password: password) { [weak self] result in
+//        viewModel.requestToChangePassword(newPassword: password) { [weak self] result in
 //            switch result {
-//            case .success(<#T##Void#>)
+//            case .success:
+//
 //            }
-        }
+//        }
     }
 }
