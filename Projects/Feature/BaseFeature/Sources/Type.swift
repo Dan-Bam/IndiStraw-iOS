@@ -4,5 +4,5 @@ public enum FindAccountType {
 
 public enum CheckPhoneDuplicateType {
     public static let signup = "SIGNUP"
-    public static let password = "PASSWORD"
+    public static let findAccount = "FIND_ACCOUNT"
 }
