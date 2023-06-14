@@ -5,6 +5,17 @@ import DesignSystem
 public class InputPhoneNumberViewController: BaseVC<InputPhoneNumberViewModel>, InputPhoneNumberComponentProtocol {
     private let component = InputPhoneNumberComponent()
     
+    var type: FindAccountType
+    
+    public init(viewModel: InputPhoneNumberViewModel, type: FindAccountType) {
+        self.type = type
+        super.init(viewModel: viewModel)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     public override func configureVC() {
         navigationItem.title = "전화번호를 입력해 주세요."
         
@@ -69,7 +80,7 @@ extension InputPhoneNumberViewController {
         viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
             switch result {
             case .success:
-                self?.viewModel.navigateToFindIdOrChangePassword(phoneNumber: phoneNumber)
+                self?.type == .findId ? self?.viewModel.pushFindId(phoneNumber: phoneNumber) : self?.viewModel.pushChangePassword(phoneNumber: phoneNumber)
             case .failure(.cantSendAuthNumber):
                 self?.component.errorLabel.text = "인증번호가 틀렸습니다."
             case .failure(.tooManyRequestException):

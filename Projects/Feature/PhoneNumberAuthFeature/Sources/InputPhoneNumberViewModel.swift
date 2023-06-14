@@ -5,13 +5,6 @@ import AuthDomain
 
 public class InputPhoneNumberViewModel: BaseViewModel {
     
-    var type: FindAccountType
-    
-    public init(coordinator: Coordinator, type: FindAccountType) {
-        self.type = type
-        super.init(coordinator: coordinator)
-    }
-    
     func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(PhoneNumberAuthTarget.sendAuthNumber(phoneNumber: phoneNumber))
             .validate()
@@ -60,12 +53,11 @@ public class InputPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func navigateToFindIdOrChangePassword(phoneNumber: String) {
-        switch type {
-        case .findId:
-            coordinator.navigate(to: .findIdIsRequired(phoneNumber: phoneNumber))
-        case .changePassword:
-            coordinator.navigate(to: .changePasswordIsRequired(phoneNumber: phoneNumber))
-        }
+    func pushFindId(phoneNumber: String) {
+        coordinator.navigate(to: .findIdIsRequired(phoneNumber: phoneNumber))
+    }
+    
+    func pushChangePassword(phoneNumber: String) {
+        coordinator.navigate(to: .changePasswordIsRequired(phoneNumber: phoneNumber))
     }
 }

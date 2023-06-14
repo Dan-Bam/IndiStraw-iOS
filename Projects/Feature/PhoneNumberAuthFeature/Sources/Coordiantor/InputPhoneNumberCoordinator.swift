@@ -5,8 +5,8 @@ import FindPasswordFeature
 
 public class InputPhoneNumberCoordinator: BaseCoordinator {
     public func startInputPhoneNumberCoordinator(type: FindAccountType) {
-        let vm = InputPhoneNumberViewModel(coordinator: self, type: type)
-        let vc = InputPhoneNumberViewController(viewModel: vm)
+        let vm = InputPhoneNumberViewModel(coordinator: self)
+        let vc = InputPhoneNumberViewController(viewModel: vm, type: type)
         
         navigationController.pushViewController(vc, animated: true)
     }
