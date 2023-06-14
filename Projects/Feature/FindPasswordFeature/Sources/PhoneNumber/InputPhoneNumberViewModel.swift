@@ -53,6 +53,6 @@ class InputPhoneNumberViewModel: BaseViewModel {
     }
     
     func pushChangePassword(phoneNumber: String) {
-        coordinator.navigate(to: .findPasswordIsRequired(phoneNumber: phoneNumber))
+        coordinator.navigate(to: .findPassword_changePassword(phoneNumber: phoneNumber))
     }
 }
