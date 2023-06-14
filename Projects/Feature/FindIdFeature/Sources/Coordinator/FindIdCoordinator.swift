@@ -3,7 +3,7 @@ import BaseFeature
 
 public class FindIdCoordinator: BaseCoordinator {
     public func startFindIdCoordinator(phoneNumber: String) {
-        let vm = FindIdViewModel(coordinator: self)
+        let vm = FindIdViewModel(coordinator: self, phoneNumber: phoneNumber)
         let vc = FindIdViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)

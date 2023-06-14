@@ -11,6 +11,17 @@ class FindIdViewController: BaseVC<FindIdViewModel> {
     
     override func configureVC() {
         navigationItem.title = "현재 아이디"
+        
+        let phoneNumber = inputIdTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        viewModel.requestToFindId(phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success(let data):
+                self?.inputIdTextField.text = data.id
+            default:
+                self?.inputIdTextField.text = "아이디 찾기를 실패했습니다."
+            }
+        }
     }
     
     override func addView() {

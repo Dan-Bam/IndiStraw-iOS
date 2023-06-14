@@ -15,6 +15,8 @@ public class InputPhoneNumberCoordinator: BaseCoordinator {
         switch step {
         case .changePasswordIsRequired(let phoneNumber):
             changePasswordIsRequired(phoneNumber: phoneNumber)
+        case .findIdIsRequired(let phoneNumber):
+            findIdIsRequired(phoneNumber: phoneNumber)
         default:
             return
         }
@@ -27,5 +29,12 @@ extension InputPhoneNumberCoordinator {
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.startChangePasswordCoordinator(phoneNumber: phoneNumber)
+    }
+    
+    func findIdIsRequired(phoneNumber: String) {
+        let vc = FindIdCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.startFindIdCoordinator(phoneNumber: phoneNumber)
     }
 }
