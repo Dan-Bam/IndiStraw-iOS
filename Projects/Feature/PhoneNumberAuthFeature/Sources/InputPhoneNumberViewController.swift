@@ -78,13 +78,19 @@ extension InputPhoneNumberViewController {
     
     public func checkAuthCode(authCode: String, phoneNumber: String) {
         viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success:
-                self?.type == .findId ? self?.viewModel.pushFindId(phoneNumber: phoneNumber) : self?.viewModel.pushChangePassword(phoneNumber: phoneNumber)
+                switch self.type {
+                case .findId:
+                    self.viewModel.pushFindId(phoneNumber: phoneNumber)
+                case .changePassword:
+                    self.viewModel.pushChangePassword(phoneNumber: phoneNumber)
+                }
             case .failure(.cantSendAuthNumber):
-                self?.component.errorLabel.text = "인증번호가 틀렸습니다."
+                self.component.errorLabel.text = "인증번호가 틀렸습니다."
             case .failure(.tooManyRequestException):
-                self?.component.errorLabel.text = "최대 인증확인 요청 횟수를 초과했습니다. 1시간 후에 다시 시도해주세요"
+                self.component.errorLabel.text = "최대 인증확인 요청 횟수를 초과했습니다. 1시간 후에 다시 시도해주세요"
             }
         }
     }
