@@ -1,9 +1,48 @@
-//
-//  FindPasswordTarget.swift
-//  FindPasswordFeature
-//
-//  Created by 민도현 on 2023/06/14.
-//  Copyright © 2023 dohyeon. All rights reserved.
-//
+import UIKit
+import Alamofire
+import AuthDomain
 
-import Foundation
+enum FindPasswordTarget {
+    case checkPhoneNumberDuplication(phoneNumber: String)
+    case sendAuthNumber(phoneNumber: String)
+    case checkAuthNumber(authCode: String, phoneNumber: String)
+}
+
+extension FindPasswordTarget: BaseRouter {
+    var baseURL: String {
+        return "https://port-0-indistraw-account-otjl2cli73l2cy.sel4.cloudtype.app/api/v1"
+    }
+    
+    var method: Alamofire.HTTPMethod {
+        switch self {
+        case .checkPhoneNumberDuplication: return .head
+        case .sendAuthNumber: return .post
+        case .checkAuthNumber: return .get
+        }
+    }
+    
+    var path: String {
+        switch self {
+        case .checkPhoneNumberDuplication(let phoneNumber):
+            return "/auth/check/phone-number/\(phoneNumber)"
+        case .sendAuthNumber(phoneNumber: let phoneNumber):
+            return "/auth/send/phone-number/\(phoneNumber)"
+        case .checkAuthNumber(authCode: let authCode, phoneNumber: let phoneNumber):
+            return "/auth/auth-code/\(authCode)/phone-number/\(phoneNumber)"
+        }
+    }
+    
+    var parameters: RequestParams {
+        switch self {
+        default:
+            return .requestPlain
+        }
+    }
+    
+    var multipart: Alamofire.MultipartFormData {
+        switch self {
+            default: return MultipartFormData()
+        }
+    }
+    
+}

@@ -2,7 +2,7 @@ import UIKit
 import BaseFeature
 import DesignSystem
 
-class InputPhoneNumberViewController: BaseVC<PasswordInputPhoneNumberViewModel>, InputPhoneNumberComponentProtocol {
+class InputPhoneNumberViewController: BaseVC<InputPhoneNumberViewModel>, InputPhoneNumberComponentProtocol {
     private let component = InputPhoneNumberComponent()
     
     override func configureVC() {
@@ -22,20 +22,59 @@ class InputPhoneNumberViewController: BaseVC<PasswordInputPhoneNumberViewModel>,
     }
 }
 
-extension PasswordInputPhoneNumberViewController {
+extension InputPhoneNumberViewController {
     func checkDuplicationPhoneNumber(phoneNumber: String) {
-        <#code#>
+        viewModel.requestToCheckDuplicationPhoneNumber(phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success:
+                self?.requestToSendAuthNumber(phoneNumber: phoneNumber)
+            case .failure:
+                self?.component.errorLabel.text = "이미 등록된 전화번호 입니다."
+            }
+        }
     }
     
     func requestToSendAuthNumber(phoneNumber: String) {
-        <#code#>
+        viewModel.requestToSendAuthNumber(phoneNumber: phoneNumber) { [weak self] response in
+            switch response {
+            case .success:
+                DispatchQueue.main.async {
+                    self?.component.continueButton.tag = 1
+                    self?.component.errorLabel.text = nil
+                    self?.navigationItem.title = "인증번호를 입력해 주세요."
+                    self?.component.continueButton.setTitle("인증번호 확인", for: .normal)
+                    self?.component.updateAuthNumberTextFieldLayout()
+                    self?.component.setupPossibleBackgroundTimer()
+                }
+            case .failure:
+                return
+            }
+        }
     }
-    
+
     func resendButtonDidTap(phoneNumber: String) {
-        <#code#>
+        viewModel.requestToSendAuthNumber(phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success:
+                self?.component.setupPossibleBackgroundTimer()
+            case .failure(.cantSendAuthNumber):
+                self?.component.errorLabel.text = "인증번호 전송에 실패했습니다."
+            case .failure(.tooManyRequestException):
+                self?.component.errorLabel.text = "최대 요청횟수를 초과했습니다. 1시간 후에 다시 시도해주세요."
+            }
+        }
     }
     
     func checkAuthCode(authCode: String, phoneNumber: String) {
-        <#code#>
+        viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
+            switch result {
+            case .success:
+                self?.viewModel.pushProfileImageVC(phoneNumber: phoneNumber)
+            case .failure(.cantSendAuthNumber):
+                self?.component.errorLabel.text = "인증번호가 틀렸습니다."
+            case .failure(.tooManyRequestException):
+                self?.component.errorLabel.text = "최대 인증확인 요청 횟수를 초과했습니다. 1시간 후에 다시 시도해주세요"
+            }
+        }
     }
 }

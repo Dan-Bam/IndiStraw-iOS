@@ -4,11 +4,6 @@ import AuthDomain
 import JwtStore
 import Alamofire
 
-enum SignupPhoneNumberErrorType: Error {
-    case cantSendAuthNumber
-    case tooManyRequestException
-}
-
 class SignupPhoneNumberViewModel: BaseViewModel {
     var container = DIContainer.shared.resolve(JwtStore.self)!
     
@@ -19,7 +14,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
         super.init(coordinator: coordinator)
     }
     
-    func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, SignupPhoneNumberErrorType>) -> Void = { _ in }) {
+    func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(SignupTarget.sendAuthNumber(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
@@ -50,7 +45,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func requestToCheckAuthNumber(authCode: String, phoneNumber: String, completion: @escaping (Result<Void, SignupPhoneNumberErrorType>) -> Void = { _ in }) {
+    func requestToCheckAuthNumber(authCode: String, phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(SignupTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
             .validate()
             .responseData { response in

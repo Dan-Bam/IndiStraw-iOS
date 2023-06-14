@@ -1,9 +1,10 @@
-//
-//  ChangePasswordViewModel.swift
-//  FindPasswordFeature
-//
-//  Created by 민도현 on 2023/06/14.
-//  Copyright © 2023 dohyeon. All rights reserved.
-//
-
 import Foundation
+import BaseFeature
+
+class ChangePasswordViewModel: BaseViewModel {
+    func isValidPassword(password: String) -> Bool {
+        let passwordRegEx = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]+$"
+        let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
+        return passwordTest.evaluate(with: password)
+    }
+}

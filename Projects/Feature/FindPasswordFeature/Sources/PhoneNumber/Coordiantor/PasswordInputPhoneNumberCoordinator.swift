@@ -1,10 +1,10 @@
 import Foundation
 import BaseFeature
 
-public class PasswordInputPhoneNumberCoordinator: BaseCoordinator {
+public class InputPhoneNumberCoordinator: BaseCoordinator {
     public override func start() {
-        let vm = PasswordInputPhoneNumberViewModel(coordinator: self)
-        let vc = PasswordInputPhoneNumberViewController(viewModel: vm)
+        let vm = InputPhoneNumberViewModel(coordinator: self)
+        let vc = InputPhoneNumberViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
     }
