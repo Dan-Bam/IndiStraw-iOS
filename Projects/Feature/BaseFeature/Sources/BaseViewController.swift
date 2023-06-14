@@ -75,9 +75,9 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
     }
     
     private func keyboardUp(_ notification: Notification) {
-        if let keyboardFrame:CGRect = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+        if let _:CGRect = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             UIView.animate(withDuration: 0.3, animations: {
-                self.view.frame.origin.y -= keyboardFrame.size.height
+                self.view.frame.origin.y -= 95
                 }
             )
         }

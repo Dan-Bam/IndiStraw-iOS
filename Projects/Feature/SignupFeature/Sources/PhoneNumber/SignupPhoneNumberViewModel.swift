@@ -32,7 +32,7 @@ class SignupPhoneNumberViewModel: BaseViewModel {
     }
     
     func requestToCheckDuplicationPhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
-        AF.request(SignupTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber))
+        AF.request(SignupTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber, type: CheckPhoneDuplicateType.signup))
             .validate()
             .responseData { response in
                 switch response.result {

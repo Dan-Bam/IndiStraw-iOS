@@ -1,10 +1,11 @@
 import UIKit
 import Alamofire
 import AuthDomain
+import BaseFeature
 
 enum SignupTarget {
     case signup(SignupRequest)
-    case checkPhoneNumberDuplication(phoneNumber: String)
+    case checkPhoneNumberDuplication(phoneNumber: String, type: String)
     case checkIdDuplication(id: String)
     case sendAuthNumber(phoneNumber: String)
     case checkAuthNumber(authCode: String, phoneNumber: String)
