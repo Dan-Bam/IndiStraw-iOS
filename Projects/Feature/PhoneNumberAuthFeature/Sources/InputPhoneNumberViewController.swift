@@ -69,7 +69,7 @@ extension InputPhoneNumberViewController {
         viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
             switch result {
             case .success:
-                self?.viewModel.pushChangePassword(phoneNumber: phoneNumber)
+                self?.viewModel.navigateToFindIdOrChangePassword(phoneNumber: phoneNumber)
             case .failure(.cantSendAuthNumber):
                 self?.component.errorLabel.text = "인증번호가 틀렸습니다."
             case .failure(.tooManyRequestException):

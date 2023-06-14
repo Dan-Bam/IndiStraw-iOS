@@ -60,7 +60,7 @@ public class InputPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func pushChangePassword(phoneNumber: String) {
+    func navigateToFindIdOrChangePassword(phoneNumber: String) {
         switch type {
         case .findId:
             coordinator.navigate(to: .findIdIsRequired(phoneNumber: phoneNumber))
