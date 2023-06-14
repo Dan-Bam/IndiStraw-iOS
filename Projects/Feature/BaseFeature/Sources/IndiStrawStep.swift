@@ -1,8 +1,14 @@
 import UIKit
 
 public enum IndiStrawStep {
+    
+    //root
     case signinIsRequired
     case signupIsRequired
+    
+    //signin
+    case findPasswordIsRequired
+    case findIdIsRequired
     
     //signup
     case selectPhotoIsRequired(name: String, phoneNumber: String)

@@ -6,7 +6,7 @@ class PasswordInputPhoneNumberViewController: BaseVC<PasswordInputPhoneNumberVie
     private let component = InputPhoneNumberComponent()
     
     override func configureVC() {
-        
+        navigationItem.title = "전화번호를 입력해 주세요."
     }
     
     override func addView() {

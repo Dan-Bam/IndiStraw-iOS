@@ -1,5 +1,6 @@
 import UIKit
 import BaseFeature
+import FindPasswordFeature
 
 public class SigninCoordinator: BaseCoordinator {
     public override func start() {
@@ -11,6 +12,8 @@ public class SigninCoordinator: BaseCoordinator {
     
     public override func navigate(to step: IndiStrawStep) {
         switch step {
+        case .findPasswordIsRequired:
+            findPasswordIsRequired()
         default:
             return
         }
@@ -18,5 +21,10 @@ public class SigninCoordinator: BaseCoordinator {
 }
 
 extension SigninCoordinator {
-
+    func findPasswordIsRequired() {
+        let vc = PasswordInputPhoneNumberCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
+    }
 }

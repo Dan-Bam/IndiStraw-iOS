@@ -58,6 +58,11 @@ public class SigninViewController: BaseVC<SigninViewModel> {
                     owner.errorLabel.text = "올바르지 않은 비밀번호입니다."
                 }
             }.disposed(by: disposeBag)
+        
+        findPasswordButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushFindPassword()
+            }.disposed(by: disposeBag)
     }
     
     public override func addView() {
