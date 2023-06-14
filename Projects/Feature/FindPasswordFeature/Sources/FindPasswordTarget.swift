@@ -6,6 +6,7 @@ enum FindPasswordTarget {
     case checkPhoneNumberDuplication(phoneNumber: String)
     case sendAuthNumber(phoneNumber: String)
     case checkAuthNumber(authCode: String, phoneNumber: String)
+    case changePasswrod(ChangePasswordModel)
 }
 
 extension FindPasswordTarget: BaseRouter {
@@ -18,6 +19,7 @@ extension FindPasswordTarget: BaseRouter {
         case .checkPhoneNumberDuplication: return .head
         case .sendAuthNumber: return .post
         case .checkAuthNumber: return .get
+        case .changePasswrod: return .patch
         }
     }
     
@@ -29,11 +31,19 @@ extension FindPasswordTarget: BaseRouter {
             return "/auth/send/phone-number/\(phoneNumber)"
         case .checkAuthNumber(authCode: let authCode, phoneNumber: let phoneNumber):
             return "/auth/auth-code/\(authCode)/phone-number/\(phoneNumber)"
+        case .changePasswrod:
+            return "/account/update/password"
         }
     }
     
     var parameters: RequestParams {
         switch self {
+        case .changePasswrod(let request):
+            let body: [String : Any] = [
+                "phoneNumber": request.phoneNumber,
+                "newPassword": request.newPassword,
+            ]
+            return .requestBody(body)
         default:
             return .requestPlain
         }

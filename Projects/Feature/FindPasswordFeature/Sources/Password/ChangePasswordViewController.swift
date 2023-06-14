@@ -24,11 +24,11 @@ class ChangePasswordViewController: BaseVC<ChangePasswordViewModel>, InputPasswo
 
 extension ChangePasswordViewController {
     func isValidPassword(password: String) {
-//        guard viewModel.isValidPassword(password: password) else {
-//            component.errorLabel.text = "숫자와 대소문자, 특수문자를 포함해주세요."
-//            component.isValidPassword = false
-//            return
-//        }
+        guard viewModel.isValidPassword(password: password) else {
+            component.errorLabel.text = "숫자와 대소문자, 특수문자를 포함해주세요."
+            component.isValidPassword = false
+            return
+        }
     }
     
     func confirmButtonDidTap(password: String) {
@@ -43,5 +43,10 @@ extension ChangePasswordViewController {
 //                self?.component.errorLabel.text = "회원가입에 실패했습니다."
 //            }
 //        }
+        viewModel.requestToChangePassword(password: password) { [weak self] result in
+//            switch result {
+//            case .success(<#T##Void#>)
+//            }
+        }
     }
 }
