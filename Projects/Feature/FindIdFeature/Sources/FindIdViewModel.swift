@@ -18,7 +18,7 @@ class FindIdViewModel: BaseViewModel {
             )
         ))
         .validate()
-        .responseDecodable(of: FindIdModelDecodable.self) { [weak self] response in
+        .responseDecodable(of: FindIdModelDecodable.self) { response in
             switch response.result {
             case .success(let data):
                 completion(.success(data))
