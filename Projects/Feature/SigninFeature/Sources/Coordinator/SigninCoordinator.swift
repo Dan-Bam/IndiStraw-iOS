@@ -12,8 +12,8 @@ public class SigninCoordinator: BaseCoordinator {
     
     public override func navigate(to step: IndiStrawStep) {
         switch step {
-        case .phoneNumberAuthIsRequired:
-            phoneNumberAuthIsRequired()
+        case .phoneNumberAuthIsRequired(let type):
+            phoneNumberAuthIsRequired(type: type)
         default:
             return
         }
@@ -21,10 +21,10 @@ public class SigninCoordinator: BaseCoordinator {
 }
 
 extension SigninCoordinator {
-    func phoneNumberAuthIsRequired() {
+    func phoneNumberAuthIsRequired(type: FindAccountType) {
         let vc = InputPhoneNumberCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
-        vc.start()
+        vc.startInputPhoneNumberCoordinator(type: type)
     }
 }

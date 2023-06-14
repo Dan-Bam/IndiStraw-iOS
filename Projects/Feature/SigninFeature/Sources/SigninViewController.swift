@@ -61,7 +61,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         
         findPasswordButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.viewModel.pushFindPassword()
+                owner.viewModel.pushPhoneNumberAuth(type: .changePassword)
             }.disposed(by: disposeBag)
     }
     

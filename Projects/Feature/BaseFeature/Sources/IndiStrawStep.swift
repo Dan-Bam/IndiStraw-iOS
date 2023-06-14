@@ -7,10 +7,13 @@ public enum IndiStrawStep {
     case signupIsRequired
     
     //signin
-    case phoneNumberAuthIsRequired
+    case phoneNumberAuthIsRequired(type: FindAccountType)
     
     //findPassword
-    case findPassword_changePassword(phoneNumber: String)
+    case changePasswordIsRequired(phoneNumber: String)
+    
+    //findId
+    case findIdIsRequired(phoneNumber: String)
     
     //signup
     case selectPhotoIsRequired(name: String, phoneNumber: String)

@@ -4,8 +4,8 @@ import FindIdFeature
 import FindPasswordFeature
 
 public class InputPhoneNumberCoordinator: BaseCoordinator {
-    public override func start() {
-        let vm = InputPhoneNumberViewModel(coordinator: self)
+    public func startInputPhoneNumberCoordinator(type: FindAccountType) {
+        let vm = InputPhoneNumberViewModel(coordinator: self, type: type)
         let vc = InputPhoneNumberViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
@@ -13,8 +13,8 @@ public class InputPhoneNumberCoordinator: BaseCoordinator {
     
     public override func navigate(to step: IndiStrawStep) {
         switch step {
-        case .findPassword_changePassword(let phoneNumber):
-            findPassword_changePassword(phoneNumber: phoneNumber)
+        case .changePasswordIsRequired(let phoneNumber):
+            changePasswordIsRequired(phoneNumber: phoneNumber)
         default:
             return
         }
@@ -22,7 +22,7 @@ public class InputPhoneNumberCoordinator: BaseCoordinator {
 }
 
 extension InputPhoneNumberCoordinator {
-    func findPassword_changePassword(phoneNumber: String) {
+    func changePasswordIsRequired(phoneNumber: String) {
         let vc = ChangePasswordCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
