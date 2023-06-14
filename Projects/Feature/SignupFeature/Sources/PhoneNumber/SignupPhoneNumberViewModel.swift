@@ -35,12 +35,11 @@ class SignupPhoneNumberViewModel: BaseViewModel {
         AF.request(SignupTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber, type: CheckPhoneDuplicateType.signup))
             .validate()
             .responseData { response in
-                switch response.result {
-                case .success:
+                switch response.response?.statusCode {
+                case 204:
                     completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                    print("Error - inputPhoneNumber = \(error.localizedDescription)")
+                case 409(let error):
+                    completion
                 }
             }
     }
