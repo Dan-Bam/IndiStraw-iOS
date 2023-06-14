@@ -1,8 +1,12 @@
 import UIKit
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 open class BaseVC<T: BaseViewModel>: UIViewController {
     let bound = UIScreen.main.bounds
+    
+    let disposeBag = DisposeBag()
     
     public let viewModel: T
     
@@ -26,17 +30,11 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white, .font: DesignSystemFontFamily.Suit.bold.font(size: 24)]
-        
+        setKeyboard()
         setup()
         addView()
         setLayout()
         configureVC()
-    }
-    
-    @available(*, unavailable)
-    public override func viewWillAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp), name: UIResponder.keyboardWillShowNotification, object: nil)
-           NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     @available(*, unavailable)
@@ -58,25 +56,34 @@ open class BaseVC<T: BaseViewModel>: UIViewController {
         self.view.endEditing(true)
     }
     
-    @objc func keyboardUp(notification: NSNotification) {
-        if let keyboardFrame:NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardHeight = keyboardFrame.cgRectValue.height
-            let bottomInset = self.view.safeAreaInsets.bottom
-//            let targetHeight = keyboardHeight - bottomInset
-            
-            UIView.animate(
-                withDuration: 0.3,
-                animations: {
-                    self.view.transform = CGAffineTransform(
-                        translationX: 0,
-                        y: -75
-                    )
+    func setKeyboard() {
+        let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+        let keyboardWillHide =
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
+        
+        keyboardWillShow
+            .asDriver(onErrorRecover: { _ in .never()})
+            .drive(with: self) { owner, noti in
+                owner.keyboardUp(noti)
+            }.disposed(by: disposeBag)
+        
+        keyboardWillHide
+            .asDriver(onErrorRecover: { _ in .never()})
+            .drive(with: self) { owner, noti in
+                owner.keyboardDown()
+            }.disposed(by: disposeBag)
+    }
+    
+    private func keyboardUp(_ notification: Notification) {
+        if let keyboardFrame:CGRect = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.view.frame.origin.y -= keyboardFrame.size.height
                 }
             )
         }
     }
     
-    @objc func keyboardDown() {
-        self.view.transform = .identity
+    private func keyboardDown() {
+        self.view.frame.origin.y = .zero
     }
 }
