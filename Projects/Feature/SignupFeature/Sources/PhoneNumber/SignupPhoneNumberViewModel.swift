@@ -1,12 +1,9 @@
 import Foundation
 import BaseFeature
 import AuthDomain
-import JwtStore
 import Alamofire
 
 class SignupPhoneNumberViewModel: BaseViewModel {
-    var container = DIContainer.shared.resolve(JwtStore.self)!
-    
     var name: String
     
     init(coordinator: Coordinator, name: String) {
@@ -14,7 +11,9 @@ class SignupPhoneNumberViewModel: BaseViewModel {
         super.init(coordinator: coordinator)
     }
     
-    func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
+    func requestToSendAuthNumber(
+        phoneNumber: String,
+        completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(SignupTarget.sendAuthNumber(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
@@ -31,7 +30,9 @@ class SignupPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func requestToCheckDuplicationPhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, CheckPhoneDuplicateErrorType>) -> Void = { _ in }) {
+    func requestToCheckDuplicationPhoneNumber(
+        phoneNumber: String,
+        completion: @escaping (Result<Void, CheckPhoneDuplicateErrorType>) -> Void = { _ in }) {
         AF.request(SignupTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber, type: CheckPhoneDuplicateType.signup))
             .validate()
             .responseData { response in
@@ -46,7 +47,10 @@ class SignupPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func requestToCheckAuthNumber(authCode: String, phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
+    func requestToCheckAuthNumber(
+        authCode: String,
+        phoneNumber: String,
+        completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(SignupTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
             .validate()
             .responseData { response in

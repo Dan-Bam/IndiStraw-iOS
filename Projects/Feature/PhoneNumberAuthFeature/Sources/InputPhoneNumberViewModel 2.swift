@@ -5,9 +5,7 @@ import AuthDomain
 
 public class InputPhoneNumberViewModel: BaseViewModel {
     
-    func requestToSendAuthNumber(
-        phoneNumber: String,
-        completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
+    func requestToSendAuthNumber(phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(PhoneNumberAuthTarget.sendAuthNumber(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
@@ -24,29 +22,21 @@ public class InputPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func requestToCheckDuplicationPhoneNumber(
-        phoneNumber: String,
-        completion: @escaping (Result<Void, CheckPhoneDuplicateErrorType>) -> Void = { _ in }) {
-        AF.request(PhoneNumberAuthTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber, type: CheckPhoneDuplicateType.findAccount))
+    func requestToCheckDuplicationPhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+        AF.request(PhoneNumberAuthTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
-                switch response.response?.statusCode {
-                case 200:
+                switch response.result {
+                case .success:
                     completion(.success(()))
-                case 404:
-                    completion(.failure(.cantFindPhoneNumber))
-                    print("Error - inputPhoneNumber = \(response.response?.statusCode)")
-                default:
-                    completion(.failure(.faildRequest))
-                    print("Error - inputPhoneNumber = \(response.response?.statusCode)")
+                case .failure(let error):
+                    completion(.failure(error))
+                    print("Error - inputPhoneNumber = \(error.localizedDescription)")
                 }
             }
     }
     
-    func requestToCheckAuthNumber(
-        authCode: String,
-        phoneNumber: String,
-        completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
+    func requestToCheckAuthNumber(authCode: String, phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(PhoneNumberAuthTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
             .validate()
             .responseData { response in

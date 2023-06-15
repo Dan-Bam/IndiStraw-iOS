@@ -8,7 +8,10 @@ import AuthDomain
 public class SigninViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     
-    func requestToSignin(request: SigninRequest, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+    func requestToSignin(
+        request: SigninRequest,
+        completion: @escaping (Result<Void, Error>) -> Void = { _ in }
+    ) {
         AF.request(SigninTarget.signin(request))
             .responseDecodable { [weak self] (response: AFDataResponse<ManageTokenModel>) in
                 switch response.result {

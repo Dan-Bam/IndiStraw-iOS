@@ -17,9 +17,7 @@ class ChangePasswordViewModel: BaseViewModel {
         return passwordTest.evaluate(with: password)
     }
     
-    func requestToChangePassword(
-        newPassword: String,
-        completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+    func requestToChangePassword(newPassword: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
         AF.request(
             FindPasswordTarget.changePasswrod(
                 ChangePasswordModel(
