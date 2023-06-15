@@ -4,16 +4,10 @@ import Alamofire
 import AuthDomain
 
 class FindIdViewModel: BaseViewModel {
-    var phoneNumber: String
-    
-    init(coordinator: Coordinator, phoneNumber: String) {
-        self.phoneNumber = phoneNumber
-        super.init(coordinator: coordinator)
-    }
-    
     func requestToFindId(
         phoneNumber: String,
         completion: @escaping (Result<FindIdModelDecodable, Error>) -> Void = { _ in }) {
+        print("PhoneNumber!E!#!@# = \(phoneNumber)")
         AF.request(FindIdTarget.findId(
             FindIdModelEncodable(
                 phoneNumber: phoneNumber
@@ -21,6 +15,7 @@ class FindIdViewModel: BaseViewModel {
         ))
         .validate()
         .responseDecodable(of: FindIdModelDecodable.self) { response in
+            print("url = \(response.response?.url)")
             switch response.result {
             case .success(let data):
                 completion(.success(data))
