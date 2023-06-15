@@ -31,7 +31,7 @@ public class InputPhoneNumberViewModel: BaseViewModel {
             .validate()
             .responseData { response in
                 switch response.response?.statusCode {
-                case 200:
+                case 204:
                     completion(.success(()))
                 case 404:
                     completion(.failure(.cantFindPhoneNumber))
