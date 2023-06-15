@@ -6,4 +6,5 @@ public enum PhoneNumberErrorType: Error {
 public enum CheckPhoneDuplicateErrorType: Error {
     case cantFindPhoneNumber
     case duplicatePhoneNumber
+    case faildRequest
 }

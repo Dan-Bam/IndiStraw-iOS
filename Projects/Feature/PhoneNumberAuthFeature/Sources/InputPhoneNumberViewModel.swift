@@ -22,16 +22,19 @@ public class InputPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func requestToCheckDuplicationPhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+    func requestToCheckDuplicationPhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, CheckPhoneDuplicateErrorType>) -> Void = { _ in }) {
         AF.request(PhoneNumberAuthTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
-                switch response.result {
-                case .success:
+                switch response.response?.statusCode {
+                case 204:
                     completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                    print("Error - inputPhoneNumber = \(error.localizedDescription)")
+                case 404:
+                    completion(.failure(.cantFindPhoneNumber))
+                    print("Error - inputPhoneNumber = \(response.response?.statusCode)")
+                default:
+                    completion(.failure(.faildRequest))
+                    print("Error - inputPhoneNumber = \(response.response?.statusCode)")
                 }
             }
     }
