@@ -11,7 +11,9 @@ class FindIdViewModel: BaseViewModel {
         super.init(coordinator: coordinator)
     }
     
-    func requestToFindId(phoneNumber: String, completion: @escaping (Result<FindIdModelDecodable, Error>) -> Void = { _ in }) {
+    func requestToFindId(
+        phoneNumber: String,
+        completion: @escaping (Result<FindIdModelDecodable, Error>) -> Void = { _ in }) {
         AF.request(FindIdTarget.findId(
             FindIdModelEncodable(
                 phoneNumber: phoneNumber

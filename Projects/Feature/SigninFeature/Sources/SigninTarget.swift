@@ -7,6 +7,9 @@ enum SigninTarget {
 }
 
 extension SigninTarget: BaseRouter {
+    var header: AuthDomain.HeaderType {
+        return .notHeader
+    }
     
     var multipart: Alamofire.MultipartFormData {
         return MultipartFormData()

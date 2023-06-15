@@ -1,5 +1,6 @@
 import Foundation
 import Alamofire
+import JwtStore
 
 public protocol BaseRouter: URLRequestConvertible {
     var baseURL: String { get }
@@ -7,6 +8,7 @@ public protocol BaseRouter: URLRequestConvertible {
     var path: String { get }
     var parameters: RequestParams { get }
     var multipart: MultipartFormData { get }
+    var header: HeaderType { get }
 }
 
 public extension BaseRouter {
@@ -14,16 +16,40 @@ public extension BaseRouter {
     func asURLRequest() throws -> URLRequest {
         let url = try baseURL.asURL()
         var urlRequest = try URLRequest(url: url.appendingPathComponent(path), method: method)
-        urlRequest.setValue(ContentType.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
+        urlRequest = makeHeaderForRequest(to: urlRequest)
+        urlRequest = try makeParameterForRequest(to: urlRequest, with: url)
         
         return urlRequest
+    }
+    
+    private func makeHeaderForRequest(to request: URLRequest) -> URLRequest {
+        var container = DIContainer.shared.resolve(JwtStore.self)!
+        var request = request
+
+        switch header {
+
+        case .notHeader:
+            request.setValue(HeaderContent.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
+            
+        case .withToken:
+            request.setValue(HeaderContent.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
+            request.setValue(container.getToken(type: .accessToken), forHTTPHeaderField: HTTPHeaderField.authentication.rawValue)
+
+        case .multiPart:
+            request.setValue(HTTPHeaderField.formDataType.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
+
+        case .multiPartWithToken:
+            request.setValue(HTTPHeaderField.formDataType.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
+            request.setValue(container.getToken(type: .accessToken), forHTTPHeaderField: HTTPHeaderField.authentication.rawValue)
+        }
+
+        return request
     }
         
     private func makeParameterForRequest(to request: URLRequest, with url: URL) throws -> URLRequest {
         var request = request
         
         switch parameters {
-            
         case .query(let query):
             let queryParams = query.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
             var components = URLComponents(string: url.appendingPathComponent(path).absoluteString)
@@ -55,11 +81,6 @@ public enum RequestParams {
     case requestPlain
 }
 
-extension Encodable {
-    func toDictionary() -> [String: Any] {
-        guard let data = try? JSONEncoder().encode(self),
-              let jsonData = try? JSONSerialization.jsonObject(with: data),
-              let dictionaryData = jsonData as? [String: Any] else { return [:] }
-        return dictionaryData
-    }
+public enum HeaderType {
+    case withToken, multiPart, multiPartWithToken, notHeader
 }

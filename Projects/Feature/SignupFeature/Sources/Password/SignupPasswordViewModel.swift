@@ -9,7 +9,10 @@ class SignupPasswordViewModel: BaseViewModel {
         return passwordTest.evaluate(with: password)
     }
     
-    func requestToUploadImage(image: UIImage?, password: String, completion: @escaping (Result<ProfileImageModel, Error>) -> Void = { _ in }) {
+    func requestToUploadImage(
+        image: UIImage?,
+        password: String,
+        completion: @escaping (Result<ProfileImageModel, Error>) -> Void = { _ in }) {
         AF.upload(
             multipartFormData: SignupTarget.uploadImage(image: image).multipart,
             with: SignupTarget.uploadImage(image: image)
@@ -26,7 +29,13 @@ class SignupPasswordViewModel: BaseViewModel {
             }
     }
     
-    func requestToSignup(id: String, password: String, name: String, phoneNumber: String, profileUrl: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+    func requestToSignup(
+        id: String,
+        password: String,
+        name: String,
+        phoneNumber: String,
+        profileUrl: String,
+        completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
         AF.request(
             SignupTarget.signup(SignupRequest(
                 id: id,

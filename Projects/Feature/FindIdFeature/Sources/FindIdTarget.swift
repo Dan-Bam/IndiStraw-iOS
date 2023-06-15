@@ -7,6 +7,12 @@ enum FindIdTarget {
 }
 
 extension FindIdTarget: BaseRouter {
+    var header: AuthDomain.HeaderType {
+        switch self {
+        case .findId: return .notHeader
+        }
+    }
+    
     var baseURL: String {
         return "https://port-0-indistraw-account-otjl2cli73l2cy.sel4.cloudtype.app/api/v1"
     }
