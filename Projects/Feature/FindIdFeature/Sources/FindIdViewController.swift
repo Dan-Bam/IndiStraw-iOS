@@ -3,9 +3,15 @@ import BaseFeature
 import DesignSystem
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class FindIdViewController: BaseVC<FindIdViewModel> {
-    private let inputIdTextField = TextFieldBox()
+    private let disposeBag = DisposeBag()
+    
+    private let inputIdTextField = TextFieldBox().then {
+        $0.isEnabled = false
+    }
     
     private let confirmButton = ButtonComponent().then {
         $0.setTitle("확인하기", for: .normal)
@@ -29,12 +35,17 @@ class FindIdViewController: BaseVC<FindIdViewModel> {
         viewModel.requestToFindId(phoneNumber: phoneNumber) { [weak self] result in
             switch result {
             case .success(let data):
-                print("data = \(data)")
                 self?.inputIdTextField.text = data.id
             default:
                 self?.inputIdTextField.text = "아이디 찾기를 실패했습니다."
             }
         }
+        
+        confirmButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.popToRootVC()
+            }.disposed(by: disposeBag)
+        
     }
     
     override func addView() {

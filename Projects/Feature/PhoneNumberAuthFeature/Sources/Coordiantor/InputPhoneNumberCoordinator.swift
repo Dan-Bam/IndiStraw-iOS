@@ -26,15 +26,11 @@ public class InputPhoneNumberCoordinator: BaseCoordinator {
 extension InputPhoneNumberCoordinator {
     func changePasswordIsRequired(phoneNumber: String) {
         let vc = ChangePasswordCoordinator(navigationController: navigationController)
-        vc.parentCoordinator = self
-        childCoordinators.append(vc)
         vc.startChangePasswordCoordinator(phoneNumber: phoneNumber)
     }
     
     func findIdIsRequired(phoneNumber: String) {
         let vc = FindIdCoordinator(navigationController: navigationController)
-        vc.parentCoordinator = self
-        childCoordinators.append(vc)
         vc.startFindIdCoordinator(phoneNumber: phoneNumber)
     }
 }
