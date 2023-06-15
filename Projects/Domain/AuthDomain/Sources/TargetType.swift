@@ -30,7 +30,7 @@ public extension BaseRouter {
 
         case .notHeader:
             request.setValue(HeaderContent.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
-
+            
         case .withToken:
             request.setValue(HeaderContent.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
             request.setValue(container.getToken(type: .accessToken), forHTTPHeaderField: HTTPHeaderField.authentication.rawValue)
