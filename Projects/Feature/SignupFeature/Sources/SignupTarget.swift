@@ -32,8 +32,8 @@ extension SignupTarget: BaseRouter {
         switch self {
         case .signup:
             return "/auth/signup"
-        case .checkPhoneNumberDuplication(let phoneNumber):
-            return "/auth/check/phone-number/\(phoneNumber)"
+        case .checkPhoneNumberDuplication(let phoneNumber, let type):
+            return "/auth/check/phone-number/\(phoneNumber)/type/\(type)"
         case .checkIdDuplication(id: let id):
             return "/auth/check/id/\(id)"
         case .sendAuthNumber(phoneNumber: let phoneNumber):

@@ -23,11 +23,11 @@ public class InputPhoneNumberViewModel: BaseViewModel {
     }
     
     func requestToCheckDuplicationPhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, CheckPhoneDuplicateErrorType>) -> Void = { _ in }) {
-        AF.request(PhoneNumberAuthTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber))
+        AF.request(PhoneNumberAuthTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber, type: CheckPhoneDuplicateType.findAccount))
             .validate()
             .responseData { response in
                 switch response.response?.statusCode {
-                case 204:
+                case 200:
                     completion(.success(()))
                 case 404:
                     completion(.failure(.cantFindPhoneNumber))

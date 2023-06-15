@@ -3,7 +3,7 @@ import Alamofire
 import AuthDomain
 
 enum PhoneNumberAuthTarget {
-    case checkPhoneNumberDuplication(phoneNumber: String)
+    case checkPhoneNumberDuplication(phoneNumber: String, type: String)
     case sendAuthNumber(phoneNumber: String)
     case checkAuthNumber(authCode: String, phoneNumber: String)
 }
@@ -23,8 +23,8 @@ extension PhoneNumberAuthTarget: BaseRouter {
     
     var path: String {
         switch self {
-        case .checkPhoneNumberDuplication(let phoneNumber):
-            return "/auth/check/phone-number/\(phoneNumber)"
+        case .checkPhoneNumberDuplication(let phoneNumber, let type):
+            return "/auth/check/phone-number/\(phoneNumber)/type/\(type)"
         case .sendAuthNumber(phoneNumber: let phoneNumber):
             return "/auth/send/phone-number/\(phoneNumber)"
         case .checkAuthNumber(authCode: let authCode, phoneNumber: let phoneNumber):
