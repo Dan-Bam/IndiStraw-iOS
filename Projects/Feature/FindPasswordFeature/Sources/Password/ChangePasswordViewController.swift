@@ -36,7 +36,9 @@ extension ChangePasswordViewController {
             switch result {
             case .success:
                 self?.viewModel.popToRootVC()
-            case .failure:
+            case .failure(.sameAsExistingPassword):
+                self?.component.errorLabel.text = "기존 비밀번호와 같은 비밀번호입니다."
+            case .failure(.failedRequest):
                 self?.component.errorLabel.text = "비밀번호 변경에 실패했습니다."
             }
         }

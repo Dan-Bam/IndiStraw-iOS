@@ -59,8 +59,10 @@ extension InputPhoneNumberViewController {
                     self?.component.updateAuthNumberTextFieldLayout()
                     self?.component.setupPossibleBackgroundTimer()
                 }
-            case .failure:
-                return
+            case .failure(.tooManyRequestException):
+                self?.component.errorLabel.text = "최대 요청 횟수를 초과했습니다. 한 시간 후에 시도해주세요."
+            case .failure(.cantSendAuthNumber):
+                self?.component.errorLabel.text = "인증번호 요청을 실패했습니다."
             }
         }
     }

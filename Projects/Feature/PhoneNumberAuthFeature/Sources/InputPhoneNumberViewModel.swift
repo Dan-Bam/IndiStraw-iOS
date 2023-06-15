@@ -31,7 +31,7 @@ public class InputPhoneNumberViewModel: BaseViewModel {
             .validate()
             .responseData { response in
                 switch response.response?.statusCode {
-                case 200:
+                case 204:
                     completion(.success(()))
                 case 404:
                     completion(.failure(.cantFindPhoneNumber))
@@ -50,6 +50,7 @@ public class InputPhoneNumberViewModel: BaseViewModel {
         AF.request(PhoneNumberAuthTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
             .validate()
             .responseData { response in
+                print("statusc = \(response.response?.statusCode)")
                 switch response.response?.statusCode {
                 case 204:
                     completion(.success(()))

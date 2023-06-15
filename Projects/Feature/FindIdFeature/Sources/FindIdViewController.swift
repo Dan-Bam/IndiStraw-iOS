@@ -3,16 +3,34 @@ import BaseFeature
 import DesignSystem
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class FindIdViewController: BaseVC<FindIdViewModel> {
-    private let inputIdTextField = TextFieldBox()
+    private let disposeBag = DisposeBag()
     
-    private let confirmButton = ButtonComponent()
+    private let inputIdTextField = TextFieldBox().then {
+        $0.isEnabled = false
+    }
+    
+    private let confirmButton = ButtonComponent().then {
+        $0.setTitle("확인하기", for: .normal)
+    }
+    
+    var phoneNumber: String
+    
+    init(viewModel: FindIdViewModel, phoneNumber: String) {
+        self.phoneNumber = phoneNumber
+        
+        super.init(viewModel: viewModel)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func configureVC() {
         navigationItem.title = "현재 아이디"
-        
-        let phoneNumber = inputIdTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
         viewModel.requestToFindId(phoneNumber: phoneNumber) { [weak self] result in
             switch result {
@@ -22,6 +40,12 @@ class FindIdViewController: BaseVC<FindIdViewModel> {
                 self?.inputIdTextField.text = "아이디 찾기를 실패했습니다."
             }
         }
+        
+        confirmButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.popToRootVC()
+            }.disposed(by: disposeBag)
+        
     }
     
     override func addView() {

@@ -4,13 +4,6 @@ import Alamofire
 import AuthDomain
 
 class FindIdViewModel: BaseViewModel {
-    var phoneNumber: String
-    
-    init(coordinator: Coordinator, phoneNumber: String) {
-        self.phoneNumber = phoneNumber
-        super.init(coordinator: coordinator)
-    }
-    
     func requestToFindId(
         phoneNumber: String,
         completion: @escaping (Result<FindIdModelDecodable, Error>) -> Void = { _ in }) {
@@ -28,5 +21,9 @@ class FindIdViewModel: BaseViewModel {
                 print("Error - findId = \(error.localizedDescription)")
             }
         }
+    }
+    
+    func popToRootVC() {
+        coordinator.navigate(to: .popToRootIsRequired)
     }
 }

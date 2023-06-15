@@ -2,6 +2,11 @@ import Foundation
 import BaseFeature
 import Alamofire
 
+enum ChangePasswordErrorType: Error {
+    case sameAsExistingPassword
+    case failedRequest
+}
+
 class ChangePasswordViewModel: BaseViewModel {
     
     var phoneNumber: String
@@ -19,7 +24,7 @@ class ChangePasswordViewModel: BaseViewModel {
     
     func requestToChangePassword(
         newPassword: String,
-        completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+        completion: @escaping (Result<Void, ChangePasswordErrorType>) -> Void = { _ in }) {
         AF.request(
             FindPasswordTarget.changePasswrod(
                 ChangePasswordModel(
@@ -30,11 +35,13 @@ class ChangePasswordViewModel: BaseViewModel {
         )
         .validate()
         .responseData { response in
-            switch response.result {
-            case .success:
+            switch response.response?.statusCode {
+            case 205:
                 completion(.success(()))
-            case .failure(let error):
-                print("Error - ChangePassword = \(error.localizedDescription)")
+            case 409:
+                completion(.failure(.sameAsExistingPassword))
+            default:
+                completion(.failure(.failedRequest))
             }
         }
     }

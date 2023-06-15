@@ -25,18 +25,14 @@ extension FindIdTarget: BaseRouter {
     
     var path: String {
         switch self {
-        case .findId:
-            return "/account/phone-number/{phoneNumber}"
+        case .findId(let data):
+            return "/account/phone-number/\(data.phoneNumber)"
         }
     }
     
     var parameters: RequestParams {
         switch self {
-        case .findId(let request):
-            let body: [String: Any] = [
-                "phoneNumber": request.phoneNumber
-            ]
-            return .requestBody(body)
+            default: return .requestPlain
         }
     }
     
