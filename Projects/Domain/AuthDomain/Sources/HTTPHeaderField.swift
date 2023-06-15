@@ -8,6 +8,7 @@ enum HTTPHeaderField: String {
     case formDataType = "multipart/form-data"
 }
 
-enum ContentType: String {
+enum HeaderContent: String {
     case json = "Application/json"
+    case bearer = "Bearer "
 }

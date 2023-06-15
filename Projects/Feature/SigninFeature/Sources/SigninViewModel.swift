@@ -13,15 +13,10 @@ public class SigninViewModel: BaseViewModel {
         completion: @escaping (Result<Void, Error>) -> Void = { _ in }
     ) {
         AF.request(SigninTarget.signin(request))
-            .responseDecodable { [weak self] (response: AFDataResponse<ManageTokenModel>) in
-                switch response.result {
-                case .success(let response):
-                    self?.container.setToken(data: response)
-                    completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                    print("Error - Signin = \(error.localizedDescription)")
-                }
+            .validate()
+            .responseData { response in
+                print(request)
+                print(response.response?.statusCode)
             }
     }
     

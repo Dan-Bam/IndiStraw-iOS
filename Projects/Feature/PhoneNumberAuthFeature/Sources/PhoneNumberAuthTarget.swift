@@ -9,6 +9,10 @@ enum PhoneNumberAuthTarget {
 }
 
 extension PhoneNumberAuthTarget: BaseRouter {
+    var header: AuthDomain.HeaderType {
+        return .notHeader
+    }
+    
     var baseURL: String {
         return "https://port-0-indistraw-account-otjl2cli73l2cy.sel4.cloudtype.app/api/v1"
     }
