@@ -31,8 +31,10 @@ extension SignupPhoneNumberViewController {
             switch result {
             case .success:
                 self?.requestToSendAuthNumber(phoneNumber: phoneNumber)
-            case .failure:
+            case .failure(.duplicatePhoneNumber):
                 self?.component.errorLabel.text = "이미 등록된 전화번호 입니다."
+            default:
+                self?.component.errorLabel.text = "인증에 실패했습니다."
             }
         }
     }
