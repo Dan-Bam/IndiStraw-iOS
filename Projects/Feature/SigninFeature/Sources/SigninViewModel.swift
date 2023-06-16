@@ -30,6 +30,10 @@ public class SigninViewModel: BaseViewModel {
         coordinator.navigate(to: .phoneNumberAuthIsRequired(type: type))
     }
     
+    func setHomeView() {
+        coordinator.navigate(to: .setHomeIsRequired)
+    }
+    
     func isValidPassword(password: String) -> Bool {
         let passwordRegEx = "^(?=.[0-9])(?=.[a-zA-Z])(?=.[!@#$%^&?~])[0-9a-zA-Z!@#$%^&*?~]+$"
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
