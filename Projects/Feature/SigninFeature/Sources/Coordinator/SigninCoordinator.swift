@@ -1,4 +1,3 @@
-import UIKit
 import BaseFeature
 import PhoneNumberAuthFeature
 import HomeFeature
@@ -33,6 +32,7 @@ extension SigninCoordinator {
     
     func setHomeIsRequired() {
         let vc = HomeCoordinator(navigationController: navigationController)
+        removeChildCoordinators()
         vc.start()
     }
 }
