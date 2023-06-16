@@ -1,6 +1,7 @@
 import UIKit
 import BaseFeature
 import PhoneNumberAuthFeature
+import HomeFeature
 
 public class SigninCoordinator: BaseCoordinator {
     public override func start() {
@@ -14,6 +15,8 @@ public class SigninCoordinator: BaseCoordinator {
         switch step {
         case .phoneNumberAuthIsRequired(let type):
             phoneNumberAuthIsRequired(type: type)
+        case .setHomeIsRequired:
+            setHomeIsRequired()
         default:
             return
         }
@@ -26,5 +29,10 @@ extension SigninCoordinator {
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.startInputPhoneNumberCoordinator(type: type)
+    }
+    
+    func setHomeIsRequired() {
+        let vc = HomeCoordinator(navigationController: navigationController)
+        vc.start()
     }
 }

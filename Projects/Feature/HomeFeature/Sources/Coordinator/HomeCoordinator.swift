@@ -1,8 +1,8 @@
 import Foundation
 import BaseFeature
 
-class HomeCoordinator: BaseCoordinator {
-    override func start() {
+public class HomeCoordinator: BaseCoordinator {
+    public override func start() {
         let vm = HomeViewModel(coordinator: self)
         let vc = HomeViewController(viewModel: vm)
         
