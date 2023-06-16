@@ -7,14 +7,24 @@ import RxCocoa
 import RxGesture
 import DesignSystem
 
-var imageData: [String] = ["asdf.jeg", "asdf.jeg", "asdf.jeg"]
+var bannerImageSources = [
+    DesignSystemAsset.Images.testImage.image,
+    DesignSystemAsset.Images.inputPhoto.image,
+    UIImage(systemName: "check"),
+    UIImage(systemName: "check")
+
+]
 
 class HomeViewController: BaseVC<HomeViewModel> {
     private let disposeBag = DisposeBag()
     
+    private let bannerImageView = UIImageView().then {
+        $0.image = bannerImageSources[0]
+    }
+    
     private let pageControl = UIPageControl().then {
         $0.currentPage = 0
-        $0.numberOfPages = imageData.count
+        $0.numberOfPages = bannerImageSources.count
         $0.setCurrentPageIndicatorImage(DesignSystemAsset.Images.pageControlIndicator.image, forPage: 0)
     }
     
@@ -35,14 +45,33 @@ class HomeViewController: BaseVC<HomeViewModel> {
                 default:
                     break
                 }
+                
+                UIView.transition(
+                    with: owner.bannerImageView,
+                    duration: 0.3,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        owner.bannerImageView.image = bannerImageSources[owner.pageControl.currentPage]
+                    },
+                    completion: nil
+                )
             }.disposed(by: disposeBag)
     }
     
     override func addView() {
-        
+        view.addSubviews(bannerImageView, pageControl)
     }
     
     override func setLayout() {
+        bannerImageView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(21)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(170)
+        }
         
+        pageControl.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(bannerImageView.snp.bottom).offset(16)
+        }
     }
 }
