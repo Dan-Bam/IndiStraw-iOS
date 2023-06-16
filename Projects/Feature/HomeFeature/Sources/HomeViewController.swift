@@ -57,6 +57,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     override func configureVC() {
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.title = "hihi"
         setGesture()
     }
     
