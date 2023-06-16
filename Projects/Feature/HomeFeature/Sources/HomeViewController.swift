@@ -28,7 +28,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.setCurrentPageIndicatorImage(DesignSystemAsset.Images.pageControlIndicator.image, forPage: 0)
     }
     
-    override func configureVC() {
+    private func setGesture() {
         Observable
             .merge(
                 view.rx.gesture(.swipe(direction: .left)).asObservable(),
@@ -52,10 +52,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
                     options: .transitionCrossDissolve,
                     animations: {
                         owner.bannerImageView.image = bannerImageSources[owner.pageControl.currentPage]
-                    },
-                    completion: nil
-                )
+                    })
             }.disposed(by: disposeBag)
+    }
+    
+    override func configureVC() {
+        setGesture()
     }
     
     override func addView() {
