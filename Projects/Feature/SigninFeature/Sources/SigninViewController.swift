@@ -50,6 +50,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
                         switch result {
                         case .success:
                             print("success")
+                            owner.viewModel.setHomeView()
                         case .failure:
                             owner.errorLabel.text = "존재하지 않는 아이디입니다."
                         }
