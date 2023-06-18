@@ -19,13 +19,18 @@ class HomeViewController: BaseVC<HomeViewModel> {
     private let disposeBag = DisposeBag()
     
     private let bannerImageView = UIImageView().then {
+        $0.layer.cornerRadius = 10
         $0.image = bannerImageSources[0]
     }
     
     private let pageControl = UIPageControl().then {
+        $0.isUserInteractionEnabled = false
         $0.currentPage = 0
         $0.numberOfPages = bannerImageSources.count
-        $0.setCurrentPageIndicatorImage(DesignSystemAsset.Images.pageControlIndicator.image, forPage: 0)
+        $0.setCurrentPageIndicatorImage(
+            DesignSystemAsset.Images.pageControlIndicator.image,
+            forPage: $0.currentPage
+        )
     }
     
     private func setGesture() {
