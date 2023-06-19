@@ -9,9 +9,9 @@ import DesignSystem
 
 var bannerImageSources = [
     DesignSystemAsset.Images.testImage.image,
-    DesignSystemAsset.Images.inputPhoto.image,
-    UIImage(systemName: "check"),
-    UIImage(systemName: "check")
+    DesignSystemAsset.Images.testImage.image,
+    DesignSystemAsset.Images.testImage.image,
+    DesignSystemAsset.Images.testImage.image
     
 ]
 
@@ -35,22 +35,17 @@ class HomeViewController: BaseVC<HomeViewModel> {
         )
     }
     
-    private let underlineView = UIView()
-//    private lazy var underlineView: UIView = {
-//        let width = self.segCon.bounds.size.width / CGFloat(self.segCon.numberOfSegments)
-//        let height = 2.0
-//        let xPosition = CGFloat(self.segCon.selectedSegmentIndex * Int(width))
-//        let yPosition = self.segCon.bounds.size.height - 1.0
-//        let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
-//        let view = UIView(frame: frame)
-//        view.backgroundColor = .green
-//        self.addSubview(view)
-//        return view
-//    }()
+    private let underlineView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
+        $0.layer.cornerRadius = 10
+    }
     
     private let segCon = UISegmentedControl(items: segConArray).then {
+        $0.clipsToBounds = false
         $0.selectedSegmentIndex = 0
-        $0.setTitleTextAttributes([.foregroundColor: DesignSystemAsset.Colors.darkGray.color], for: .normal)
+        $0.setTitleTextAttributes([.foregroundColor: DesignSystemAsset.Colors.darkGray.color,
+                                   .font: DesignSystemFontFamily.Suit.semiBold.font(size: 14)],
+                                  for: .normal)
         $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
     }
     
@@ -93,14 +88,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     override func viewWillLayoutSubviews() {
         removeBackgroundAndDidiver()
-        
-        let underlineFinalXPosition = (self.segCon.bounds.width / CGFloat(self.segCon.numberOfSegments)) * CGFloat(self.segCon.selectedSegmentIndex)
-        UIView.animate(
-            withDuration: 0.1,
-            animations: {
-                self.underlineView.frame.origin.x = underlineFinalXPosition
-            }
-        )
     }
     
     override func configureVC() {
@@ -108,27 +95,36 @@ class HomeViewController: BaseVC<HomeViewModel> {
         navigationItem.title = "hihi"
         setGesture()
         
-        let width = self.segCon.bounds.size.width / CGFloat(self.segCon.numberOfSegments)
-        let height = 2.0
-        let xPosition = CGFloat(self.segCon.selectedSegmentIndex * Int(width))
-        let yPosition = self.segCon.bounds.size.height - 1.0
+        let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
+        let height: CGFloat = 2.0
+        let xPosition = CGFloat(segCon.selectedSegmentIndex) * width
+        let yPosition = segCon.bounds.size.height - height
         let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
         underlineView.frame = frame
-//        segCon.rx.selectedSegmentIndex.changed
-//            .bind(with: self) { owner, _ in
-//                switch owner.segCon.selectedSegmentIndex {
-//
-//                default:
-//                    return
-//                }
-//            }.disposed(by: disposeBag)
+        segCon.addSubview(underlineView)
+        
+        segCon.rx.selectedSegmentIndex.changed
+            .bind(with: self) { owner, _ in
+                let underlineFinalXPosition = (self.segCon.bounds.width / CGFloat(self.segCon.numberOfSegments)) * CGFloat(self.segCon.selectedSegmentIndex)
+                UIView.animate(
+                    withDuration: 0.1,
+                    animations: {
+                        self.underlineView.frame.origin.x = underlineFinalXPosition
+                    }
+                )
+                switch owner.segCon.selectedSegmentIndex {
+
+                default:
+                    return
+                }
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
         view.addSubviews(bannerImageView, pageControl, segCon)
         segCon.addSubview(underlineView)
     }
-    
+
     override func setLayout() {
         bannerImageView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(21)
@@ -146,10 +142,5 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.leading.equalToSuperview().inset(15)
             $0.height.equalTo(23)
         }
-        
-//        underlineView.snp.makeConstraints {
-//            $0.height.equalTo(1)
-//            $0.width.equalTo(100)
-//        }
     }
 }
