@@ -14,6 +14,8 @@ let project = Project.makeModule(
         .Feature.FindIdFeature,
         .Feature.PhoneNumberAuthFeature,
         .Feature.HomeFeature,
+        .Feature.ProfileFeature,
+        .Feature.SettingFeature,
         
         .Core.JwtStore,
         .Core.DesignSystem,
