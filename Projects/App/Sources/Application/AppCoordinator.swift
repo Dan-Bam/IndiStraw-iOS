@@ -17,7 +17,7 @@ open class AppCoordinator: Coordinator {
 
     public func start() {
         window?.rootViewController = navigationController
-        let rootController = ProfileCoordinator(navigationController: navigationController)
+        let rootController = RootCoordinator(navigationController: navigationController)
         start(coordinator: rootController)
     }
 
