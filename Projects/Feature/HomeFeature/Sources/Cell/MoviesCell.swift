@@ -1,7 +1,7 @@
 import UIKit
 import Then
 import SnapKit
-import GlobalThirdPartyLib
+import Kingfisher
 
 class MoviesCell: UICollectionViewCell {
     static let identifier = "MoviesCell"
@@ -24,6 +24,6 @@ class MoviesCell: UICollectionViewCell {
     }
     
     func prepare(model: MovieesModel) {
-        moviesImageView.kf.
+        moviesImageView.kf.setImage(with: URL(string: model.imageUrl))
     }
 }
