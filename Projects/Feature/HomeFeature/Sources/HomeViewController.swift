@@ -18,11 +18,19 @@ var bannerImageSources = [
 var segConArray = ["최근", "추천", "인기"]
 
 class HomeViewController: BaseVC<HomeViewModel> {
+    var moviesData = BehaviorRelay<[MovieesModel]>(value: [])
+    
     private let disposeBag = DisposeBag()
     
-    private let moviesCollectionView = UICollectionView().then {
-        $0.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
-    }
+    lazy var moviesCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 9 // cell사이의 간격 설정
+        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.backgroundColor = .brown
+
+        return view
+    }()
     
     private let bannerImageView = UIImageView().then {
         $0.layer.cornerRadius = 10
@@ -91,22 +99,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
             }.disposed(by: disposeBag)
     }
     
-    override func viewWillLayoutSubviews() {
-        removeBackgroundAndDidiver()
-    }
-    
-    override func configureVC() {
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.title = "hihi"
-        setGesture()
-        
-        let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
-        let height: CGFloat = 2.0
-        let xPosition = CGFloat(segCon.selectedSegmentIndex) * width
-        let yPosition = segCon.bounds.size.height - height
-        let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
-        underlineView.frame = frame
-        segCon.addSubview(underlineView)
+    func bindUI() {
+        moviesData
+            .asDriver()
+            .drive(moviesCollectionView.rx.items(cellIdentifier: MoviesCell.identifier,
+                                                 cellType: MoviesCell.self)) { (row, data, cell) in
+                
+            }.disposed(by: disposeBag)
         
         segCon.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
@@ -123,6 +122,24 @@ class HomeViewController: BaseVC<HomeViewModel> {
                     return
                 }
             }.disposed(by: disposeBag)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        removeBackgroundAndDidiver()
+    }
+    
+    override func configureVC() {
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.title = "hihi"
+        setGesture()
+        
+        let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
+        let height: CGFloat = 2.0
+        let xPosition = CGFloat(segCon.selectedSegmentIndex) * width
+        let yPosition = segCon.bounds.size.height - height
+        let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+        underlineView.frame = frame
+        segCon.addSubview(underlineView)
     }
     
     override func addView() {
@@ -146,6 +163,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.top.equalTo(pageControl.snp.bottom).offset(20)
             $0.leading.equalToSuperview().inset(15)
             $0.height.equalTo(23)
+        }
+        
+        moviesCollectionView.snp.makeConstraints {
+            $0.top.equalTo(segCon.snp.bottom).offset(10)
+            $0.leading.equalToSuperview().inset(15)
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(150)
         }
     }
 }
