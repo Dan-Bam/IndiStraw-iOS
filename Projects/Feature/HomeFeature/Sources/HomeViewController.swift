@@ -20,6 +20,10 @@ var segConArray = ["최근", "추천", "인기"]
 class HomeViewController: BaseVC<HomeViewModel> {
     private let disposeBag = DisposeBag()
     
+    private let moviesCollectionView = UICollectionView().then {
+        $0.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
+    }
+    
     private let bannerImageView = UIImageView().then {
         $0.layer.cornerRadius = 10
         $0.image = bannerImageSources[0]
@@ -122,8 +126,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     override func addView() {
-        view.addSubviews(bannerImageView, pageControl, segCon)
-        segCon.addSubview(underlineView)
+        view.addSubviews(bannerImageView, pageControl, segCon, moviesCollectionView)
+//        segCon.addSubview(underlineView)
     }
 
     override func setLayout() {
