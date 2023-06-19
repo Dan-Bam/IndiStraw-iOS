@@ -8,9 +8,9 @@ import RxGesture
 import DesignSystem
 
 var bannerImageSources = [
-    DesignSystemAsset.Images.testImage2.image,
     DesignSystemAsset.Images.testImage.image,
-    DesignSystemAsset.Images.testImage2.image,
+    DesignSystemAsset.Images.testImage.image,
+    DesignSystemAsset.Images.testImage.image,
     DesignSystemAsset.Images.testImage2.image
 ]
 
@@ -124,27 +124,22 @@ class HomeViewController: BaseVC<HomeViewModel> {
             options: .transitionCrossDissolve,
             animations: {
                 self.bannerImageView.image = bannerImageSources[self.pageControl.currentPage]
-            },
-            completion: { _ in
-                self.startAnimation()
             })
     }
     
     private func startAnimation() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            if self.pageControl.currentPage == 3 {
-                self.pageControl.currentPage = 0
-            } else {
-                self.pageControl.currentPage += 1
-            }
-            self.bannerAnimation()
+        if self.pageControl.currentPage == 3 {
+            self.pageControl.currentPage = 0
+        } else {
+            self.pageControl.currentPage += 1
         }
+        self.bannerAnimation()
     }
     
     private func bannerMovetimer() {
         Observable<Int>.interval(.seconds(4), scheduler: MainScheduler.instance)
             .bind(with: self) { owner, remainingSeconds in
-                owner.bannerAnimation()
+                owner.startAnimation()
             }.disposed(by: disposeBag)
     }
     
@@ -194,7 +189,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         }
         
         viewAllButton.snp.makeConstraints {
-            $0.top.equalTo(bannerImageView.snp.bottom).offset(50)
+            $0.centerY.equalTo(segCon)
             $0.trailing.equalToSuperview().inset(15)
         }
         
