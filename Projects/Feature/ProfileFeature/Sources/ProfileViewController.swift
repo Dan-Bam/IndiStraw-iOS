@@ -17,12 +17,18 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         $0.imageEdgeInsets = UIEdgeInsets(top: 22, left: 22, bottom: 22, right: 22)
         $0.layer.cornerRadius = 40
     }
+    
+    private let userNameLabel = UILabel().then {
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Suit.bold.font(size: 20)
+    }
+    
     override func configureVC() {
         navigationItem.rightBarButtonItem = settingButton
     }
     
     override func addView() {
-        view.addSubviews(profileImageButton)
+        view.addSubviews(profileImageButton, userNameLabel)
     }
     
     override func setLayout() {
@@ -30,6 +36,11 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(22)
             $0.centerX.equalToSuperview()
             $0.size.equalTo(80)
+        }
+        
+        userNameLabel.snp.makeConstraints {
+            $0.top.equalTo(profileImageButton.snp.bottom).offset(7)
+            $0.centerX.equalToSuperview()
         }
     }
 }
