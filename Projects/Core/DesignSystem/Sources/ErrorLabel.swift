@@ -4,7 +4,7 @@ public class ErrorLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        textColor = DesignSystemAsset.Colors.error.color
+        textColor = DesignSystemAsset.Colors.red.color
         font = DesignSystemFontFamily.Suit.regular.font(size: 12)
     }
     

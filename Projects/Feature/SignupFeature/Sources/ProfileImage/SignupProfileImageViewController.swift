@@ -16,7 +16,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         $0.clipsToBounds = true
         $0.isUserInteractionEnabled = false
         $0.isEnabled = true
-        $0.backgroundColor = DesignSystemAsset.Colors.exampleText.color
+        $0.backgroundColor = DesignSystemAsset.Colors.gray.color
         $0.setImage(DesignSystemAsset.Images.inputPhoto.image, for: .normal)
         $0.layer.cornerRadius = 62.5
     }
