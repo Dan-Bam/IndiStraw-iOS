@@ -36,7 +36,7 @@ class PrivacyBottomSheet: UIViewController {
     }
     
     private let separatorLine = UIView().then {
-        $0.backgroundColor = DesignSystemAsset.Colors.line.color
+        $0.backgroundColor = DesignSystemAsset.Colors.gray2.color
     }
     
     private let termsOfUseWrapperButton = UIButton()

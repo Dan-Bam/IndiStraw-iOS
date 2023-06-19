@@ -27,7 +27,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         $0.setTitleColor(.white, for: .normal)
         $0.layer.cornerRadius = 20
-        $0.backgroundColor = DesignSystemAsset.Colors.plusButton.color
+        $0.backgroundColor = DesignSystemAsset.Colors.blue.color
     }
     
     private let errorLabel = ErrorLabel()
