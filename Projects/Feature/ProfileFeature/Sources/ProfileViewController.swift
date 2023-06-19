@@ -3,8 +3,12 @@ import BaseFeature
 import DesignSystem
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class ProfileViewController: BaseVC<ProfileViewModel> {
+    private let disposeBag = DisposeBag()
+    
     private let settingButton = UIBarButtonItem().then {
         $0.tintColor = .white
         $0.image = UIImage(systemName: "gearshape")
@@ -28,6 +32,11 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
     
     override func configureVC() {
         navigationItem.rightBarButtonItem = settingButton
+        
+        settingButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushSettingVC()
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {

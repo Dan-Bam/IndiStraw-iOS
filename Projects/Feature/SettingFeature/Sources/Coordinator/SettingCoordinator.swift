@@ -1,7 +1,7 @@
 import BaseFeature
 
-class SettingCoordinator: BaseCoordinator {
-    override func start() {
+public class SettingCoordinator: BaseCoordinator {
+    public override func start() {
         let vm = SettingViewModel(coordinator: self)
         let vc = SettingViewController(viewModel: vm)
         
