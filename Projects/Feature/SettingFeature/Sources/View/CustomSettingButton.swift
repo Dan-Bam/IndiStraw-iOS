@@ -10,24 +10,26 @@ class CustomSettingButton: UIButton {
     }
     
     private let textLabel = UILabel().then {
+        $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.cornerRadius = 10
-//        self.backgroundColor = DesignSystemAsset.Colors.ligh
+        self.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
         
         self.addSubviews(logoImageView, textLabel)
         
         logoImageView.snp.makeConstraints {
-            $0.top.leading.bottom.equalToSuperview().inset(16)
-            $0.size.equalTo(25)
+            $0.top.leading.bottom.equalToSuperview().inset(15)
+            $0.size.equalTo(24)
         }
         
         textLabel.snp.makeConstraints {
             $0.centerY.equalTo(logoImageView)
             $0.leading.equalTo(logoImageView.snp.trailing).offset(12)
+            $0.trailing.equalToSuperview()
         }
     }
     
@@ -43,6 +45,6 @@ class CustomSettingButton: UIButton {
 //    }
     
     func setText(text: String) {
-        
+        textLabel.text = text
     }
 }
