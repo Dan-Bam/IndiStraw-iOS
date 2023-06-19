@@ -1,7 +1,7 @@
 import BaseFeature
 
-class ProfileCoordinator: BaseCoordinator {
-    override func start() {
+public class ProfileCoordinator: BaseCoordinator {
+    public override func start() {
         let vm = ProfileViewModel(coordinator: self)
         let vc = ProfileViewController(viewModel: vm)
         

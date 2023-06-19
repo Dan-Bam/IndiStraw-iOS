@@ -1,7 +1,7 @@
 import UIKit
 import BaseFeature
 import RootFeature
-import HomeFeature
+import ProfileFeature
 
 open class AppCoordinator: Coordinator {
     public var navigationController: UINavigationController
@@ -17,7 +17,7 @@ open class AppCoordinator: Coordinator {
 
     public func start() {
         window?.rootViewController = navigationController
-        let rootController = HomeCoordinator(navigationController: navigationController)
+        let rootController = ProfileCoordinator(navigationController: navigationController)
         start(coordinator: rootController)
     }
 
