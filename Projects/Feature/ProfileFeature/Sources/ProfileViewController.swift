@@ -10,13 +10,13 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         $0.image = UIImage(systemName: "gearshape")
     }
     
-    private let profileImageButton = UIButton().then {
+    private let profileImageButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 100)).then {
         $0.clipsToBounds = true
         $0.isUserInteractionEnabled = false
         $0.isEnabled = true
         $0.backgroundColor = DesignSystemAsset.Colors.exampleText.color
-        $0.setImage(DesignSystemAsset.Images.inputPhoto.image, for: .normal)
-        $0.imageEdgeInsets = UIEdgeInsets(top: 22, left: 22, bottom: 22, right: 22)
+        $0.setImage(UIImage(systemName: "person", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .light)), for: .normal)
+        $0.tintColor = .white
         $0.layer.cornerRadius = 40
     }
     
