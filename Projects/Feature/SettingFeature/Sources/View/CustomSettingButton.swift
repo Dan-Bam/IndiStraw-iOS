@@ -15,6 +15,7 @@ class CustomSettingButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.layer.cornerRadius = 10
         
         self.addSubviews(logoImageView, textLabel)
         
@@ -31,5 +32,16 @@ class CustomSettingButton: UIButton {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+//    func setImage() {
+//        logoImageView.snp.makeConstraints {
+//            $0.top.leading.bottom.equalToSuperview().inset(16)
+//            $0.size.equalTo(25)
+//        }
+//    }
+    
+    func setText(text: String) {
+        
     }
 }
