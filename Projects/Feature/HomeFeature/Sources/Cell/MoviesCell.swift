@@ -16,6 +16,7 @@ class MoviesCell: UICollectionViewCell {
         self.addSubview(moviesImageView)
         moviesImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+            
         }
     }
     
@@ -24,6 +25,7 @@ class MoviesCell: UICollectionViewCell {
     }
     
     func prepare(model: MovieesModel) {
+        print("model.imageUrl = \(model.imageUrl)")
         moviesImageView.kf.setImage(with: URL(string: model.imageUrl))
     }
 }

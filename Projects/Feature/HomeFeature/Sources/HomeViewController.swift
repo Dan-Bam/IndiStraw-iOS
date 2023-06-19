@@ -12,7 +12,6 @@ var bannerImageSources = [
     DesignSystemAsset.Images.testImage.image,
     DesignSystemAsset.Images.testImage.image,
     DesignSystemAsset.Images.testImage.image
-    
 ]
 
 var segConArray = ["최근", "추천", "인기"]
@@ -25,9 +24,9 @@ class HomeViewController: BaseVC<HomeViewModel> {
     lazy var moviesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 9 // cell사이의 간격 설정
+        flowLayout.minimumLineSpacing = 9
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        view.backgroundColor = .brown
+        view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
 
         return view
     }()
@@ -74,8 +73,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
     private func setGesture() {
         Observable
             .merge(
-                view.rx.gesture(.swipe(direction: .left)).asObservable(),
-                view.rx.gesture(.swipe(direction: .right)).asObservable()
+                bannerImageView.rx.gesture(.swipe(direction: .left)).asObservable(),
+                bannerImageView.rx.gesture(.swipe(direction: .right)).asObservable()
             )
             .bind(with: self) { owner, gesture in
                 guard let gesture = gesture as? UISwipeGestureRecognizer else { return }
@@ -104,7 +103,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
             .asDriver()
             .drive(moviesCollectionView.rx.items(cellIdentifier: MoviesCell.identifier,
                                                  cellType: MoviesCell.self)) { (row, data, cell) in
-                
+                cell.prepare(model: data)
             }.disposed(by: disposeBag)
         
         segCon.rx.selectedSegmentIndex.changed
@@ -132,6 +131,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.title = "hihi"
         setGesture()
+        bindUI()
         
         let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
         let height: CGFloat = 2.0
@@ -144,7 +144,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     override func addView() {
         view.addSubviews(bannerImageView, pageControl, segCon, moviesCollectionView)
-//        segCon.addSubview(underlineView)
     }
 
     override func setLayout() {
@@ -169,7 +168,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.top.equalTo(segCon.snp.bottom).offset(10)
             $0.leading.equalToSuperview().inset(15)
             $0.trailing.equalToSuperview()
-            $0.height.equalTo(150)
+            $0.height.equalTo(moviesCollectionView.frame.height)
         }
     }
 }
