@@ -43,9 +43,10 @@ class HomeViewController: BaseVC<HomeViewModel> {
     private let segCon = UISegmentedControl(items: segConArray).then {
         $0.clipsToBounds = false
         $0.selectedSegmentIndex = 0
-        $0.setTitleTextAttributes([.foregroundColor: DesignSystemAsset.Colors.darkGray.color,
-                                   .font: DesignSystemFontFamily.Suit.semiBold.font(size: 14)],
-                                  for: .normal)
+        $0.setTitleTextAttributes([
+            NSAttributedString.Key.foregroundColor: DesignSystemAsset.Colors.darkGray.color,
+            NSAttributedString.Key.font: DesignSystemFontFamily.Suit.semiBold.font(size: 16)
+        ], for: .normal)
         $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
     }
     
