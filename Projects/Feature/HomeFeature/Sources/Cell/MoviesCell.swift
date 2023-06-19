@@ -16,7 +16,6 @@ class MoviesCell: UICollectionViewCell {
         self.addSubview(moviesImageView)
         moviesImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-            
         }
     }
     

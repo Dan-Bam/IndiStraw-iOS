@@ -9,9 +9,9 @@ import DesignSystem
 
 var bannerImageSources = [
     DesignSystemAsset.Images.testImage.image,
+    DesignSystemAsset.Images.inputPhoto.image,
     DesignSystemAsset.Images.testImage.image,
-    DesignSystemAsset.Images.testImage.image,
-    DesignSystemAsset.Images.testImage.image
+    DesignSystemAsset.Images.inputPhoto.image
 ]
 
 var segConArray = ["최근", "추천", "인기"]
@@ -27,7 +27,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         flowLayout.minimumLineSpacing = 9
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
-
+        
         return view
     }()
     
@@ -116,9 +116,20 @@ class HomeViewController: BaseVC<HomeViewModel> {
                     }
                 )
                 switch owner.segCon.selectedSegmentIndex {
-
+                    
                 default:
                     return
+                }
+            }.disposed(by: disposeBag)
+    }
+    
+    private func bannerMovetimer() {
+        Observable<Int>.interval(.seconds(4), scheduler: MainScheduler.instance)
+            .bind(with: self) { owner, remainingSeconds in
+                if owner.pageControl.currentPage == 3 {
+                    owner.pageControl.currentPage = 0
+                } else {
+                    owner.pageControl.currentPage += 1
                 }
             }.disposed(by: disposeBag)
     }
@@ -132,6 +143,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         navigationItem.title = "hihi"
         setGesture()
         bindUI()
+        bannerMovetimer()
         
         let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
         let height: CGFloat = 2.0
@@ -145,7 +157,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     override func addView() {
         view.addSubviews(bannerImageView, pageControl, segCon, moviesCollectionView)
     }
-
+    
     override func setLayout() {
         bannerImageView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(21)
