@@ -16,6 +16,8 @@ public extension TargetDependency.Feature {
     static let FindIdFeature = TargetDependency.feature(name: "FindIdFeature")
     static let PhoneNumberAuthFeature = TargetDependency.feature(name: "PhoneNumberAuthFeature")
     static let HomeFeature = TargetDependency.feature(name: "HomeFeature")
+    static let ProfileFeature = TargetDependency.feature(name: "ProfileFeature")
+    static let SettingFeature = TargetDependency.feature(name: "SettingFeature")
 }
 
 public extension TargetDependency.Core {
