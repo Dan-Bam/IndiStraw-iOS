@@ -123,23 +123,20 @@ class HomeViewController: BaseVC<HomeViewModel> {
             duration: 0.3,
             options: .transitionCrossDissolve,
             animations: {
+                print(self.pageControl.currentPage)
                 self.bannerImageView.image = bannerImageSources[self.pageControl.currentPage]
             })
     }
     
-    private func startAnimation() {
-        if self.pageControl.currentPage == 3 {
-            self.pageControl.currentPage = 0
-        } else {
-            self.pageControl.currentPage += 1
-        }
-        self.bannerAnimation()
-    }
-    
     private func bannerMovetimer() {
         Observable<Int>.interval(.seconds(4), scheduler: MainScheduler.instance)
-            .bind(with: self) { owner, remainingSeconds in
-                owner.startAnimation()
+            .bind(with: self) { owner, _ in
+                if owner.pageControl.currentPage == 3  {
+                    owner.pageControl.currentPage = 0
+                } else {
+                    owner.pageControl.currentPage += 1
+                }
+                owner.bannerAnimation()
             }.disposed(by: disposeBag)
     }
     
