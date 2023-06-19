@@ -4,7 +4,10 @@ import SnapKit
 import Then
 import DesignSystem
 
+
 class CustomSettingButton: UIButton {
+    var type: String?
+    
     private let logoImageView = UIImageView().then {
         $0.tintColor = .white
     }
@@ -37,14 +40,22 @@ class CustomSettingButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    func setImage() {
-//        logoImageView.snp.makeConstraints {
-//            $0.top.leading.bottom.equalToSuperview().inset(16)
-//            $0.size.equalTo(25)
-//        }
-//    }
-    
-    func setText(text: String) {
-        textLabel.text = text
+    func configure(type: String) {
+        textLabel.text = type
+        self.type = type
+        
+        switch type {
+        case customButonType.editProfile:
+            logoImageView.image = UIImage(systemName: "person")
+        case customButonType.editPassword:
+            logoImageView.image = UIImage(systemName: "shield")
+        case customButonType.editLanguage:
+            logoImageView.image = UIImage(systemName: "network")
+        default:
+            textLabel.snp.makeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.equalToSuperview().inset(13)
+            }
+        }
     }
 }

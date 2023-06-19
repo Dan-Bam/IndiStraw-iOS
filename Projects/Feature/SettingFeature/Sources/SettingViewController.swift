@@ -5,9 +5,17 @@ import Utility
 import SnapKit
 import Then
 
+enum customButonType {
+    static let editProfile = "프로필 수정"
+    static let editPassword = "비밀번호 변경"
+    static let editLanguage = "언어 변경"
+    static let logout = "로그아웃"
+    static let withdrawal = "회원탈퇴"
+}
+
 class SettingViewController: BaseVC<SettingViewModel> {
     private let editProfileButton = CustomSettingButton().then {
-        $0.setText(text: "프로필 수정")
+        $0.configure(type: customButonType.editProfile)
     }
     
     private let settingAccountLabel = UILabel().then {
@@ -18,22 +26,22 @@ class SettingViewController: BaseVC<SettingViewModel> {
     
     private let editPasswordButton = CustomSettingButton().then {
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.setText(text: "비밀번호 변경")
+        $0.configure(type: customButonType.editPassword)
     }
     
     private let editLanguageButton = CustomSettingButton().then {
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        $0.setText(text: "언어 변경")
+        $0.configure(type: customButonType.editLanguage)
     }
     
     private let logoutButton = CustomSettingButton().then {
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.setText(text: "로그아웃")
+        $0.configure(type: customButonType.logout)
     }
     
     private let withdrawalButton = CustomSettingButton().then {
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        $0.setText(text: "회원탈퇴")
+        $0.configure(type: customButonType.withdrawal)
     }
     
     override func configureVC() {
@@ -82,6 +90,22 @@ class SettingViewController: BaseVC<SettingViewModel> {
             $0.top.equalTo(logoutButton.snp.bottom)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(57)
+        }
+    }
+}
+
+
+extension CALayer {
+    func addBorder(_ arr_edge: [UIRectEdge], color: UIColor, width: CGFloat) {
+        for edge in arr_edge {
+            let border = CALayer()
+            switch edge {
+            case UIRectEdge.bottom:
+                border.frame = CGRect.init(x: 0, y: frame.height - width, width: frame.width, height: width)
+                break
+            default:
+                break
+            }
         }
     }
 }
