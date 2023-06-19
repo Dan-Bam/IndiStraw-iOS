@@ -16,6 +16,7 @@ class CustomSettingButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.cornerRadius = 10
+        self.backgroundColor = DesignSystemAsset.Colors.ligh
         
         self.addSubviews(logoImageView, textLabel)
         

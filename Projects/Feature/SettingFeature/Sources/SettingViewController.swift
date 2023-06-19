@@ -2,6 +2,8 @@ import UIKit
 import BaseFeature
 import DesignSystem
 import Utility
+import SnapKit
+import Then
 
 class SettingViewController: BaseVC<SettingViewModel> {
     private let editProfileButton = CustomSettingButton().then {
@@ -41,6 +43,40 @@ class SettingViewController: BaseVC<SettingViewModel> {
     }
     
     override func setLayout() {
+        editProfileButton.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(60)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
+        }
         
+        settingAccountLabel.snp.makeConstraints {
+            $0.top.equalTo(editProfileButton.snp.bottom).inset(36)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
+        }
+        
+        editPasswordButton.snp.makeConstraints {
+            $0.top.equalTo(settingAccountLabel.snp.bottom).inset(10)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
+        }
+        
+        editLanguageButton.snp.makeConstraints {
+            $0.top.equalTo(editPasswordButton.snp.bottom)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
+        }
+        
+        logoutBUtton.snp.makeConstraints {
+            $0.top.equalTo(editLanguageButton.snp.bottom).offset(40)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
+        }
+        
+        editProfileButton.snp.makeConstraints {
+            $0.top.equalTo(logoutBUtton.snp.bottom)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
+        }
     }
 }
