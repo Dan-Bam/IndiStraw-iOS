@@ -1,6 +1,8 @@
 import UIKit
 import BaseFeature
 import DesignSystem
+import SnapKit
+import Then
 
 class ProfileViewController: BaseVC<ProfileViewModel> {
     private let settingButton = UIBarButtonItem().then {
@@ -19,6 +21,7 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
     }
     
     private let userNameLabel = UILabel().then {
+        $0.text = "민도현님"
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.bold.font(size: 20)
     }
@@ -33,7 +36,7 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
     
     override func setLayout() {
         profileImageButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(22)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(17)
             $0.centerX.equalToSuperview()
             $0.size.equalTo(80)
         }
