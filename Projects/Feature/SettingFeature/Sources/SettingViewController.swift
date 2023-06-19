@@ -64,8 +64,7 @@ class SettingViewController: BaseVC<SettingViewModel> {
         
         settingAccountLabel.snp.makeConstraints {
             $0.top.equalTo(editProfileButton.snp.bottom).offset(36)
-            $0.leading.trailing.equalToSuperview().inset(15)
-            $0.height.equalTo(57)
+            $0.leading.equalToSuperview().inset(15)
         }
         
         editPasswordButton.snp.makeConstraints {
