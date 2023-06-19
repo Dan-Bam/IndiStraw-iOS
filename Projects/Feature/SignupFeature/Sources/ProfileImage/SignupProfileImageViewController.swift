@@ -7,6 +7,8 @@ import Utility
 
 class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, SelectPhotoProtocol {
     private let disposeBag = DisposeBag()
+    
+    var isImageChanged = false
 
     private let inputProfileImageButton = UIButton()
     
@@ -70,7 +72,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                let image = owner.photoImageButton.currentImage
+                let image = owner.isImageChanged ? owner.photoImageButton.currentImage : nil
                 owner.viewModel.pushInputIDVC(image: image)
             }.disposed(by: disposeBag)
     }
@@ -120,5 +122,6 @@ extension SignupProfileImageViewController: UIImagePickerControllerDelegate, UIN
         self.photoImageButton.setImage(newImage, for: .normal)
         
         picker.dismiss(animated: true, completion: nil)
+        isImageChanged = true
     }
 }
