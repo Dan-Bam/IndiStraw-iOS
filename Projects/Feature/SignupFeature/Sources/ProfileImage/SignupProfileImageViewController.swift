@@ -7,6 +7,8 @@ import Utility
 
 class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, SelectPhotoProtocol {
     private let disposeBag = DisposeBag()
+    
+    var isImageChanged = false
 
     private let inputProfileImageButton = UIButton()
     
@@ -14,7 +16,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         $0.clipsToBounds = true
         $0.isUserInteractionEnabled = false
         $0.isEnabled = true
-        $0.backgroundColor = DesignSystemAsset.Colors.exampleText.color
+        $0.backgroundColor = DesignSystemAsset.Colors.gray.color
         $0.setImage(DesignSystemAsset.Images.inputPhoto.image, for: .normal)
         $0.layer.cornerRadius = 62.5
     }
@@ -25,7 +27,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         $0.setTitleColor(.white, for: .normal)
         $0.layer.cornerRadius = 20
-        $0.backgroundColor = DesignSystemAsset.Colors.plusButton.color
+        $0.backgroundColor = DesignSystemAsset.Colors.blue.color
     }
     
     private let errorLabel = ErrorLabel()
@@ -70,7 +72,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                let image = owner.photoImageButton.currentImage
+                let image = owner.isImageChanged ? owner.photoImageButton.currentImage : nil
                 owner.viewModel.pushInputIDVC(image: image)
             }.disposed(by: disposeBag)
     }
@@ -120,5 +122,6 @@ extension SignupProfileImageViewController: UIImagePickerControllerDelegate, UIN
         self.photoImageButton.setImage(newImage, for: .normal)
         
         picker.dismiss(animated: true, completion: nil)
+        isImageChanged = true
     }
 }

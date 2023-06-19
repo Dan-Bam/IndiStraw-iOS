@@ -43,7 +43,9 @@ class SignupPasswordViewModel: BaseViewModel {
                 name: name,
                 phoneNumber: phoneNumber,
                 profileUrl: profileUrl))
-        ).responseData { response in
+        )
+        .validate()
+        .responseData { response in
             switch response.result {
             case .success:
                 print("success - signup")

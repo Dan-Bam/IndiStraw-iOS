@@ -6,6 +6,7 @@ let project = Project.makeModule(
     product: .staticLibrary,
     dependencies: [
         .Feature.BaseFeature,
+        .Feature.SettingFeature,
         .Core.DesignSystem,
         .Domain.AuthDomain,
         .Shared.Utility,

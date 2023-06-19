@@ -3,7 +3,6 @@ import Alamofire
 import JwtStore
 
 public protocol BaseRouter: URLRequestConvertible {
-    var baseURL: String { get }
     var method: HTTPMethod { get }
     var path: String { get }
     var parameters: RequestParams { get }
@@ -14,8 +13,9 @@ public protocol BaseRouter: URLRequestConvertible {
 public extension BaseRouter {
     // URLRequestConvertible 구현
     func asURLRequest() throws -> URLRequest {
-        let url = try baseURL.asURL()
+        let url = try "https://port-0-indistraw-msa-server-dihik2mlj29oc6u.sel4.cloudtype.app/api/v1".asURL()
         var urlRequest = try URLRequest(url: url.appendingPathComponent(path), method: method)
+        print(urlRequest.url)
         urlRequest = makeHeaderForRequest(to: urlRequest)
         urlRequest = try makeParameterForRequest(to: urlRequest, with: url)
         

@@ -12,7 +12,7 @@ protocol AllAgreeButtonDidTapProtocol: AnyObject {
 
 enum Colors {
     static let mainColor = DesignSystemAsset.Colors.mainColor.color
-    static let exampleTextColor = DesignSystemAsset.Colors.exampleText.color
+    static let exampleTextColor = DesignSystemAsset.Colors.gray.color
 }
 
 class PrivacyBottomSheet: UIViewController {
@@ -24,7 +24,7 @@ class PrivacyBottomSheet: UIViewController {
     
     private let allAgreeChildButton = UIButton().then {
         $0.isEnabled = false
-        $0.layer.borderColor = DesignSystemAsset.Colors.exampleText.color.cgColor
+        $0.layer.borderColor = DesignSystemAsset.Colors.gray.color.cgColor
         $0.layer.borderWidth = 2
         $0.layer.cornerRadius = 5
         $0.tintColor = Colors.mainColor
@@ -36,7 +36,7 @@ class PrivacyBottomSheet: UIViewController {
     }
     
     private let separatorLine = UIView().then {
-        $0.backgroundColor = DesignSystemAsset.Colors.line.color
+        $0.backgroundColor = DesignSystemAsset.Colors.gray2.color
     }
     
     private let termsOfUseWrapperButton = UIButton()
@@ -56,7 +56,7 @@ class PrivacyBottomSheet: UIViewController {
         $0.setTitle("자세히보기", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
-        $0.setUnderline(color: DesignSystemAsset.Colors.exampleText.color)
+        $0.setUnderline(color: DesignSystemAsset.Colors.gray.color)
     }
     
     private let personalInformationWrapperButton = UIButton()
@@ -76,7 +76,7 @@ class PrivacyBottomSheet: UIViewController {
         $0.setTitle("자세히보기", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
-        $0.setUnderline(color: DesignSystemAsset.Colors.exampleText.color)
+        $0.setUnderline(color: DesignSystemAsset.Colors.gray.color)
     }
     
     
