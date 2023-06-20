@@ -13,6 +13,10 @@ enum SignupTarget {
 }
 
 extension SignupTarget: BaseRouter {
+    var baseURL: String {
+        return "https://port-0-indistraw-msa-server-dihik2mlj29oc6u.sel4.cloudtype.app/api/v1"
+    }
+    
     var header: AuthDomain.HeaderType {
         switch self {
         case .uploadImage: return .multiPart
