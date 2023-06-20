@@ -1,12 +1,9 @@
-import BaseFeature
 import UIKit
-import DesignSystem
-import RxSwift
-import RxCocoa
-import Utility
+import BaseFeature
 import SelectPhotoFeature
+import DesignSystem
 
-class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, SelectPhotoProtocol, presentBottomSheetProtocol {
+class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomSheetProtocol, SelectPhotoProtocol {
     func presentBottomSheet() {
         let vc = SelectPhotoBottomSheet(delegate: self)
         vc.modalPresentationStyle = .pageSheet
@@ -17,17 +14,9 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         present(vc, animated: true)
     }
     
-    private let disposeBag = DisposeBag()
-    
     private let component = SelectPhotoViewButton()
     
     var isImageChanged = false
-    
-    private let errorLabel = ErrorLabel()
-    
-    private let continueButton = ButtonComponent().then {
-        $0.setTitle("계속하기", for: .normal)
-    }
     
     private let imagePickerController = UIImagePickerController()
     
@@ -47,39 +36,25 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     }
     
     override func configureVC() {
-        navigationItem.title = "프로필 이미지를 선택해주세요."
-        
-        imagePickerController.delegate = self
         component.delegate = self
-        
-        continueButton.rx.tap
-            .bind(with: self) { owner, _ in
-                let image = owner.isImageChanged ? owner.component.photoImageButton.currentImage : nil
-                owner.viewModel.pushInputIDVC(image: image)
-            }.disposed(by: disposeBag)
+        imagePickerController.delegate = self
     }
     
     override func addView() {
-        view.addSubviews(component, continueButton)
+        view.addSubviews(component)
     }
     
     override func setLayout() {
         component.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(54)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(22)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(137)
             $0.height.equalTo(125)
         }
-        
-        continueButton.snp.makeConstraints {
-            $0.top.equalTo(component.snp.bottom).offset(156)
-            $0.leading.trailing.equalToSuperview().inset(32)
-            $0.height.equalTo(54)
-        }
     }
 }
 
-extension SignupProfileImageViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var newImage: UIImage? = nil
         

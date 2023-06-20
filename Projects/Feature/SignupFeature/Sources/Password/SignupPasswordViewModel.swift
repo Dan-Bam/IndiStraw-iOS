@@ -2,6 +2,10 @@ import UIKit
 import BaseFeature
 import Alamofire
 
+enum SignupErrorType: Error {
+    case failedRequest
+}
+
 class SignupPasswordViewModel: BaseViewModel {
     func isValidPassword(password: String) -> Bool {
         let passwordRegEx = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]+$"
@@ -10,7 +14,7 @@ class SignupPasswordViewModel: BaseViewModel {
     }
     
     func requestToUploadImage(
-        image: UIImage?,
+        image: UIImage,
         password: String,
         completion: @escaping (Result<ProfileImageModel, Error>) -> Void = { _ in }) {
         AF.upload(
@@ -21,7 +25,7 @@ class SignupPasswordViewModel: BaseViewModel {
         .responseDecodable(of: ProfileImageModel.self) { response in
                 switch response.result {
                 case .success(let data):
-                    print("data = \(data.file)")
+                    print("data = \(data.imageUrl)")
                     completion(.success(data))
                 case .failure(let error):
                     print("Error - ImageUpload = \(error.localizedDescription)")
@@ -34,8 +38,8 @@ class SignupPasswordViewModel: BaseViewModel {
         password: String,
         name: String,
         phoneNumber: String,
-        profileUrl: String,
-        completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+        profileUrl: String?,
+        completion: @escaping (Result<Void, SignupErrorType>) -> Void = { _ in }) {
         AF.request(
             SignupTarget.signup(SignupRequest(
                 id: id,
@@ -46,13 +50,13 @@ class SignupPasswordViewModel: BaseViewModel {
         )
         .validate()
         .responseData { response in
-            switch response.result {
-            case .success:
+            switch response.response?.statusCode {
+            case 201:
                 print("success - signup")
                 completion(.success(()))
-            case .failure(let error):
-                print("Error - signup - \(error.localizedDescription)")
-                completion(.failure(error))
+            default:
+                print("statusCode = \(response.response?.statusCode)")
+                completion(.failure(.failedRequest))
             }
         }
     }

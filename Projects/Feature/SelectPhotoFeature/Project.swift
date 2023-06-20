@@ -2,12 +2,10 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "SettingFeature",
+    name: "SelectPhotoFeature",
     product: .staticLibrary,
     dependencies: [
         .Feature.BaseFeature,
-        .Feature.EditProfileFeature,
-        
         .Core.DesignSystem,
         .Domain.AuthDomain,
         .Shared.Utility,

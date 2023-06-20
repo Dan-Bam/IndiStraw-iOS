@@ -4,6 +4,8 @@ import DesignSystem
 import Utility
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 enum customButonType {
     static let editProfile = "프로필 수정"
@@ -14,6 +16,8 @@ enum customButonType {
 }
 
 class SettingViewController: BaseVC<SettingViewModel> {
+    private let disposeBag = DisposeBag()
+    
     private let editProfileButton = CustomSettingButton().then {
         $0.configure(type: customButonType.editProfile)
     }
@@ -45,7 +49,10 @@ class SettingViewController: BaseVC<SettingViewModel> {
     }
     
     override func configureVC() {
-        
+        editProfileButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushEditProfileVC()
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {

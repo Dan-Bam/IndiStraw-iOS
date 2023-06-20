@@ -18,6 +18,8 @@ public extension TargetDependency.Feature {
     static let HomeFeature = TargetDependency.feature(name: "HomeFeature")
     static let ProfileFeature = TargetDependency.feature(name: "ProfileFeature")
     static let SettingFeature = TargetDependency.feature(name: "SettingFeature")
+    static let EditProfileFeature = TargetDependency.feature(name: "EditProfileFeature")
+    static let SelectPhotoFeature = TargetDependency.feature(name: "SelectPhotoFeature")
 }
 
 public extension TargetDependency.Core {
