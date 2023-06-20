@@ -10,7 +10,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     
     var isImageChanged = false
 
-    private let inputProfileImageButton = UIButton()
+    private let inputProfileImageWrapperButton = UIButton()
     
     private let photoImageButton = UIButton().then {
         $0.clipsToBounds = true
@@ -39,7 +39,6 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     private let imagePickerController = UIImagePickerController()
     
     // MARK: - Method
-    
     func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
         switch type {
         case .photo:
@@ -59,7 +58,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         
         imagePickerController.delegate = self
 
-        inputProfileImageButton.rx.tap
+        inputProfileImageWrapperButton.rx.tap
             .bind(with: self) { owner, _ in
                 let vc = SelectPhotoBottomSheet(delegate: self)
                 vc.modalPresentationStyle = .pageSheet
@@ -78,14 +77,14 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     }
     
     override func addView() {
-        view.addSubviews(inputProfileImageButton, continueButton)
-        inputProfileImageButton.addSubviews(photoImageButton, plusImageButton)
+        view.addSubviews(inputProfileImageWrapperButton, continueButton)
+        inputProfileImageWrapperButton.addSubviews(photoImageButton, plusImageButton)
         
-        view.bringSubviewToFront(inputProfileImageButton)
+        view.bringSubviewToFront(inputProfileImageWrapperButton)
     }
     
     override func setLayout() {
-        inputProfileImageButton.snp.makeConstraints {
+        inputProfileImageWrapperButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(54)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(137)
@@ -103,7 +102,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         }
         
         continueButton.snp.makeConstraints {
-            $0.top.equalTo(inputProfileImageButton.snp.bottom).offset(156)
+            $0.top.equalTo(inputProfileImageWrapperButton.snp.bottom).offset(156)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
