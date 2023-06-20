@@ -4,7 +4,7 @@ import AuthDomain
 import BaseFeature
 
 enum EditProfileTarget {
-    case searchProfileInfo(ProfileModel)
+    case searchProfileInfo
 }
 
 extension EditProfileTarget: BaseRouter {

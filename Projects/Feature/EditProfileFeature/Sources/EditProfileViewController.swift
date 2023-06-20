@@ -15,6 +15,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     }
     
     private let inputPhoneNumberTextField = TextFieldBox().then {
+        $0.isEnabled = false
         $0.setPlaceholer(text: "전화번호")
     }
     
@@ -25,6 +26,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     }
     
     private let inputAddressTextField = TextFieldBox().then {
+        $0.isEnabled = false
         $0.setPlaceholer(text: "주소")
     }
     
@@ -53,6 +55,13 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     override func configureVC() {
         component.delegate = self
         imagePickerController.delegate = self
+        
+        viewModel.requestProfileInfo() { result in
+            switch result {
+            case .success(let data):
+                
+            }
+        }
     }
     
     override func addView() {
