@@ -126,6 +126,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
                     return
                 }
             }.disposed(by: disposeBag)
+        
+        profileButton.rx.tap
+            .bind(with: self) { owner, _ in
+                
+            }.disposed(by: disposeBag)
     }
     
     override func viewWillLayoutSubviews() {
