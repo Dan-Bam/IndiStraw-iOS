@@ -11,7 +11,7 @@ var bannerImageSources = [
     DesignSystemAsset.Images.testImage.image,
     DesignSystemAsset.Images.testImage.image,
     DesignSystemAsset.Images.testImage.image,
-    DesignSystemAsset.Images.testImage.image
+    DesignSystemAsset.Images.testImage2.image
 ]
 
 var segConArray = ["최근", "추천", "인기"]
@@ -27,7 +27,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         flowLayout.minimumLineSpacing = 9
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
-
+        
         return view
     }()
     
@@ -49,6 +49,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
     private let underlineView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
         $0.layer.cornerRadius = 10
+    }
+    
+    private let viewAllButton = UIButton().then {
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 10)
+        $0.setTitle("전체 보기 >", for: .normal)
     }
     
     private let segCon = UISegmentedControl(items: segConArray).then {
@@ -87,24 +92,18 @@ class HomeViewController: BaseVC<HomeViewModel> {
                 default:
                     break
                 }
-                
-                UIView.transition(
-                    with: owner.bannerImageView,
-                    duration: 0.3,
-                    options: .transitionCrossDissolve,
-                    animations: {
-                        owner.bannerImageView.image = bannerImageSources[owner.pageControl.currentPage]
-                    })
+                owner.bannerAnimation()
             }.disposed(by: disposeBag)
     }
     
     func bindUI() {
         moviesData
             .asDriver()
-            .drive(moviesCollectionView.rx.items(cellIdentifier: MoviesCell.identifier,
-                                                 cellType: MoviesCell.self)) { (row, data, cell) in
-                cell.prepare(model: data)
-            }.disposed(by: disposeBag)
+            .drive(moviesCollectionView.rx.items(
+                cellIdentifier: MoviesCell.identifier,
+                cellType: MoviesCell.self)) { (row, data, cell) in
+                    cell.prepare(model: data)
+                }.disposed(by: disposeBag)
         
         segCon.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
@@ -115,11 +114,29 @@ class HomeViewController: BaseVC<HomeViewModel> {
                         self.underlineView.frame.origin.x = underlineFinalXPosition
                     }
                 )
-                switch owner.segCon.selectedSegmentIndex {
-
-                default:
-                    return
+            }.disposed(by: disposeBag)
+    }
+    
+    func bannerAnimation() {
+        UIView.transition(
+            with: bannerImageView,
+            duration: 0.3,
+            options: .transitionCrossDissolve,
+            animations: {
+                print(self.pageControl.currentPage)
+                self.bannerImageView.image = bannerImageSources[self.pageControl.currentPage]
+            })
+    }
+    
+    private func bannerMovetimer() {
+        Observable<Int>.interval(.seconds(4), scheduler: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                if owner.pageControl.currentPage == 3  {
+                    owner.pageControl.currentPage = 0
+                } else {
+                    owner.pageControl.currentPage += 1
                 }
+                owner.bannerAnimation()
             }.disposed(by: disposeBag)
     }
     
@@ -129,9 +146,9 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.title = "hihi"
         setGesture()
         bindUI()
+        bannerMovetimer()
         
         let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
         let height: CGFloat = 2.0
@@ -143,9 +160,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     override func addView() {
-        view.addSubviews(bannerImageView, pageControl, segCon, moviesCollectionView)
+        view.addSubviews(
+            bannerImageView, pageControl,
+            segCon, moviesCollectionView,
+            viewAllButton
+        )
     }
-
+    
     override func setLayout() {
         bannerImageView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(21)
@@ -162,6 +183,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.top.equalTo(pageControl.snp.bottom).offset(20)
             $0.leading.equalToSuperview().inset(15)
             $0.height.equalTo(23)
+        }
+        
+        viewAllButton.snp.makeConstraints {
+            $0.centerY.equalTo(segCon)
+            $0.trailing.equalToSuperview().inset(15)
         }
         
         moviesCollectionView.snp.makeConstraints {
