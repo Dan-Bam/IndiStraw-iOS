@@ -2,6 +2,10 @@ import UIKit
 import BaseFeature
 import Alamofire
 
+enum SignupErrorType: Error {
+    case failedRequest
+}
+
 class SignupPasswordViewModel: BaseViewModel {
     func isValidPassword(password: String) -> Bool {
         let passwordRegEx = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]+$"
@@ -35,7 +39,7 @@ class SignupPasswordViewModel: BaseViewModel {
         name: String,
         phoneNumber: String,
         profileUrl: String?,
-        completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+        completion: @escaping (Result<Void, SignupErrorType>) -> Void = { _ in }) {
         AF.request(
             SignupTarget.signup(SignupRequest(
                 id: id,
@@ -44,15 +48,15 @@ class SignupPasswordViewModel: BaseViewModel {
                 phoneNumber: phoneNumber,
                 profileUrl: profileUrl))
         )
-        .validate()
+        .validate(statusCode: [201, 203, 204])
         .responseData { response in
-            switch response.result {
-            case .success:
+            switch response.response?.statusCode {
+            case 201:
                 print("success - signup")
                 completion(.success(()))
-            case .failure(let error):
-                print("Error - signup - \(error.localizedDescription)")
-                completion(.failure(error))
+            default:
+                print("statusCode = \(response.response?.statusCode)")
+                completion(.failure(.failedRequest))
             }
         }
     }

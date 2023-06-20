@@ -22,26 +22,6 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     private let component = SelectPhotoViewButton()
     
     var isImageChanged = false
-
-//    private let inputProfileImageWrapperButton = UIButton()
-//
-//    private let photoImageButton = UIButton().then {
-//        $0.clipsToBounds = true
-//        $0.isUserInteractionEnabled = false
-//        $0.isEnabled = true
-//        $0.backgroundColor = DesignSystemAsset.Colors.gray.color
-//        $0.setImage(DesignSystemAsset.Images.inputPhoto.image, for: .normal)
-//        $0.layer.cornerRadius = 62.5
-//    }
-//
-//    private let plusImageButton = UIButton().then {
-//        $0.isUserInteractionEnabled = false
-//        $0.setTitle("+", for: .normal)
-//        $0.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-//        $0.setTitleColor(.white, for: .normal)
-//        $0.layer.cornerRadius = 20
-//        $0.backgroundColor = DesignSystemAsset.Colors.blue.color
-//    }
     
     private let errorLabel = ErrorLabel()
     
@@ -71,17 +51,6 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         
         imagePickerController.delegate = self
         component.delegate = self
-
-//        inputProfileImageWrapperButton.rx.tap
-//            .bind(with: self) { owner, _ in
-//                let vc = SelectPhotoBottomSheet(delegate: self)
-//                vc.modalPresentationStyle = .pageSheet
-//                if let sheet = vc.sheetPresentationController {
-//                    sheet.detents = [.medium(), .large()]
-//                    sheet.prefersGrabberVisible = true
-//                }
-//                owner.present(vc, animated: true)
-//            }.disposed(by: disposeBag)
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -92,28 +61,9 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     
     override func addView() {
         view.addSubviews(component, continueButton)
-//        inputProfileImageWrapperButton.addSubviews(photoImageButton, plusImageButton)
-        
-//        view.bringSubviewToFront(inputProfileImageWrapperButton)
     }
     
     override func setLayout() {
-//        inputProfileImageWrapperButton.snp.makeConstraints {
-//            $0.top.equalTo(view.safeAreaLayoutGuide).inset(54)
-//            $0.centerX.equalToSuperview()
-//            $0.width.equalTo(137)
-//            $0.height.equalTo(125)
-//        }
-//
-//        photoImageButton.snp.makeConstraints {
-//            $0.top.leading.bottom.equalToSuperview()
-//            $0.size.equalTo(125)
-//        }
-//
-//        plusImageButton.snp.makeConstraints {
-//            $0.trailing.bottom.equalToSuperview()
-//            $0.size.equalTo(40)
-//        }
         component.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(54)
             $0.centerX.equalToSuperview()
