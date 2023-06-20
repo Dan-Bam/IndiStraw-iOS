@@ -37,6 +37,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     
     override func configureVC() {
         component.delegate = self
+        imagePickerController.delegate = self
     }
     
     override func addView() {
