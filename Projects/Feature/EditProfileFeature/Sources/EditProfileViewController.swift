@@ -3,7 +3,17 @@ import BaseFeature
 import SelectPhotoFeature
 import DesignSystem
 
-class EditProfileViewController: BaseVC<EditProfileViewModel> {
+class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomSheetProtocol, SelectPhotoProtocol {
+    func presentBottomSheet() {
+        let vc = SelectPhotoBottomSheet(delegate: self)
+        vc.modalPresentationStyle = .pageSheet
+        if let sheet = vc.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(vc, animated: true)
+    }
+    
     private let component = SelectPhotoViewButton()
     
     var isImageChanged = false
@@ -26,7 +36,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel> {
     }
     
     override func configureVC() {
-        
+        component.delegate = self
     }
     
     override func addView() {
@@ -35,9 +45,10 @@ class EditProfileViewController: BaseVC<EditProfileViewModel> {
     
     override func setLayout() {
         component.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(54)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(22)
             $0.centerX.equalToSuperview()
-            $0.size.equalTo(80)
+            $0.width.equalTo(137)
+            $0.height.equalTo(125)
         }
     }
 }

@@ -28,4 +28,7 @@ public enum IndiStrawStep {
     
     //profile
     case settingIsRequired
+    
+    //setting
+    case editProfileIsRequired
 }
