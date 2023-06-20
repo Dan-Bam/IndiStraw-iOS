@@ -48,7 +48,7 @@ class SignupPasswordViewModel: BaseViewModel {
                 phoneNumber: phoneNumber,
                 profileUrl: profileUrl))
         )
-        .validate(statusCode: [201, 203, 204])
+        .validate()
         .responseData { response in
             switch response.response?.statusCode {
             case 201:

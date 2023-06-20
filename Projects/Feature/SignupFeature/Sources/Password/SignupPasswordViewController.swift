@@ -37,11 +37,6 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     }
     
     func requestToSignup(password: String, data: ProfileImageModel?) {
-        print("id = \(self.id)")
-        print("password = \(password)")
-        print("name = \(self.name)")
-        print("phone = \(phoneNumber)")
-        print("profileUrl = \(data?.imageUrl)")
         viewModel.requestToSignup(
             id: id,
             password: password,
@@ -51,7 +46,7 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
                 switch result {
                 case .success:
                     self?.presentBottomSheet()
-                case .failure:
+                case .failure(.failedRequest):
                     self?.component.errorLabel.text = "회원가입에 실패했습니다."
                 }
             }
