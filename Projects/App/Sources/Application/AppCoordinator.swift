@@ -22,12 +22,11 @@ open class AppCoordinator: Coordinator {
     public func start() {
         let url = APIConstants.reissueURL
         let container = DIContainer.shared.resolve(JwtStore.self)!
-        let headers: HTTPHeaders = ["refreshToken" : container.getToken(type: .refreshToken)]
+        let headers: HTTPHeaders = ["refreshToken" : "Bearer " + container.getToken(type: .refreshToken)]
         
         let rootCoordinator = RootCoordinator(navigationController: navigationController)
         let homeCoordinator = HomeCoordinator(navigationController: navigationController)
         window?.rootViewController = navigationController
-        
         AF.request(url,
                    method: .patch,
                    encoding: JSONEncoding.default,
