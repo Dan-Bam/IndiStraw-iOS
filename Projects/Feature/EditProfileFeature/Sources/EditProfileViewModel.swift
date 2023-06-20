@@ -11,6 +11,7 @@ class EditProfileViewModel: BaseViewModel {
                 case .success(let data):
                     completion(.success(data))
                 case .failure(let error):
+                    print("Error - ProfileInfo = \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }
