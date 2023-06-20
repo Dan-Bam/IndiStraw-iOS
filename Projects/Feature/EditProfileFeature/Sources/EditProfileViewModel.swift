@@ -8,7 +8,9 @@ class EditProfileViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     
     func requestProfileInfo(completion: @escaping (Result<ProfileModel, Error>) -> Void = { _ in}) {
-        AF.request(EditProfileTarget.searchProfileInfo, interceptor: JwtRequestInterceptor(jwtStore: container))
+        AF.request(
+            EditProfileTarget.searchProfileInfo,
+            interceptor: JwtRequestInterceptor(jwtStore: container))
             .validate()
             .responseDecodable(of: ProfileModel.self) { response in
                 switch response.result {

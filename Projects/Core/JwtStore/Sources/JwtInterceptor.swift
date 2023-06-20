@@ -15,9 +15,9 @@ public class JwtRequestInterceptor: RequestInterceptor {
             return
         }
         var urlRequest = urlRequest
-        let accessToken = jwtStore.getToken(type: .accessToken)
-        print("accessToken = \(jwtStore.getToken(type: .accessTokenExpiredAt))")
-        urlRequest.addValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
+//        let accessToken = jwtStore.getToken(type: .accessToken)
+//        print("accessToken = \(jwtStore.getToken(type: .accessTokenExpiredAt))")
+//        urlRequest.addValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
         completion(.success(urlRequest))
     }
     
