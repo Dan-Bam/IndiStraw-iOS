@@ -56,10 +56,14 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         component.delegate = self
         imagePickerController.delegate = self
         
-        viewModel.requestProfileInfo() { result in
+        viewModel.requestProfileInfo() { [weak self] result in
             switch result {
             case .success(let data):
-                
+                self?.inputNameTextField.text = data.name
+                self?.inputPhoneNumberTextField.text = data.phoneNumber
+                self?.inputAddressTextField.text = data.address
+            case .failure:
+                print("Error")
             }
         }
     }
