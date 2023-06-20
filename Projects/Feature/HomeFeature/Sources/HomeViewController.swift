@@ -22,7 +22,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
     private let disposeBag = DisposeBag()
     
     private let profileButton = UIBarButtonItem().then {
-        $0.image = 
+        $0.image = DesignSystemAsset.Images.profileIcon.image
+        $0.tintColor = .white
     }
     
     lazy var moviesCollectionView: UICollectionView = {
@@ -134,6 +135,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.title = "hihi"
+        navigationItem.rightBarButtonItem = profileButton
         setGesture()
         bindUI()
         

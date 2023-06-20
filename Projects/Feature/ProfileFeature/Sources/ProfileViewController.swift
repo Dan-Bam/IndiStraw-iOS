@@ -19,7 +19,8 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         $0.isUserInteractionEnabled = false
         $0.isEnabled = true
         $0.backgroundColor = DesignSystemAsset.Colors.gray.color
-        $0.setImage(UIImage(systemName: "person", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .light)), for: .normal)
+        $0.setImage(DesignSystemAsset.Images.profileIcon.image.withConfiguration(UIImage.SymbolConfiguration(pointSize: 30, weight: .light)), for: .normal)
+//        $0.setImage(UIImage(systemName: "person", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .light)), for: .normal)
         $0.tintColor = .white
         $0.layer.cornerRadius = 40
     }
