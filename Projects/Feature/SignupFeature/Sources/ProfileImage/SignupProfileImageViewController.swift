@@ -4,31 +4,44 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 import Utility
+import SelectPhotoFeature
 
-class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, SelectPhotoProtocol {
+class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, SelectPhotoProtocol, presentBottomSheetProtocol {
+    func presentBottomSheet() {
+        let vc = SelectPhotoBottomSheet(delegate: self)
+        vc.modalPresentationStyle = .pageSheet
+        if let sheet = vc.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(vc, animated: true)
+    }
+    
     private let disposeBag = DisposeBag()
+    
+    private let component = SelectPhotoViewButton()
     
     var isImageChanged = false
 
-    private let inputProfileImageWrapperButton = UIButton()
-    
-    private let photoImageButton = UIButton().then {
-        $0.clipsToBounds = true
-        $0.isUserInteractionEnabled = false
-        $0.isEnabled = true
-        $0.backgroundColor = DesignSystemAsset.Colors.gray.color
-        $0.setImage(DesignSystemAsset.Images.inputPhoto.image, for: .normal)
-        $0.layer.cornerRadius = 62.5
-    }
-    
-    private let plusImageButton = UIButton().then {
-        $0.isUserInteractionEnabled = false
-        $0.setTitle("+", for: .normal)
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        $0.setTitleColor(.white, for: .normal)
-        $0.layer.cornerRadius = 20
-        $0.backgroundColor = DesignSystemAsset.Colors.blue.color
-    }
+//    private let inputProfileImageWrapperButton = UIButton()
+//
+//    private let photoImageButton = UIButton().then {
+//        $0.clipsToBounds = true
+//        $0.isUserInteractionEnabled = false
+//        $0.isEnabled = true
+//        $0.backgroundColor = DesignSystemAsset.Colors.gray.color
+//        $0.setImage(DesignSystemAsset.Images.inputPhoto.image, for: .normal)
+//        $0.layer.cornerRadius = 62.5
+//    }
+//
+//    private let plusImageButton = UIButton().then {
+//        $0.isUserInteractionEnabled = false
+//        $0.setTitle("+", for: .normal)
+//        $0.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+//        $0.setTitleColor(.white, for: .normal)
+//        $0.layer.cornerRadius = 20
+//        $0.backgroundColor = DesignSystemAsset.Colors.blue.color
+//    }
     
     private let errorLabel = ErrorLabel()
     
@@ -57,52 +70,59 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         navigationItem.title = "프로필 이미지를 선택해주세요."
         
         imagePickerController.delegate = self
+        component.delegate = self
 
-        inputProfileImageWrapperButton.rx.tap
-            .bind(with: self) { owner, _ in
-                let vc = SelectPhotoBottomSheet(delegate: self)
-                vc.modalPresentationStyle = .pageSheet
-                if let sheet = vc.sheetPresentationController {
-                    sheet.detents = [.medium(), .large()]
-                    sheet.prefersGrabberVisible = true
-                }
-                owner.present(vc, animated: true)
-            }.disposed(by: disposeBag)
+//        inputProfileImageWrapperButton.rx.tap
+//            .bind(with: self) { owner, _ in
+//                let vc = SelectPhotoBottomSheet(delegate: self)
+//                vc.modalPresentationStyle = .pageSheet
+//                if let sheet = vc.sheetPresentationController {
+//                    sheet.detents = [.medium(), .large()]
+//                    sheet.prefersGrabberVisible = true
+//                }
+//                owner.present(vc, animated: true)
+//            }.disposed(by: disposeBag)
         
         continueButton.rx.tap
             .bind(with: self) { owner, _ in
-                let image = owner.isImageChanged ? owner.photoImageButton.currentImage : nil
+                let image = owner.isImageChanged ? owner.component.photoImageButton.currentImage : nil
                 owner.viewModel.pushInputIDVC(image: image)
             }.disposed(by: disposeBag)
     }
     
     override func addView() {
-        view.addSubviews(inputProfileImageWrapperButton, continueButton)
-        inputProfileImageWrapperButton.addSubviews(photoImageButton, plusImageButton)
+        view.addSubviews(component, continueButton)
+//        inputProfileImageWrapperButton.addSubviews(photoImageButton, plusImageButton)
         
-        view.bringSubviewToFront(inputProfileImageWrapperButton)
+//        view.bringSubviewToFront(inputProfileImageWrapperButton)
     }
     
     override func setLayout() {
-        inputProfileImageWrapperButton.snp.makeConstraints {
+//        inputProfileImageWrapperButton.snp.makeConstraints {
+//            $0.top.equalTo(view.safeAreaLayoutGuide).inset(54)
+//            $0.centerX.equalToSuperview()
+//            $0.width.equalTo(137)
+//            $0.height.equalTo(125)
+//        }
+//
+//        photoImageButton.snp.makeConstraints {
+//            $0.top.leading.bottom.equalToSuperview()
+//            $0.size.equalTo(125)
+//        }
+//
+//        plusImageButton.snp.makeConstraints {
+//            $0.trailing.bottom.equalToSuperview()
+//            $0.size.equalTo(40)
+//        }
+        component.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(54)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(137)
             $0.height.equalTo(125)
         }
         
-        photoImageButton.snp.makeConstraints {
-            $0.top.leading.bottom.equalToSuperview()
-            $0.size.equalTo(125)
-        }
-        
-        plusImageButton.snp.makeConstraints {
-            $0.trailing.bottom.equalToSuperview()
-            $0.size.equalTo(40)
-        }
-        
         continueButton.snp.makeConstraints {
-            $0.top.equalTo(inputProfileImageWrapperButton.snp.bottom).offset(156)
+            $0.top.equalTo(component.snp.bottom).offset(156)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
@@ -118,7 +138,7 @@ extension SignupProfileImageViewController: UIImagePickerControllerDelegate, UIN
         } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             newImage = possibleImage
         }
-        self.photoImageButton.setImage(newImage, for: .normal)
+        self.component.photoImageButton.setImage(newImage, for: .normal)
         
         picker.dismiss(animated: true, completion: nil)
         isImageChanged = true

@@ -36,13 +36,18 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
         present(bottomSheet, animated: true)
     }
     
-    func requestToSignup(password: String, data: ProfileImageModel) {
+    func requestToSignup(password: String, data: ProfileImageModel?) {
+        print("id = \(self.id)")
+        print("password = \(password)")
+        print("name = \(self.name)")
+        print("phone = \(phoneNumber)")
+        print("profileUrl = \(data?.imageUrl)")
         viewModel.requestToSignup(
             id: id,
             password: password,
             name: name,
             phoneNumber: phoneNumber,
-            profileUrl: data.file) { [weak self] result in
+            profileUrl: data?.imageUrl) { [weak self] result in
                 switch result {
                 case .success:
                     self?.presentBottomSheet()
@@ -86,16 +91,23 @@ extension SignupPasswordViewController {
     }
     
     func confirmButtonDidTap(password: String) {
-        viewModel.requestToUploadImage(image: profileImage, password: password) { [weak self] result in
-            switch result {
-            case .success(let data):
-                self?.requestToSignup(
-                    password: password,
-                    data: data
-                )
-            case .failure:
-                self?.component.errorLabel.text = "회원가입에 실패했습니다."
+        if let image = profileImage {
+            viewModel.requestToUploadImage(image: image, password: password) { [weak self] result in
+                switch result {
+                case .success(let data):
+                    self?.requestToSignup(
+                        password: password,
+                        data: data
+                    )
+                case .failure:
+                    self?.component.errorLabel.text = "회원가입에 실패했습니다."
+                }
             }
+        } else {
+            requestToSignup(
+                password: password,
+                data: nil
+            )
         }
     }
 }

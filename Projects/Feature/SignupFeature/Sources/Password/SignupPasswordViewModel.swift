@@ -10,7 +10,7 @@ class SignupPasswordViewModel: BaseViewModel {
     }
     
     func requestToUploadImage(
-        image: UIImage?,
+        image: UIImage,
         password: String,
         completion: @escaping (Result<ProfileImageModel, Error>) -> Void = { _ in }) {
         AF.upload(
@@ -21,7 +21,7 @@ class SignupPasswordViewModel: BaseViewModel {
         .responseDecodable(of: ProfileImageModel.self) { response in
                 switch response.result {
                 case .success(let data):
-                    print("data = \(data.file)")
+                    print("data = \(data.imageUrl)")
                     completion(.success(data))
                 case .failure(let error):
                     print("Error - ImageUpload = \(error.localizedDescription)")
@@ -34,7 +34,7 @@ class SignupPasswordViewModel: BaseViewModel {
         password: String,
         name: String,
         phoneNumber: String,
-        profileUrl: String,
+        profileUrl: String?,
         completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
         AF.request(
             SignupTarget.signup(SignupRequest(
