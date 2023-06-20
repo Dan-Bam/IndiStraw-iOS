@@ -21,6 +21,10 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     private let disposeBag = DisposeBag()
     
+    private let profileButton = UIBarButtonItem().then {
+        $0.image = 
+    }
+    
     lazy var moviesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
