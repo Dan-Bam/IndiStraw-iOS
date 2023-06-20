@@ -129,7 +129,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         
         profileButton.rx.tap
             .bind(with: self) { owner, _ in
-                
+                owner.viewModel.pushProfileVC()
             }.disposed(by: disposeBag)
     }
     
