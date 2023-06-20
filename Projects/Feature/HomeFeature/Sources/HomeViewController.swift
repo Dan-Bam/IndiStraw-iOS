@@ -21,6 +21,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     private let disposeBag = DisposeBag()
     
+    private let profileButton = UIBarButtonItem().then {
+        $0.image = DesignSystemAsset.Images.profileIcon.image
+        $0.tintColor = .white
+    }
+    
     lazy var moviesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -121,6 +126,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
                     return
                 }
             }.disposed(by: disposeBag)
+        
+        profileButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushProfileVC()
+            }.disposed(by: disposeBag)
     }
     
     override func viewWillLayoutSubviews() {
@@ -130,6 +140,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.title = "hihi"
+        navigationItem.rightBarButtonItem = profileButton
         setGesture()
         bindUI()
         
