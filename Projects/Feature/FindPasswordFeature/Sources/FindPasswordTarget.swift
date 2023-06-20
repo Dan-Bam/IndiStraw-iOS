@@ -10,6 +10,10 @@ enum FindPasswordTarget {
 }
 
 extension FindPasswordTarget: BaseRouter {
+    var baseURL: String {
+        return "https://port-0-indistraw-msa-server-dihik2mlj29oc6u.sel4.cloudtype.app/api/v1"
+    }
+    
     var header: AuthDomain.HeaderType {
         return .notHeader
     }
