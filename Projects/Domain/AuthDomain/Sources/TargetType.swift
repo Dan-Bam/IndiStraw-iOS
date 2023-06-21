@@ -34,7 +34,7 @@ public extension BaseRouter {
             
         case .withToken:
             request.setValue(HeaderContent.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
-            request.setValue(container.getToken(type: .accessToken), forHTTPHeaderField: HTTPHeaderField.authentication.rawValue)
+            request.setValue("Bearer " + container.getToken(type: .accessToken), forHTTPHeaderField: HTTPHeaderField.authentication.rawValue)
 
         case .multiPart:
             request.setValue(HTTPHeaderField.formDataType.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)

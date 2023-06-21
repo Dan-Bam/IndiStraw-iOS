@@ -23,11 +23,11 @@ public class SigninCoordinator: BaseCoordinator {
 }
 
 extension SigninCoordinator {
-    func phoneNumberAuthIsRequired(type: FindAccountType) {
+    func phoneNumberAuthIsRequired(type: InputPhoneNumberType) {
         let vc = InputPhoneNumberCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
-        vc.startInputPhoneNumberCoordinator(type: type)
+        vc.startInputPhoneNumberCoordinator(type: type, title: "전화번호 입력")
     }
     
     func setHomeIsRequired() {

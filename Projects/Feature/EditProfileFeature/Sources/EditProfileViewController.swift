@@ -36,7 +36,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     
     private let addressChangeButton = UIButton().then {
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
-        $0.setTitle("주소 찾기", for: .normal)
+        $0.setTitle("주소찾기", for: .normal)
         $0.setTitleColor(DesignSystemAsset.Colors.skyblue.color, for: .normal)
     }
     
@@ -50,6 +50,13 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         component.delegate = self
         imagePickerController.delegate = self
         
+        phoneNumberChangeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushChangePhoneNumber()
+            }.disposed(by: disposeBag)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         viewModel.requestProfileInfo() { [weak self] result in
             switch result {
             case .success(let data):
@@ -70,12 +77,9 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     override func addView() {
         view.addSubviews(
             component, inputNameTextField,
-            inputPhoneNumberTextField,
-            inputAddressTextField, addressChangeButton
+            inputPhoneNumberTextField, inputAddressTextField,
+            phoneNumberChangeButton, addressChangeButton
         )
-        
-        inputPhoneNumberTextField.addSubview(phoneNumberChangeButton)
-        inputAddressTextField.addSubview(addressChangeButton)
     }
     
     override func setLayout() {
@@ -99,8 +103,8 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         }
         
         phoneNumberChangeButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(10)
+            $0.centerY.equalTo(inputPhoneNumberTextField)
+            $0.trailing.equalTo(inputPhoneNumberTextField.snp.trailing).offset(-10)
         }
         
         inputAddressTextField.snp.makeConstraints {
@@ -110,8 +114,8 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         }
         
         addressChangeButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(10)
+            $0.centerY.equalTo(inputAddressTextField)
+            $0.trailing.equalTo(inputAddressTextField.snp.trailing).offset(-10)
         }
     }
 }

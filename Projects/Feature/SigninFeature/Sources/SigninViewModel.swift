@@ -3,7 +3,6 @@ import BaseFeature
 import Alamofire
 import JwtStore
 import Swinject
-import AuthDomain
 
 public class SigninViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
@@ -17,6 +16,7 @@ public class SigninViewModel: BaseViewModel {
             .responseDecodable(of: ManageTokenModel.self) { [weak self] response in
                 switch response.result {
                 case .success(let response):
+                    print("token  =  \(response)")
                     self?.container.setToken(data: response)
                     completion(.success(()))
                 case .failure(let error):
@@ -26,7 +26,7 @@ public class SigninViewModel: BaseViewModel {
             }
     }
     
-    func pushPhoneNumberAuth(type: FindAccountType) {
+    func pushPhoneNumberAuth(type: InputPhoneNumberType) {
         coordinator.navigate(to: .phoneNumberAuthIsRequired(type: type))
     }
     

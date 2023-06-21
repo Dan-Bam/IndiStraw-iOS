@@ -3,6 +3,7 @@ import BaseFeature
 import Alamofire
 import JwtStore
 import AuthDomain
+import Swinject
 
 
 class EditProfileViewModel: BaseViewModel {
@@ -40,6 +41,10 @@ class EditProfileViewModel: BaseViewModel {
                 return
             }
         }
+    }
+    
+    func pushChangePhoneNumber() {
+        coordinator.navigate(to: .changePhoneNumberIsRequired)
     }
 }
 
