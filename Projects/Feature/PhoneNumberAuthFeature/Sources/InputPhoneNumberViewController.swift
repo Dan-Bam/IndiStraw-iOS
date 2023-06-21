@@ -92,8 +92,8 @@ extension InputPhoneNumberViewController {
                     self.viewModel.pushFindId(phoneNumber: phoneNumber)
                 case .changePassword:
                     self.viewModel.pushChangePassword(phoneNumber: phoneNumber)
-                default:
-                    return
+                case .changePhoneNumber:
+                    self.viewModel.reqeustToChangePhoneNumber(phoneNumber: phoneNumber)
                     
                 }
             case .failure(.cantSendAuthNumber):

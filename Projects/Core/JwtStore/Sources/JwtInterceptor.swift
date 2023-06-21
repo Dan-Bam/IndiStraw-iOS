@@ -26,7 +26,7 @@ public class JwtRequestInterceptor: RequestInterceptor {
         }
 
         let url = APIConstants.reissueURL
-        let headers: HTTPHeaders = ["refreshToken" : jwtStore.getToken(type: .refreshToken)]
+        let headers: HTTPHeaders = ["refreshToken" : "Bearer " + jwtStore.getToken(type: .refreshToken)]
 
         AF.request(url,
                    method: .patch,

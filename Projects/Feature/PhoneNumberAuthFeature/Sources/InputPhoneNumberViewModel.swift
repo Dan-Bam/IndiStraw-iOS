@@ -2,8 +2,10 @@ import Foundation
 import BaseFeature
 import Alamofire
 import AuthDomain
+import JwtStore
 
 public class InputPhoneNumberViewModel: BaseViewModel {
+    var container = DIContainer.shared.resolve(JwtStore.self)!
     
     func requestToSendAuthNumber(
         phoneNumber: String,
@@ -64,8 +66,22 @@ public class InputPhoneNumberViewModel: BaseViewModel {
             }
     }
     
-    func reqeustToChangePhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
-        
+    func reqeustToChangePhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
+        AF.request(
+            PhoneNumberAuthTarget.changePhoneNumber(
+                phoneNumber: phoneNumber),
+                interceptor: JwtRequestInterceptor(jwtStore: container)
+        )
+        .validate()
+        .responseData { [weak self] response in
+            print("ChangePhoneNUmber = \(response.response?.statusCode)")
+            switch response.response?.statusCode {
+            case 205:
+                self?.popToRootVC()
+            default:
+                return
+            }
+        }
     }
     
     func pushFindId(phoneNumber: String) {
