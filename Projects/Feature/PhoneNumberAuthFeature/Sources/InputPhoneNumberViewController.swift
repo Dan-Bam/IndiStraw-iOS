@@ -5,10 +5,12 @@ import DesignSystem
 public class InputPhoneNumberViewController: BaseVC<InputPhoneNumberViewModel>, InputPhoneNumberComponentProtocol {
     private let component = InputPhoneNumberComponent()
     
-    var type: FindAccountType
+    var type: InputPhoneNumberType
+    var title: String
     
-    public init(viewModel: InputPhoneNumberViewModel, type: FindAccountType) {
+    public init(viewModel: InputPhoneNumberViewModel, type: InputPhoneNumberType, title: String) {
         self.type = type
+        self.title = title
         super.init(viewModel: viewModel)
     }
     
@@ -17,7 +19,7 @@ public class InputPhoneNumberViewController: BaseVC<InputPhoneNumberViewModel>, 
     }
     
     public override func configureVC() {
-        navigationItem.title = "전화번호를 입력해 주세요."
+        navigationItem.title = title
         
         component.delegate = self
     }

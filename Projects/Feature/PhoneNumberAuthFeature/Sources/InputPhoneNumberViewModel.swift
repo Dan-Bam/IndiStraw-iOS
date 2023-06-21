@@ -71,4 +71,8 @@ public class InputPhoneNumberViewModel: BaseViewModel {
     func pushChangePassword(phoneNumber: String) {
         coordinator.navigate(to: .changePasswordIsRequired(phoneNumber: phoneNumber))
     }
+    
+    func popToRootVC() {
+        coordinator.navigate(to: .popToRootIsRequired)
+    }
 }

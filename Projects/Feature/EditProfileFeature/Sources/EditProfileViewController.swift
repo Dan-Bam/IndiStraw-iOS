@@ -2,8 +2,11 @@ import UIKit
 import BaseFeature
 import SelectPhotoFeature
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomSheetProtocol, SelectPhotoProtocol {
+    private let disposeBag = DisposeBag()
     private let component = SelectPhotoViewButton()
     
     var isImageChanged = false
@@ -38,20 +41,6 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
 
     
     // MARK: - Method
-    func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
-        switch type {
-        case .photo:
-            imagePickerController.sourceType = .photoLibrary
-        case .camera:
-            imagePickerController.sourceType = .camera
-        }
-        imagePickerController.allowsEditing = true
-        imagePickerController.modalPresentationStyle = .fullScreen
-        
-        self.dismiss(animated: true)
-        self.present(imagePickerController, animated: true)
-    }
-    
     override func configureVC() {
         component.delegate = self
         imagePickerController.delegate = self
@@ -66,6 +55,11 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
                 print("Error")
             }
         }
+        
+        phoneNumberChangeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
@@ -134,6 +128,20 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
 }
 
 extension EditProfileViewController {
+    func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
+        switch type {
+        case .photo:
+            imagePickerController.sourceType = .photoLibrary
+        case .camera:
+            imagePickerController.sourceType = .camera
+        }
+        imagePickerController.allowsEditing = true
+        imagePickerController.modalPresentationStyle = .fullScreen
+        
+        self.dismiss(animated: true)
+        self.present(imagePickerController, animated: true)
+    }
+    
     func presentBottomSheet() {
         let vc = SelectPhotoBottomSheet(delegate: self)
         vc.modalPresentationStyle = .pageSheet

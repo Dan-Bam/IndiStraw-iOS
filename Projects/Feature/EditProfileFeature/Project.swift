@@ -7,6 +7,8 @@ let project = Project.makeModule(
     dependencies: [
         .Feature.BaseFeature,
         .Feature.SelectPhotoFeature,
+        .Feature.PhoneNumberAuthFeature,
+        
         .Core.DesignSystem,
         .Domain.AuthDomain,
         .Shared.Utility,
