@@ -23,8 +23,8 @@ class EditProfileViewModel: BaseViewModel {
             }
     }
     
-    func pushChangePhoneNumber(title: String) {
-        coordinator.navigate(to: .changePhoneNumberIsRequired(title: title))
+    func pushChangePhoneNumber() {
+        coordinator.navigate(to: .changePhoneNumberIsRequired)
     }
 }
 

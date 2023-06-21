@@ -6,11 +6,11 @@ public class InputPhoneNumberViewController: BaseVC<InputPhoneNumberViewModel>, 
     private let component = InputPhoneNumberComponent()
     
     var type: InputPhoneNumberType
-    var title: String
+    var navigationTitle: String
     
     public init(viewModel: InputPhoneNumberViewModel, type: InputPhoneNumberType, title: String) {
         self.type = type
-        self.title = title
+        self.navigationTitle = title
         super.init(viewModel: viewModel)
     }
     
@@ -19,7 +19,7 @@ public class InputPhoneNumberViewController: BaseVC<InputPhoneNumberViewModel>, 
     }
     
     public override func configureVC() {
-        navigationItem.title = title
+        navigationItem.title = navigationTitle
         
         component.delegate = self
     }
@@ -92,6 +92,9 @@ extension InputPhoneNumberViewController {
                     self.viewModel.pushFindId(phoneNumber: phoneNumber)
                 case .changePassword:
                     self.viewModel.pushChangePassword(phoneNumber: phoneNumber)
+                default:
+                    return
+                    
                 }
             case .failure(.cantSendAuthNumber):
                 self.component.errorLabel.text = "인증번호가 틀렸습니다."

@@ -64,6 +64,10 @@ public class InputPhoneNumberViewModel: BaseViewModel {
             }
     }
     
+    func reqeustToChangePhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+        
+    }
+    
     func pushFindId(phoneNumber: String) {
         coordinator.navigate(to: .findIdIsRequired(phoneNumber: phoneNumber))
     }
