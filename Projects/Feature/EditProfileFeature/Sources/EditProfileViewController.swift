@@ -43,7 +43,6 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     private let saveButton = ButtonComponent().then {
         $0.setTitle("저장하기", for: .normal)
     }
-
     
     // MARK: - Method
     override func configureVC() {

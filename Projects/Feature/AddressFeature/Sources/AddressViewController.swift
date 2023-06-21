@@ -1,5 +1,7 @@
 import UIKit
 import BaseFeature
+import RxSwift
+import RxCocoa
 
 class AddressViewController: BaseVC<AddressViewModel> {
 //    private let searchController = UISearchController().then {
@@ -8,6 +10,8 @@ class AddressViewController: BaseVC<AddressViewModel> {
 //        $0.searchBar.layer.borderColor = UIColor.white.cgColor
 //        $0.searchBar.layer.cornerRadius = 5
 //    }
+    
+    private let disposeBag = DisposeBag()
     
     private let searchTextField = UITextField().then {
         $0.placeholder = "검색어를 입력해주세요."
@@ -20,21 +24,36 @@ class AddressViewController: BaseVC<AddressViewModel> {
             attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
         $0.addLeftPadding()
     }
+    
+    private let searchButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
+        $0.tintColor = .white
+    }
 
     override func configureVC() {
         navigationItem.titleView = searchTextField
+        
+        searchButton.rx.tap
+            .bind(with: self) { owner, _ in
+                
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
         view.addSubviews(searchTextField)
+        searchTextField.addSubview(searchButton)
     }
     
     override func setLayout() {
         searchTextField.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(55)
             $0.trailing.equalToSuperview().inset(24)
             $0.width.equalTo(308)
             $0.height.equalTo(40)
+        }
+        
+        searchButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(11)
         }
     }
 }
