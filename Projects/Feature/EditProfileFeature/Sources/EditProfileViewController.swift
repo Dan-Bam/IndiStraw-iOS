@@ -7,6 +7,7 @@ import RxCocoa
 
 class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomSheetProtocol, SelectPhotoProtocol {
     private let disposeBag = DisposeBag()
+    
     private let component = SelectPhotoViewButton()
     
     var isImageChanged = false
@@ -37,6 +38,10 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
         $0.setTitle("주소찾기", for: .normal)
         $0.setTitleColor(DesignSystemAsset.Colors.skyblue.color, for: .normal)
+    }
+    
+    private let saveButton = ButtonComponent().then {
+        $0.setTitle("저장하기", for: .normal)
     }
 
     
@@ -69,13 +74,19 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
                 print("Error")
             }
         }
+        
+        saveButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.requestToeditProfile(name: owner.inputNameTextField.text!)
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
         view.addSubviews(
             component, inputNameTextField,
             inputPhoneNumberTextField, inputAddressTextField,
-            phoneNumberChangeButton, addressChangeButton
+            phoneNumberChangeButton, addressChangeButton,
+            saveButton
         )
     }
     
@@ -113,6 +124,12 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         addressChangeButton.snp.makeConstraints {
             $0.centerY.equalTo(inputAddressTextField)
             $0.trailing.equalTo(inputAddressTextField.snp.trailing).offset(-10)
+        }
+        
+        saveButton.snp.makeConstraints {
+            $0.top.equalTo(inputAddressTextField.snp.bottom).offset(50)
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(54)
         }
     }
 }

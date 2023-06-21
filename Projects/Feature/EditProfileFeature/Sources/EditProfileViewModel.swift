@@ -2,25 +2,45 @@ import Foundation
 import BaseFeature
 import Alamofire
 import JwtStore
+import AuthDomain
 import Swinject
 
+
 class EditProfileViewModel: BaseViewModel {
-    let container = DIContainer.shared.resolve(JwtStore.self)!
+    var container = DIContainer.shared.resolve(JwtStore.self)!
     
-    func requestProfileInfo(completion: @escaping (Result<ProfileModel, Error>) -> Void = { _ in}) {
+    var profileUrl: String?
+    
+    func requestProfileInfo(completion: @escaping (Result<ProfileModel, Error>) -> Void = { _ in }) {
         AF.request(
             EditProfileTarget.searchProfileInfo,
             interceptor: JwtRequestInterceptor(jwtStore: container))
-            .validate()
-            .responseDecodable(of: ProfileModel.self) { response in
-                switch response.result {
-                case .success(let data):
-                    completion(.success(data))
-                case .failure(let error):
-                    print("Error - ProfileInfo = \(error.localizedDescription)")
-                    completion(.failure(error))
-                }
+        .validate()
+        .responseDecodable(of: ProfileModel.self) { response in
+            switch response.result {
+            case .success(let data):
+                completion(.success(data))
+            case .failure(let error):
+                completion(.failure(error))
             }
+        }
+    }
+    
+    func requestToeditProfile(name: String) {
+        AF.request(
+            EditProfileTarget.editProfile(EditProfileModel(
+                name: name,
+                profileUrl: profileUrl
+            )),interceptor: JwtRequestInterceptor(jwtStore: container))
+        .validate()
+        .responseData { [weak self] response in
+            switch response.response?.statusCode {
+            case 205:
+                self?.requestProfileInfo()
+            default:
+                return
+            }
+        }
     }
     
     func pushChangePhoneNumber() {
