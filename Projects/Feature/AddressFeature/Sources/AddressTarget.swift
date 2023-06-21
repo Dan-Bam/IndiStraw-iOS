@@ -4,7 +4,7 @@ import AuthDomain
 import BaseFeature
 
 enum AddressTarget {
-    case searchAddress(AddressModel)
+    case searchAddress(RequestAddressModel)
 }
 
 extension AddressTarget: BaseRouter {

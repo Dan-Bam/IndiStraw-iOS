@@ -9,6 +9,13 @@ import JwtStore
 class AddressViewModel: BaseViewModel {
     var currentPage = 0
     func requestAddress(keyword: String) {
-        AF.request(AddressTarget.searchAddress(AddressModel(confmKey: <#T##String#>, currentPage: <#T##Int#>, keyword: <#T##String#>)))
+        AF.request(AddressTarget.searchAddress(
+            RequestAddressModel(
+                currentPage: currentPage,
+                keyword: keyword
+            )
+        ))
+        .validate()
+        
     }
 }
