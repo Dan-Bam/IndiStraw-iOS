@@ -15,9 +15,6 @@ public class JwtRequestInterceptor: RequestInterceptor {
             return
         }
         var urlRequest = urlRequest
-        let accessToken = jwtStore.getToken(type: .accessToken)
-        print("accessToken = \(jwtStore.getToken(type: .accessTokenExpiredAt))")
-        urlRequest.addValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
         completion(.success(urlRequest))
     }
     
@@ -29,7 +26,7 @@ public class JwtRequestInterceptor: RequestInterceptor {
         }
 
         let url = APIConstants.reissueURL
-        let headers: HTTPHeaders = ["RefreshToken" : jwtStore.getToken(type: .refreshToken)]
+        let headers: HTTPHeaders = ["refreshToken" : jwtStore.getToken(type: .refreshToken)]
 
         AF.request(url,
                    method: .patch,
