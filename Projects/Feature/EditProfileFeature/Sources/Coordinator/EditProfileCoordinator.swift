@@ -1,5 +1,6 @@
 import BaseFeature
 import PhoneNumberAuthFeature
+import AddressFeature
 
 public class EditProfileCoordinator: BaseCoordinator {
     public override func start() {
@@ -13,6 +14,8 @@ public class EditProfileCoordinator: BaseCoordinator {
         switch step {
         case .changePhoneNumberIsRequired:
             changePhoneNumberIsRequired()
+        case .findAddressIsRequired:
+            findAddressIsRequired()
         default:
             return
         }
@@ -25,5 +28,12 @@ extension EditProfileCoordinator {
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.startInputPhoneNumberCoordinator(type: .changePhoneNumber, title: "새로운 전화번호 입력")
+    }
+    
+    func findAddressIsRequired() {
+        let vc = AddressCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
     }
 }

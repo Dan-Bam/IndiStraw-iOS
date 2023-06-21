@@ -49,6 +49,11 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
             .bind(with: self) { owner, _ in
                 owner.viewModel.pushChangePhoneNumber()
             }.disposed(by: disposeBag)
+        
+        addressChangeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushFindAddress()
+            }.disposed(by: disposeBag)
     }
     
     override func viewWillAppear(_ animated: Bool) {

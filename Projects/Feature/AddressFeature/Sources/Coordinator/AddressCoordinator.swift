@@ -1,7 +1,7 @@
 import BaseFeature
 
-class AddressCoordinator: BaseCoordinator {
-    override func start() {
+public class AddressCoordinator: BaseCoordinator {
+    public override func start() {
         let vm = AddressViewModel(coordinator: self)
         let vc = AddressViewController(viewModel: vm)
         
