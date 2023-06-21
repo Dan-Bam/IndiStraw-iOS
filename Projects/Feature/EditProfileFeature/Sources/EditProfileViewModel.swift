@@ -22,5 +22,9 @@ class EditProfileViewModel: BaseViewModel {
                 }
             }
     }
+    
+    func pushChangePhoneNumber() {
+        coordinator.navigate(to: .changePhoneNumberIsRequired)
+    }
 }
 

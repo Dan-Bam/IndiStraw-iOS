@@ -26,7 +26,7 @@ public class SigninViewModel: BaseViewModel {
             }
     }
     
-    func pushPhoneNumberAuth(type: FindAccountType) {
+    func pushPhoneNumberAuth(type: InputPhoneNumberType) {
         coordinator.navigate(to: .phoneNumberAuthIsRequired(type: type))
     }
     

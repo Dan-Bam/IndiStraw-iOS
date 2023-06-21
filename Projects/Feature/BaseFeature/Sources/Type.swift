@@ -1,5 +1,5 @@
-public enum FindAccountType {
-    case findId, changePassword
+public enum InputPhoneNumberType {
+    case findId, changePassword, changePhoneNumber
 }
 
 public enum CheckPhoneDuplicateType {
