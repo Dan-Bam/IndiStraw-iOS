@@ -18,12 +18,11 @@ class AddressViewController: BaseVC<AddressViewModel> {
         $0.attributedPlaceholder = NSAttributedString(
             string: $0.placeholder!,
             attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
+        $0.addLeftPadding()
     }
-    
+
     override func configureVC() {
         navigationItem.titleView = searchTextField
-        navigationController?.isNavigationBarHidden = true
-//        navigationItem.titleView = searchController.searchBar
     }
     
     override func addView() {
