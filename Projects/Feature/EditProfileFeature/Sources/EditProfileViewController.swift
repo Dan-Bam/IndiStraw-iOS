@@ -45,6 +45,13 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         component.delegate = self
         imagePickerController.delegate = self
         
+        phoneNumberChangeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushChangePhoneNumber()
+            }.disposed(by: disposeBag)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         viewModel.requestProfileInfo() { [weak self] result in
             switch result {
             case .success(let data):
@@ -55,11 +62,6 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
                 print("Error")
             }
         }
-        
-        phoneNumberChangeButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.viewModel.pushChangePhoneNumber()
-            }.disposed(by: disposeBag)
     }
     
     override func addView() {

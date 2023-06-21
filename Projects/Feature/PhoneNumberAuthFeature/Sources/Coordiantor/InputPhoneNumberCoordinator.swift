@@ -37,6 +37,6 @@ extension InputPhoneNumberCoordinator {
     }
     
     func popToRootIsRequired() {
-        navigationController.popToRootViewController(animated: true)
+        navigationController.popViewController(animated: true)
     }
 }
