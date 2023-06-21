@@ -42,6 +42,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     
     // MARK: - Method
     override func configureVC() {
+        navigationController?.navigationBar.tintColor = .white
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         component.delegate = self
         imagePickerController.delegate = self
