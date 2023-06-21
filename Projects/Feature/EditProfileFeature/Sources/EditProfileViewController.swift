@@ -78,7 +78,8 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         view.addSubviews(
             component, inputNameTextField,
             inputPhoneNumberTextField, inputAddressTextField,
-            phoneNumberChangeButton, addressChangeButton
+            phoneNumberChangeButton, addressChangeButton,
+            saveButton
         )
     }
     
@@ -116,6 +117,12 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         addressChangeButton.snp.makeConstraints {
             $0.centerY.equalTo(inputAddressTextField)
             $0.trailing.equalTo(inputAddressTextField.snp.trailing).offset(-10)
+        }
+        
+        saveButton.snp.makeConstraints {
+            $0.top.equalTo(inputAddressTextField.snp.bottom).offset(50)
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(54)
         }
     }
 }
