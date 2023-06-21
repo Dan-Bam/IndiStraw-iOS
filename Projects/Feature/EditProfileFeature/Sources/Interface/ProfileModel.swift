@@ -5,3 +5,8 @@ struct ProfileModel: Decodable {
     var address: String
     var profileUrl: String
 }
+
+struct EditProfileModel: Encodable {
+    var name: String
+    var profileUrl: String?
+}

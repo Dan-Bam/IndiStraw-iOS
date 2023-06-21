@@ -5,6 +5,7 @@ import BaseFeature
 
 enum EditProfileTarget {
     case searchProfileInfo
+    case editProfile(EditProfileModel)
 }
 
 extension EditProfileTarget: BaseRouter {
@@ -15,12 +16,14 @@ extension EditProfileTarget: BaseRouter {
     var header: AuthDomain.HeaderType {
         switch self {
         case .searchProfileInfo: return .withToken
+        case .editProfile: return .withToken
         }
     }
     
     var method: Alamofire.HTTPMethod {
         switch self {
         case .searchProfileInfo: return .get
+        case .editProfile: return .patch
         }
     }
     
@@ -28,11 +31,19 @@ extension EditProfileTarget: BaseRouter {
         switch self {
         case .searchProfileInfo:
             return "/account/profile"
+        case .editProfile:
+            return "/account/profile"
         }
     }
     
     var parameters: RequestParams {
         switch self {
+        case .editProfile(let request):
+            let body: [String : Any] = [
+                "name": request.name,
+                "profileUrl": request.profileUrl,
+            ]
+            return .requestBody(body)
         default:
             return .requestPlain
         }
