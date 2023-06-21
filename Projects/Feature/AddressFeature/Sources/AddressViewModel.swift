@@ -16,6 +16,14 @@ class AddressViewModel: BaseViewModel {
             )
         ))
         .validate()
+        .responseDecodable(of: ResponseAddressModel.self) { response in
+            switch response.result {
+            case .success(let data):
+                print(data.results.juso)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
         
     }
 }

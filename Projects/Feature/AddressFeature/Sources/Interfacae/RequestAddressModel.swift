@@ -15,6 +15,7 @@ struct Results: Decodable {
 }
 
 struct Juso: Decodable {
+    var zipNo: String
     var roadAddrPart1: String
     var bdNm: String
 }

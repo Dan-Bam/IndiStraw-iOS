@@ -9,23 +9,23 @@ enum AddressTarget {
 
 extension AddressTarget: BaseRouter {
     var baseURL: String {
-        return ""
+        return "https://business.juso.go.kr/addrlink"
     }
     
     var header: AuthDomain.HeaderType {
         switch self {
-        case .searchAddress: return .withToken
+        case .searchAddress: return .notHeader
         }
     }
     
     var method: Alamofire.HTTPMethod {
         switch self {
-        case .searchAddress: return .post
+        case .searchAddress: return .get
         }
     }
     
     var path: String {
-        return ""
+        return "/addrLinkApi.do"
     }
     
     var parameters: RequestParams {
@@ -37,11 +37,8 @@ extension AddressTarget: BaseRouter {
                 "countPerPage": request.countPerPage,
                 "keyword": request.keyword,
                 "resultType": request.resultType
-                
             ]
-            return .requestBody(body)
-        default:
-            return .requestPlain
+            return .query(body)
         }
     }
     

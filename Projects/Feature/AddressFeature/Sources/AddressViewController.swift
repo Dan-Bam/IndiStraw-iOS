@@ -33,6 +33,12 @@ class AddressViewController: BaseVC<AddressViewModel> {
     override func configureVC() {
         navigationItem.titleView = searchTextField
         
+        searchTextField.rx.controlEvent(.editingChanged)
+            .bind(with: self) { owner, _ in
+                let keyword = owner.searchTextField.text!
+                owner.viewModel.requestAddress(keyword: keyword)
+            }.disposed(by: disposeBag)
+        
         searchButton.rx.tap
             .bind(with: self) { owner, _ in
                 
