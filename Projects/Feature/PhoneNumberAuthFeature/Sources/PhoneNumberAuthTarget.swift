@@ -6,6 +6,7 @@ enum PhoneNumberAuthTarget {
     case checkPhoneNumberDuplication(phoneNumber: String, type: String)
     case sendAuthNumber(phoneNumber: String)
     case checkAuthNumber(authCode: String, phoneNumber: String)
+    case changePhoneNumber(phoneNumber: String)
 }
 
 extension PhoneNumberAuthTarget: BaseRouter {
@@ -14,7 +15,12 @@ extension PhoneNumberAuthTarget: BaseRouter {
     }
     
     var header: AuthDomain.HeaderType {
-        return .notHeader
+        switch self {
+        case .changePhoneNumber:
+            return .withToken
+        default:
+            return .notHeader
+        }
     }
     
     var method: Alamofire.HTTPMethod {
@@ -22,6 +28,7 @@ extension PhoneNumberAuthTarget: BaseRouter {
         case .checkPhoneNumberDuplication: return .head
         case .sendAuthNumber: return .post
         case .checkAuthNumber: return .get
+        case .changePhoneNumber: return .patch
         }
     }
     
@@ -29,10 +36,12 @@ extension PhoneNumberAuthTarget: BaseRouter {
         switch self {
         case .checkPhoneNumberDuplication(let phoneNumber, let type):
             return "/auth/check/phone-number/\(phoneNumber)/type/\(type)"
-        case .sendAuthNumber(phoneNumber: let phoneNumber):
+        case .sendAuthNumber(let phoneNumber):
             return "/auth/send/phone-number/\(phoneNumber)"
-        case .checkAuthNumber(authCode: let authCode, phoneNumber: let phoneNumber):
+        case .checkAuthNumber(let authCode, let phoneNumber):
             return "/auth/auth-code/\(authCode)/phone-number/\(phoneNumber)"
+        case .changePhoneNumber(let phoneNumber):
+            return "/account/phone-number/\(phoneNumber)"
         }
     }
     
