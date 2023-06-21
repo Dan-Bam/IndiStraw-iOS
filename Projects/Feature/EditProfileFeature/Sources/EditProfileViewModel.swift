@@ -22,5 +22,9 @@ class EditProfileViewModel: BaseViewModel {
                 }
             }
     }
+    
+    func pushAddressVC() {
+        coordinator.navigate(to: .addressVCIsRequired)
+    }
 }
 

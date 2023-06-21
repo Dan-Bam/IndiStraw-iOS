@@ -34,4 +34,7 @@ public enum IndiStrawStep {
     
     //setting
     case editProfileIsRequired
+    
+    //editProfile
+    case addressVCIsRequired
 }
