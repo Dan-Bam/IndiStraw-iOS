@@ -7,6 +7,9 @@ import AuthDomain
 
 class EditProfileViewModel: BaseViewModel {
     var container = DIContainer.shared.resolve(JwtStore.self)!
+    
+    var profileUrl: String?
+    
     func requestProfileInfo(completion: @escaping (Result<ProfileModel, Error>) -> Void = { _ in }) {
         AF.request(
             EditProfileTarget.searchProfileInfo,
@@ -22,15 +25,20 @@ class EditProfileViewModel: BaseViewModel {
         }
     }
     
-    func requestToeditProfile(name: String, profileUrl: String, completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+    func requestToeditProfile(name: String) {
         AF.request(
             EditProfileTarget.editProfile(EditProfileModel(
                 name: name,
                 profileUrl: profileUrl
             )),interceptor: JwtRequestInterceptor(jwtStore: container))
         .validate()
-        .responseData { response in
-            
+        .responseData { [weak self] response in
+            switch response.response?.statusCode {
+            case 205:
+                self?.requestProfileInfo()
+            default:
+                return
+            }
         }
     }
 }

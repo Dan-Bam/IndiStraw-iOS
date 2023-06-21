@@ -2,8 +2,12 @@ import UIKit
 import BaseFeature
 import SelectPhotoFeature
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomSheetProtocol, SelectPhotoProtocol {
+    private let disposeBag = DisposeBag()
+    
     private let component = SelectPhotoViewButton()
     
     var isImageChanged = false
@@ -32,26 +36,16 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     
     private let addressChangeButton = UIButton().then {
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
-        $0.setTitle("변경하기", for: .normal)
+        $0.setTitle("주소 찾기", for: .normal)
         $0.setTitleColor(DesignSystemAsset.Colors.skyblue.color, for: .normal)
+    }
+    
+    private let saveButton = ButtonComponent().then {
+        $0.setTitle("저장하기", for: .normal)
     }
 
     
     // MARK: - Method
-    func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
-        switch type {
-        case .photo:
-            imagePickerController.sourceType = .photoLibrary
-        case .camera:
-            imagePickerController.sourceType = .camera
-        }
-        imagePickerController.allowsEditing = true
-        imagePickerController.modalPresentationStyle = .fullScreen
-        
-        self.dismiss(animated: true)
-        self.present(imagePickerController, animated: true)
-    }
-    
     override func configureVC() {
         component.delegate = self
         imagePickerController.delegate = self
@@ -66,6 +60,11 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
                 print("Error")
             }
         }
+        
+        saveButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.requestToeditProfile(name: owner.inputNameTextField.text!)
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
@@ -134,6 +133,20 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
 }
 
 extension EditProfileViewController {
+    func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
+        switch type {
+        case .photo:
+            imagePickerController.sourceType = .photoLibrary
+        case .camera:
+            imagePickerController.sourceType = .camera
+        }
+        imagePickerController.allowsEditing = true
+        imagePickerController.modalPresentationStyle = .fullScreen
+        
+        self.dismiss(animated: true)
+        self.present(imagePickerController, animated: true)
+    }
+    
     func presentBottomSheet() {
         let vc = SelectPhotoBottomSheet(delegate: self)
         vc.modalPresentationStyle = .pageSheet
