@@ -26,8 +26,8 @@ class AddressCell: UITableViewCell {
         $0.textColor = .gray
     }
     
-    private let autoCompleteButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "arrow.up.left"), for: .normal)
+    private let autoCompleteButton = UIImageView().then {
+        $0.image = UIImage(systemName: "arrow.up.left")
         $0.tintColor = .white
     }
     
@@ -35,7 +35,6 @@ class AddressCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.backgroundColor = .black
-        self.selectionStyle = .none
         
         addView()
         setLayout()
@@ -55,27 +54,26 @@ class AddressCell: UITableViewCell {
             leftMagnifyingglassImageView, addressLabel,
             buildingNameLabel, autoCompleteButton
         )
-        self.bringSubviewToFront(autoCompleteButton)
     }
     
     private func setLayout() {
         leftMagnifyingglassImageView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview().inset(24)
-            $0.leading.equalToSuperview().inset(25)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().inset(27)
         }
         
         addressLabel.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview().inset(22)
+            $0.top.equalToSuperview().inset(14)
             $0.leading.equalTo(leftMagnifyingglassImageView.snp.trailing).offset(14)
         }
         
         buildingNameLabel.snp.makeConstraints {
-            $0.top.equalTo(addressLabel.snp.bottom).offset(7)
+            $0.top.equalTo(addressLabel.snp.bottom).offset(4)
             $0.leading.equalTo(addressLabel.snp.leading)
         }
         
         autoCompleteButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().inset(28)
+            $0.trailing.equalToSuperview().inset(26)
             $0.top.bottom.equalToSuperview().inset(22)
         }
     }
