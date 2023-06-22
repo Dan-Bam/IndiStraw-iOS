@@ -23,7 +23,7 @@ public extension BaseRouter {
     }
     
     private func makeHeaderForRequest(to request: URLRequest) -> URLRequest {
-        var container = DIContainer.shared.resolve(JwtStore.self)!
+        let container = DIContainer.shared.resolve(JwtStore.self)!
         var request = request
 
         switch header {
