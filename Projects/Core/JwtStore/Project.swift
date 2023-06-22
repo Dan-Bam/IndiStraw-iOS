@@ -7,6 +7,5 @@ let project = Project.makeModule(
     dependencies: [
         .Shared.GlobalThirdPartyLib,
         .Shared.Utility
-    ],
-    resources: ["Resources/**"]
+    ]
 )

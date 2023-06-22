@@ -7,6 +7,5 @@ let project = Project.makeModule(
     dependencies: [
         .Core.JwtStore,
         .Shared.GlobalThirdPartyLib
-    ],
-    resources: ["Resources/**"]
+    ]
 )
