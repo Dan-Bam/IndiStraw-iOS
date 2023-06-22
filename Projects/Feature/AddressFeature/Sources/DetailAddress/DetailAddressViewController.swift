@@ -25,6 +25,10 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
         $0.setPlaceholer(text: "상세주소")
     }
     
+    private let confirmButton = ButtonComponent().then {
+        $0.setTitle("확인하기", for: .normal)
+    }
+    
     init(viewModel: DetailAddressViewModel, zipCode: String, roadAddrPart: String) {
         super.init(viewModel: viewModel)
         zipCodeLabel.text = zipCode
@@ -41,7 +45,8 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
     override func addView() {
         view.addSubviews(
             nowAddressLabel, zipCodeLabel,
-            roadAddrPartLabel, inputDetailAddressTextField
+            roadAddrPartLabel, inputDetailAddressTextField,
+            confirmButton
         )
     }
     
@@ -63,6 +68,12 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
         
         inputDetailAddressTextField.snp.makeConstraints {
             $0.top.equalTo(roadAddrPartLabel.snp.bottom).offset(47)
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(54)
+        }
+        
+        confirmButton.snp.makeConstraints {
+            $0.top.equalTo(inputDetailAddressTextField.snp.bottom).offset(44)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
