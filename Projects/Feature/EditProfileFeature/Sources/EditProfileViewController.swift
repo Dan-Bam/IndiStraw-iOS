@@ -43,16 +43,22 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     private let saveButton = ButtonComponent().then {
         $0.setTitle("저장하기", for: .normal)
     }
-
     
     // MARK: - Method
     override func configureVC() {
+        navigationController?.navigationBar.tintColor = .white
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         component.delegate = self
         imagePickerController.delegate = self
         
         phoneNumberChangeButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.pushChangePhoneNumber()
+            }.disposed(by: disposeBag)
+        
+        addressChangeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushFindAddress()
             }.disposed(by: disposeBag)
     }
     

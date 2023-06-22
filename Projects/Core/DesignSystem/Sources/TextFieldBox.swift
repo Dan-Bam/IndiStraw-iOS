@@ -3,6 +3,7 @@ import Then
 import SnapKit
 import RxSwift
 import RxCocoa
+import Utility
 
 public class TextFieldBox: UITextField {
     private var iconTaped = false
@@ -58,12 +59,6 @@ public class TextFieldBox: UITextField {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(12)
         }
-    }
-    
-    private func addLeftPadding() {
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: self.frame.height))
-        self.leftView = paddingView
-        self.leftViewMode = ViewMode.always
     }
     
     public func eyeIconButtonVisible() {

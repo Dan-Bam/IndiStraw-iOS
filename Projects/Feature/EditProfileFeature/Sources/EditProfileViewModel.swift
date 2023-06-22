@@ -46,5 +46,9 @@ class EditProfileViewModel: BaseViewModel {
     func pushChangePhoneNumber() {
         coordinator.navigate(to: .changePhoneNumberIsRequired)
     }
+    
+    func pushFindAddress() {
+        coordinator.navigate(to: .findAddressIsRequired)
+    }
 }
 

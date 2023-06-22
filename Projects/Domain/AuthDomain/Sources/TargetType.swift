@@ -16,7 +16,6 @@ public extension BaseRouter {
     func asURLRequest() throws -> URLRequest {
         let url = try baseURL.asURL()
         var urlRequest = try URLRequest(url: url.appendingPathComponent(path), method: method)
-        print(urlRequest.url)
         urlRequest = makeHeaderForRequest(to: urlRequest)
         urlRequest = try makeParameterForRequest(to: urlRequest, with: url)
         
