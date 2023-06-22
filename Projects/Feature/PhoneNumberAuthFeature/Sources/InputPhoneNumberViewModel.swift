@@ -10,26 +10,30 @@ public class InputPhoneNumberViewModel: BaseViewModel {
     func requestToSendAuthNumber(
         phoneNumber: String,
         completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
-        AF.request(PhoneNumberAuthTarget.sendAuthNumber(phoneNumber: phoneNumber))
-            .validate()
-            .responseData { response in
-                switch response.response?.statusCode {
-                case 204:
-                    completion(.success(()))
-                case 429:
-                    completion(.failure(.tooManyRequestException))
-                case 400:
-                    completion(.failure(.cantSendAuthNumber))
-                default:
-                    completion(.failure(.cantSendAuthNumber))
+            AF.request(PhoneNumberAuthTarget.sendAuthNumber(phoneNumber: phoneNumber))
+                .validate()
+                .responseData { response in
+                    switch response.response?.statusCode {
+                    case 204:
+                        completion(.success(()))
+                    case 429:
+                        completion(.failure(.tooManyRequestException))
+                    case 400:
+                        completion(.failure(.cantSendAuthNumber))
+                    default:
+                        completion(.failure(.cantSendAuthNumber))
+                    }
                 }
-            }
-    }
+        }
     
     func requestToCheckDuplicationPhoneNumber(
         phoneNumber: String,
+        type: String,
         completion: @escaping (Result<Void, CheckPhoneDuplicateErrorType>) -> Void = { _ in }) {
-        AF.request(PhoneNumberAuthTarget.checkPhoneNumberDuplication(phoneNumber: phoneNumber, type: CheckPhoneDuplicateType.findAccount))
+            AF.request(
+                PhoneNumberAuthTarget.checkPhoneNumberDuplication(
+                    phoneNumber: phoneNumber,
+                    type: type))
             .validate()
             .responseData { response in
                 switch response.response?.statusCode {
@@ -45,34 +49,34 @@ public class InputPhoneNumberViewModel: BaseViewModel {
                     print("Error - inputPhoneNumber = \(response.response?.statusCode)")
                 }
             }
-    }
+        }
     
     func requestToCheckAuthNumber(
         authCode: String,
         phoneNumber: String,
         completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
-        AF.request(PhoneNumberAuthTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
-            .validate()
-            .responseData { response in
-                print("statusc = \(response.response?.statusCode)")
-                switch response.response?.statusCode {
-                case 204:
-                    completion(.success(()))
-                case 429:
-                    completion(.failure(.tooManyRequestException))
-                case 400:
-                    completion(.failure(.cantSendAuthNumber))
-                default:
-                    completion(.failure(.cantSendAuthNumber))
+            AF.request(PhoneNumberAuthTarget.checkAuthNumber(authCode: authCode, phoneNumber: phoneNumber))
+                .validate()
+                .responseData { response in
+                    print("statusc = \(response.response?.statusCode)")
+                    switch response.response?.statusCode {
+                    case 204:
+                        completion(.success(()))
+                    case 429:
+                        completion(.failure(.tooManyRequestException))
+                    case 400:
+                        completion(.failure(.cantSendAuthNumber))
+                    default:
+                        completion(.failure(.cantSendAuthNumber))
+                    }
                 }
-            }
-    }
+        }
     
     func reqeustToChangePhoneNumber(phoneNumber: String, completion: @escaping (Result<Void, PhoneNumberErrorType>) -> Void = { _ in }) {
         AF.request(
             PhoneNumberAuthTarget.changePhoneNumber(
                 phoneNumber: phoneNumber),
-                interceptor: JwtRequestInterceptor(jwtStore: container)
+            interceptor: JwtRequestInterceptor(jwtStore: container)
         )
         .validate()
         .responseData { [weak self] response in

@@ -6,6 +6,7 @@ public class InputPhoneNumberViewController: BaseVC<InputPhoneNumberViewModel>, 
     private let component = InputPhoneNumberComponent()
     
     var type: InputPhoneNumberType
+    var checkDuplicateType: String?
     var navigationTitle: String
     
     public init(viewModel: InputPhoneNumberViewModel, type: InputPhoneNumberType, title: String) {
@@ -37,7 +38,13 @@ public class InputPhoneNumberViewController: BaseVC<InputPhoneNumberViewModel>, 
 
 extension InputPhoneNumberViewController {
     public func checkDuplicationPhoneNumber(phoneNumber: String) {
-        viewModel.requestToCheckDuplicationPhoneNumber(phoneNumber: phoneNumber) { [weak self] result in
+        if type == .findId || type == .changePassword {
+            checkDuplicateType = CheckPhoneDuplicateType.findAccount
+        } else {
+            checkDuplicateType = CheckPhoneDuplicateType.changePhoneNumber
+        }
+        
+        viewModel.requestToCheckDuplicationPhoneNumber(phoneNumber: phoneNumber, type: checkDuplicateType!) { [weak self] result in
             switch result {
             case .success:
                 self?.requestToSendAuthNumber(phoneNumber: phoneNumber)
