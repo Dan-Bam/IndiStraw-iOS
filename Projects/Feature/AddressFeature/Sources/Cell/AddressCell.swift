@@ -62,7 +62,7 @@ class AddressCell: UITableViewCell {
         buildingNameLabel.text = data.bdNm
     }
     
-    func addView() {
+    private func addView() {
         self.addSubviews(
             leftMagnifyingglassImageView, addressLabel,
             autoCompleteButton, buildingNameLabel
@@ -70,7 +70,7 @@ class AddressCell: UITableViewCell {
         self.bringSubviewToFront(autoCompleteButton)
     }
     
-    func setLayout() {
+    private func setLayout() {
         leftMagnifyingglassImageView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview().inset(24)
             $0.leading.equalToSuperview().inset(25)
