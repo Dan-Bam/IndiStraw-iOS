@@ -38,6 +38,8 @@ public class InputPhoneNumberViewModel: BaseViewModel {
                 case 404:
                     completion(.failure(.cantFindPhoneNumber))
                     print("Error - inputPhoneNumber = \(response.response?.statusCode)")
+                case 409:
+                    completion(.failure(.duplicatePhoneNumber))
                 default:
                     completion(.failure(.faildRequest))
                     print("Error - inputPhoneNumber = \(response.response?.statusCode)")

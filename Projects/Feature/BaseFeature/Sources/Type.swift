@@ -5,4 +5,5 @@ public enum InputPhoneNumberType {
 public enum CheckPhoneDuplicateType {
     public static let signup = "SIGNUP"
     public static let findAccount = "FIND_ACCOUNT"
+    public static let changePhoneNumber = "CHANGE_PHONE"
 }

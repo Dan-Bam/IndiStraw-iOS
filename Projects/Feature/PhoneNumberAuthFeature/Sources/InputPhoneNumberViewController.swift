@@ -43,6 +43,8 @@ extension InputPhoneNumberViewController {
                 self?.requestToSendAuthNumber(phoneNumber: phoneNumber)
             case .failure(.cantFindPhoneNumber):
                 self?.component.errorLabel.text = "등록되지 않은 전화번호 입니다."
+            case .failure(.duplicatePhoneNumber):
+                self?.component.errorLabel.text = "중복된 전화번호 입니다."
             default:
                 self?.component.errorLabel.text = "인증에 실패했습니다."
             }

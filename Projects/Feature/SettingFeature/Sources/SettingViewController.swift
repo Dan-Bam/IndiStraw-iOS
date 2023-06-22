@@ -56,7 +56,7 @@ class SettingViewController: BaseVC<SettingViewModel> {
         
         editPasswordButton.rx.tap
             .bind(with: self) { owner, _ in
-                
+                owner.viewModel.pushChangePassword()
             }.disposed(by: disposeBag)
     }
     
