@@ -6,15 +6,9 @@ import Utility
 import RxSwift
 import RxCocoa
 
-protocol autoCompleteProtocol: AnyObject {
-    func autoCompleteButtonDidTap(address: String)
-}
-
 class AddressCell: UITableViewCell {
     private let disposedBag = DisposeBag()
-    
-    weak var delegate: autoCompleteProtocol?
-    
+
     static let identifier = "AddressCell"
     
     private let leftMagnifyingglassImageView = UIImageView().then {
@@ -45,13 +39,6 @@ class AddressCell: UITableViewCell {
         
         addView()
         setLayout()
-        
-        autoCompleteButton.rx.tap
-            .asDriver()
-            .drive(with: self) { owner, _ in
-                let address = owner.addressLabel.text!
-                owner.delegate?.autoCompleteButtonDidTap(address: address)
-            }.disposed(by: disposedBag)
     }
     
     required init?(coder: NSCoder) {

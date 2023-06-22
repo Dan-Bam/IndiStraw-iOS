@@ -3,7 +3,7 @@ import BaseFeature
 import RxSwift
 import RxCocoa
 
-class AddressViewController: BaseVC<AddressViewModel>, autoCompleteProtocol {
+class AddressViewController: BaseVC<AddressViewModel> {
     private let disposeBag = DisposeBag()
     
     private let searchTextField = UITextField().then {
@@ -48,7 +48,6 @@ class AddressViewController: BaseVC<AddressViewModel>, autoCompleteProtocol {
             .bind(to: addressTableView.rx.items(
                 cellIdentifier: AddressCell.identifier,
                 cellType: AddressCell.self)) { (row, data, cell) in
-//                    cell.delegate = self
                     cell.configure(with: data)
                 }.disposed(by: disposeBag)
     }
