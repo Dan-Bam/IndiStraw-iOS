@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 import BaseFeature
 
 class DetailAddressCoordinator: BaseCoordinator {
@@ -7,5 +7,21 @@ class DetailAddressCoordinator: BaseCoordinator {
         let vc = DetailAddressViewController(viewModel: vm, zipCode: zipCode, roadAddrPart: roadAddrPart)
         
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    override func navigate(to step: IndiStrawStep) {
+        switch step {
+        case .popViewIsRequired:
+            popViewIsRequired()
+        default:
+            return
+        }
+    }
+}
+
+extension DetailAddressCoordinator {
+    func popViewIsRequired() {
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        navigationController.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
     }
 }
