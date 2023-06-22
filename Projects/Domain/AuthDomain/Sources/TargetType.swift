@@ -53,11 +53,8 @@ public extension BaseRouter {
         case .query(let query):
             let queryParams = query.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
             var components = URLComponents(string: url.appendingPathComponent(path).absoluteString)
-            print("url = \(url)")
-            print("path = \(path)")
             components?.queryItems = queryParams
             request.url = components?.url
-            print(components?.url)
             
         case .requestBody(let body):
             request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])

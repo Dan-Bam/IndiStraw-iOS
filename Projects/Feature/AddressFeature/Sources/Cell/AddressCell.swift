@@ -5,6 +5,7 @@ import DesignSystem
 import Utility
 
 class AddressCell: UITableViewCell {
+    static let identifier = "AddressCell"
     
     private let leftMagnifyingglassImageView = UIImageView().then {
         $0.image = UIImage(systemName: "magnifyingglass")
@@ -16,6 +17,11 @@ class AddressCell: UITableViewCell {
         $0.textColor = .white
     }
     
+    private let buildingNameLabel = UILabel().then {
+        $0.font = DesignSystemFontFamily.Suit.regular.font(size: 14)
+        $0.textColor = .gray
+    }
+    
     private let rightArrowImageView = UIImageView().then {
         $0.image = UIImage(systemName: "arrow.up.left")
     }
@@ -23,10 +29,19 @@ class AddressCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+//        self.backgroundColor = .black
+//        addView()
+//        setLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(data: Juso) {
+        addressLabel.text = data.roadAddrPart1
+        buildingNameLabel.text = data.bdNm
     }
     
     func addView() {
