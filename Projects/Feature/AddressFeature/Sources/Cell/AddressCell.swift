@@ -47,7 +47,8 @@ class AddressCell: UITableViewCell {
         setLayout()
         
         autoCompleteButton.rx.tap
-            .bind(with: self) { owner, _ in
+            .asDriver()
+            .drive(with: self) { owner, _ in
                 let address = owner.addressLabel.text!
                 owner.delegate?.autoCompleteButtonDidTap(address: address)
             }.disposed(by: disposedBag)
@@ -57,7 +58,7 @@ class AddressCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(data: Juso) {
+    func configure(with data: Juso) {
         addressLabel.text = data.roadAddrPart1
         buildingNameLabel.text = data.bdNm
     }
@@ -65,7 +66,7 @@ class AddressCell: UITableViewCell {
     private func addView() {
         self.addSubviews(
             leftMagnifyingglassImageView, addressLabel,
-            autoCompleteButton, buildingNameLabel
+            buildingNameLabel, autoCompleteButton
         )
         self.bringSubviewToFront(autoCompleteButton)
     }

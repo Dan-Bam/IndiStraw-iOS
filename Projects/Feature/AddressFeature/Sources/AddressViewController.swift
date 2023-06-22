@@ -48,8 +48,8 @@ class AddressViewController: BaseVC<AddressViewModel>, autoCompleteProtocol {
             .bind(to: addressTableView.rx.items(
                 cellIdentifier: AddressCell.identifier,
                 cellType: AddressCell.self)) { (row, data, cell) in
-                    cell.delegate = self
-                    cell.configure(data: data)
+//                    cell.delegate = self
+                    cell.configure(with: data)
                 }.disposed(by: disposeBag)
     }
     
