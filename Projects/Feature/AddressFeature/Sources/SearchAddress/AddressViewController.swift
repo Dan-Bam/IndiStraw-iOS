@@ -50,6 +50,11 @@ class AddressViewController: BaseVC<AddressViewModel> {
                 cellType: AddressCell.self)) { (row, data, cell) in
                     cell.configure(with: data)
                 }.disposed(by: disposeBag)
+        
+        addressTableView.rx.modelSelected(Juso.self)
+            .bind(with: self) { owner, data in
+                owner.viewModel.pushDetailAddressVC(data: data)
+            }.disposed(by: disposeBag)
     }
     
     override func configureVC() {
