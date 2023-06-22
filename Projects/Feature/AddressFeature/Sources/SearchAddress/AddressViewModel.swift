@@ -54,7 +54,7 @@ class AddressViewModel: BaseViewModel, ViewModelType {
         }
     }
     
-    func pushDetailAddressVC() {
-        coordinator.navigate(to: .detailAddressisRequired)
+    func pushDetailAddressVC(data: Juso) {
+        coordinator.navigate(to: .detailAddressisRequired(data: data))
     }
 }
