@@ -53,6 +53,11 @@ class SettingViewController: BaseVC<SettingViewModel> {
             .bind(with: self) { owner, _ in
                 owner.viewModel.pushEditProfileVC()
             }.disposed(by: disposeBag)
+        
+        editPasswordButton.rx.tap
+            .bind(with: self) { owner, _ in
+                
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
