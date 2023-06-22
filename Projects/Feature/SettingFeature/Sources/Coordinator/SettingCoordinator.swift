@@ -32,6 +32,6 @@ extension SettingCoordinator {
     
     func phoneNumberAuthIsRequired(type: InputPhoneNumberType) {
         let vc = InputPhoneNumberCoordinator(navigationController: navigationController)
-        vc.startInputPhoneNumberCoordinator(type: type, title: "전화번호 입력")
+        vc.startInputPhoneNumberCoordinator(type: type, title: "전화번호 변경")
     }
 }
