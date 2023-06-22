@@ -25,6 +25,7 @@ public enum IndiStrawStep {
     
     //pop
     case popToRootIsRequired
+    case popViewIsRequired
     
     //home
     case profileIsRequired

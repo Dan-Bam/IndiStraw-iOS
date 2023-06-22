@@ -3,8 +3,15 @@ import BaseFeature
 import SnapKit
 import Then
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
+    private let disposeBag = DisposeBag()
+    
+    var zipCode: String
+    var roadAddrPart: String
+    
     private let nowAddressLabel = UILabel().then {
         $0.text = "현재주소"
         $0.font = DesignSystemFontFamily.Suit.bold.font(size: 24)
@@ -30,9 +37,14 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
     }
     
     init(viewModel: DetailAddressViewModel, zipCode: String, roadAddrPart: String) {
+        self.zipCode = zipCode
+        self.roadAddrPart = roadAddrPart
+        
         super.init(viewModel: viewModel)
+        
         zipCodeLabel.text = zipCode
         roadAddrPartLabel.text = roadAddrPart
+        
     }
     
     required init?(coder: NSCoder) {
@@ -40,6 +52,17 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
     }
     
     override func configureVC() {
+        confirmButton.rx.tap
+            .bind(with: self) { owner, _ in
+                let detailAddress = owner.inputDetailAddressTextField.text!
+                owner.viewModel.requestToChangeAddress(
+                    data: ChangeAddressModel(
+                        zipcode: owner.zipCode,
+                        streetAddress: owner.roadAddrPart,
+                        detailAddress: detailAddress
+                    )
+                )
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {

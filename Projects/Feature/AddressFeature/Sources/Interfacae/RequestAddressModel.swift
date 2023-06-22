@@ -1,3 +1,4 @@
+//searchAddress
 struct RequestAddressModel: Encodable {
     var confmKey: String = "U01TX0FVVEgyMDIzMDYxODEzNDkzODExMzg1ODU="
     var currentPage: Int
@@ -18,4 +19,11 @@ struct Juso: Decodable {
     var zipNo: String
     var roadAddrPart1: String
     var bdNm: String
+}
+
+//changeAddress
+struct ChangeAddressModel: Encodable {
+    var zipcode: String
+    var streetAddress: String
+    var detailAddress: String
 }

@@ -21,8 +21,6 @@ public class AddressCoordinator: BaseCoordinator {
 extension AddressCoordinator {
     func detailAddressisRequired(zipCode: String, roadAddrPart: String) {
         let vc = DetailAddressCoordinator(navigationController: navigationController)
-        vc.parentCoordinator = self
-        childCoordinators.append(vc)
         vc.startDetailAddressCoordinator(zipCode: zipCode, roadAddrPart: roadAddrPart)
     }
 }
