@@ -1,9 +1,10 @@
+import Foundation
 import BaseFeature
 
 class DetailAddressCoordinator: BaseCoordinator {
-    override func startDetailAddressCoordinator(data: Juso) {
+    func startDetailAddressCoordinator(zipCode: String, roadAddrPart: String) {
         let vm = DetailAddressViewModel(coordinator: self)
-        let vc = DetailAddressViewController(viewModel: vm, data: data)
+        let vc = DetailAddressViewController(viewModel: vm, zipCode: zipCode, roadAddrPart: roadAddrPart)
         
         navigationController.pushViewController(vc, animated: true)
     }

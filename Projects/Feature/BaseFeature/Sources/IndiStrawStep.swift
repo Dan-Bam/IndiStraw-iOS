@@ -1,5 +1,4 @@
 import UIKit
-import AddressFeature
 
 public enum IndiStrawStep {
     
@@ -41,5 +40,5 @@ public enum IndiStrawStep {
     case findAddressIsRequired
     
     //address
-    case detailAddressisRequired(data: Juso)
+    case detailAddressisRequired(zipCode: String, roadAddrPart: String)
 }

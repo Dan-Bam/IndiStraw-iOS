@@ -10,8 +10,8 @@ public class AddressCoordinator: BaseCoordinator {
     
     public override func navigate(to step: IndiStrawStep) {
         switch step {
-        case .detailAddressisRequired(let data):
-            detailAddressisRequired(data: data)
+        case .detailAddressisRequired(let zipCode, let roadAddrPart):
+            detailAddressisRequired(zipCode: zipCode, roadAddrPart: roadAddrPart)
         default:
             return
         }
@@ -19,10 +19,10 @@ public class AddressCoordinator: BaseCoordinator {
 }
 
 extension AddressCoordinator {
-    func detailAddressisRequired(data: Juso) {
+    func detailAddressisRequired(zipCode: String, roadAddrPart: String) {
         let vc = DetailAddressCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
-        vc.startDetailAddressCoordinator(data: data)
+        vc.startDetailAddressCoordinator(zipCode: zipCode, roadAddrPart: roadAddrPart)
     }
 }
