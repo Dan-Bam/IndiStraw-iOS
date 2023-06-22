@@ -64,8 +64,8 @@ class AddressCell: UITableViewCell {
     
     func addView() {
         self.addSubviews(
-            leftMagnifyingglassImageView,
-            addressLabel, autoCompleteButton
+            leftMagnifyingglassImageView, addressLabel,
+            autoCompleteButton, buildingNameLabel
         )
         self.bringSubviewToFront(autoCompleteButton)
     }
@@ -79,6 +79,11 @@ class AddressCell: UITableViewCell {
         addressLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview().inset(22)
             $0.leading.equalTo(leftMagnifyingglassImageView.snp.trailing).offset(14)
+        }
+        
+        buildingNameLabel.snp.makeConstraints {
+            $0.top.equalTo(addressLabel.snp.bottom).offset(7)
+            $0.leading.equalTo(addressLabel.snp.leading)
         }
         
         autoCompleteButton.snp.makeConstraints {
