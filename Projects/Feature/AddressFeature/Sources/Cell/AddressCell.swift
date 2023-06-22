@@ -7,7 +7,7 @@ import RxSwift
 import RxCocoa
 
 protocol autoCompleteProtocol: AnyObject {
-    func authCompleteButtonDidTap(address: String)
+    func autoCompleteButtonDidTap(address: String)
 }
 
 class AddressCell: UITableViewCell {
@@ -32,7 +32,7 @@ class AddressCell: UITableViewCell {
         $0.textColor = .gray
     }
     
-    private let authCompleteButton = UIButton().then {
+    private let autoCompleteButton = UIButton().then {
         $0.setImage(UIImage(systemName: "arrow.up.left"), for: .normal)
         $0.tintColor = .white
     }
@@ -41,13 +41,15 @@ class AddressCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.backgroundColor = .black
+        self.selectionStyle = .none
+        
         addView()
         setLayout()
         
-        authCompleteButton.rx.tap
+        autoCompleteButton.rx.tap
             .bind(with: self) { owner, _ in
                 let address = owner.addressLabel.text!
-                owner.delegate?.authCompleteButtonDidTap(address: address)
+                owner.delegate?.autoCompleteButtonDidTap(address: address)
             }.disposed(by: disposedBag)
     }
     
@@ -63,8 +65,9 @@ class AddressCell: UITableViewCell {
     func addView() {
         self.addSubviews(
             leftMagnifyingglassImageView,
-            addressLabel, authCompleteButton
+            addressLabel, autoCompleteButton
         )
+        self.bringSubviewToFront(autoCompleteButton)
     }
     
     func setLayout() {
@@ -78,7 +81,7 @@ class AddressCell: UITableViewCell {
             $0.leading.equalTo(leftMagnifyingglassImageView.snp.trailing).offset(14)
         }
         
-        authCompleteButton.snp.makeConstraints {
+        autoCompleteButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(28)
             $0.top.bottom.equalToSuperview().inset(22)
         }

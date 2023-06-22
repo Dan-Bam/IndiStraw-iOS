@@ -3,7 +3,7 @@ import BaseFeature
 import RxSwift
 import RxCocoa
 
-class AddressViewController: BaseVC<AddressViewModel> {
+class AddressViewController: BaseVC<AddressViewModel>, autoCompleteProtocol {
     private let disposeBag = DisposeBag()
     
     private let searchTextField = UITextField().then {
@@ -25,6 +25,8 @@ class AddressViewController: BaseVC<AddressViewModel> {
     }
     
     private let addressTableView = UITableView().then {
+        $0.rowHeight = UITableView.automaticDimension
+        $0.estimatedRowHeight = 70
         $0.backgroundColor = .black
         $0.register(AddressCell.self, forCellReuseIdentifier: AddressCell.identifier)
     }
@@ -35,21 +37,20 @@ class AddressViewController: BaseVC<AddressViewModel> {
             .observe(on: MainScheduler.instance)
             .flatMapLatest { [weak self] text -> BehaviorRelay<[Juso]> in
                 guard let self = self else { return .init(value: []) }
-
+                
                 let input = AddressViewModel.Input(
                     inputKeyword: Observable.just(text)
                 )
                 let output = self.viewModel.transform(input: input)
-
-                print("output = \(output.outAddressData.value)")
+                
                 return output.outAddressData
             }
             .bind(to: addressTableView.rx.items(
                 cellIdentifier: AddressCell.identifier,
                 cellType: AddressCell.self)) { (row, data, cell) in
-                print("data = \(data)")
-                cell.configure(data: data)
-            }.disposed(by: disposeBag)
+                    cell.delegate = self
+                    cell.configure(data: data)
+                }.disposed(by: disposeBag)
     }
     
     override func configureVC() {
@@ -80,6 +81,14 @@ class AddressViewController: BaseVC<AddressViewModel> {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(30)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
+        }
+    }
+}
+
+extension AddressViewController {
+    func autoCompleteButtonDidTap(address: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.searchTextField.text = address
         }
     }
 }
