@@ -21,6 +21,10 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
         $0.textColor = .white
     }
     
+    private let inputDetailAddressTextField = TextFieldBox().then {
+        $0.setPlaceholer(text: "상세주소")
+    }
+    
     init(viewModel: DetailAddressViewModel, zipCode: String, roadAddrPart: String) {
         super.init(viewModel: viewModel)
         zipCodeLabel.text = zipCode
@@ -35,7 +39,10 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
     }
     
     override func addView() {
-        view.addSubviews(nowAddressLabel, zipCodeLabel, roadAddrPartLabel)
+        view.addSubviews(
+            nowAddressLabel, zipCodeLabel,
+            roadAddrPartLabel, inputDetailAddressTextField
+        )
     }
     
     override func setLayout() {
@@ -45,13 +52,19 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
         }
         
         zipCodeLabel.snp.makeConstraints {
-            $0.top.equalTo(nowAddressLabel.snp.bottom).inset(16)
+            $0.top.equalTo(nowAddressLabel.snp.bottom).offset(16)
             $0.leading.equalTo(nowAddressLabel)
         }
         
         roadAddrPartLabel.snp.makeConstraints {
             $0.top.equalTo(zipCodeLabel.snp.bottom).offset(2)
             $0.leading.equalTo(nowAddressLabel)
+        }
+        
+        inputDetailAddressTextField.snp.makeConstraints {
+            $0.top.equalTo(roadAddrPartLabel.snp.bottom).offset(47)
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(54)
         }
     }
 }
