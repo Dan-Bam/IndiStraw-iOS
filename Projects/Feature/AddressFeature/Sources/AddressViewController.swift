@@ -12,6 +12,7 @@ class AddressViewController: BaseVC<AddressViewModel> {
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 5
         $0.layer.borderColor = UIColor.white.cgColor
+        $0.backgroundColor = .black
         $0.attributedPlaceholder = NSAttributedString(
             string: $0.placeholder!,
             attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
@@ -24,6 +25,7 @@ class AddressViewController: BaseVC<AddressViewModel> {
     }
     
     private let addressTableView = UITableView().then {
+        $0.backgroundColor = .black
         $0.register(AddressCell.self, forCellReuseIdentifier: AddressCell.identifier)
     }
     
@@ -52,6 +54,7 @@ class AddressViewController: BaseVC<AddressViewModel> {
     
     override func configureVC() {
         navigationItem.titleView = searchTextField
+        navigationItem.titleView?.backgroundColor = .black
         
         bind()
     }

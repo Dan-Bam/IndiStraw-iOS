@@ -3,8 +3,18 @@ import SnapKit
 import Then
 import DesignSystem
 import Utility
+import RxSwift
+import RxCocoa
+
+protocol autoCompleteProtocol: AnyObject {
+    func authCompleteButtonDidTap(address: String)
+}
 
 class AddressCell: UITableViewCell {
+    private let disposedBag = DisposeBag()
+    
+    weak var delegate: autoCompleteProtocol?
+    
     static let identifier = "AddressCell"
     
     private let leftMagnifyingglassImageView = UIImageView().then {
@@ -22,17 +32,23 @@ class AddressCell: UITableViewCell {
         $0.textColor = .gray
     }
     
-    private let rightArrowImageView = UIImageView().then {
-        $0.image = UIImage(systemName: "arrow.up.left")
+    private let authCompleteButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "arrow.up.left"), for: .normal)
+        $0.tintColor = .white
     }
-    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-//        self.backgroundColor = .black
-//        addView()
-//        setLayout()
+        self.backgroundColor = .black
+        addView()
+        setLayout()
+        
+        authCompleteButton.rx.tap
+            .bind(with: self) { owner, _ in
+                let address = owner.addressLabel.text!
+                owner.delegate?.authCompleteButtonDidTap(address: address)
+            }.disposed(by: disposedBag)
     }
     
     required init?(coder: NSCoder) {
@@ -47,7 +63,7 @@ class AddressCell: UITableViewCell {
     func addView() {
         self.addSubviews(
             leftMagnifyingglassImageView,
-            addressLabel, rightArrowImageView
+            addressLabel, authCompleteButton
         )
     }
     
@@ -62,7 +78,7 @@ class AddressCell: UITableViewCell {
             $0.leading.equalTo(leftMagnifyingglassImageView.snp.trailing).offset(14)
         }
         
-        rightArrowImageView.snp.makeConstraints {
+        authCompleteButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(28)
             $0.top.bottom.equalToSuperview().inset(22)
         }
