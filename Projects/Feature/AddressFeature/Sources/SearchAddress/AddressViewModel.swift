@@ -53,4 +53,8 @@ class AddressViewModel: BaseViewModel, ViewModelType {
             }
         }
     }
+    
+    func pushDetailAddressVC() {
+        coordinator.navigate(to: .detailAddressisRequired)
+    }
 }

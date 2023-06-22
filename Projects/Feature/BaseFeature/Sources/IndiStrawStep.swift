@@ -38,4 +38,7 @@ public enum IndiStrawStep {
     //editProfile
     case changePhoneNumberIsRequired
     case findAddressIsRequired
+    
+    //address
+    case detailAddressisRequired
 }
