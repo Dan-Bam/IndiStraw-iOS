@@ -10,7 +10,7 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
     }
     
     private let playImageIconView = UIImageView().then {
-        $0.image = UIImage(systemName: "play.circle")
+        $0.image = DesignSystemAsset.Images.playIcon.image
         $0.tintColor = .white
     }
     
