@@ -1,5 +1,0 @@
-import SigninFeature
-
-class TestViewController {
-    
-}
