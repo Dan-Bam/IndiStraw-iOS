@@ -7,8 +7,6 @@ import RxSwift
 import RxCocoa
 
 class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
-    //    var highlightData: BehaviorRelay<>
-    
     private let thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Images.testImage.image
     }
@@ -51,11 +49,7 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 18)
     }
-    
-    func bindUI() {
-        
-    }
-        
+
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
