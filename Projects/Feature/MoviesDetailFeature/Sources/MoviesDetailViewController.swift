@@ -3,8 +3,12 @@ import BaseFeature
 import DesignSystem
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
+//    var highlightData: BehaviorRelay<>
+    
     private let thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Images.testImage.image
     }
@@ -38,10 +42,10 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
     }
     
-    private let hightlightCollectionView = UICollectionView().then {
+    private let highlightCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         $0.register(HighlightCell.self, forCellWithReuseIdentifier: HighlightCell.identifier)
     }
-    
+        
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
@@ -50,7 +54,7 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         view.addSubviews(
             thumbnailImageView, movieTitleLabel,
             movieDescriptionLabel, highlightTitleLabel,
-            hightlightCollectionView
+            highlightCollectionView
         )
         
         thumbnailImageView.addSubview(playImageIconView)
@@ -83,7 +87,7 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
             $0.leading.equalToSuperview().inset(25)
         }
         
-        hightlightCollectionView.snp.makeConstraints {
+        highlightCollectionView.snp.makeConstraints {
             $0.top.equalTo(highlightTitleLabel.snp.bottom).offset(14)
             $0.leading.equalTo(highlightTitleLabel)
         }
