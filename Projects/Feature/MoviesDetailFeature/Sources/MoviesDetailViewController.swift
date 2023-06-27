@@ -32,10 +32,20 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
     }
     
+    private let highlightTitleLabel = UILabel().then {
+        $0.text = "하이라이트"
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
+    }
+    
+    override func configureVC() {
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
     override func addView() {
         view.addSubviews(
             thumbnailImageView, movieTitleLabel,
-            movieDescriptionLabel
+            movieDescriptionLabel, highlightTitleLabel
         )
         
         thumbnailImageView.addSubview(playImageIconView)
@@ -61,6 +71,11 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         movieDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(movieTitleLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview().inset(25)
+        }
+        
+        highlightTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(movieDescriptionLabel.snp.bottom).offset(44)
+            $0.leading.equalToSuperview().inset(25)
         }
     }
 }
