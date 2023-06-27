@@ -19,6 +19,7 @@ let project = Project.makeModule(
         .Feature.EditProfileFeature,
         .Feature.SelectPhotoFeature,
         .Feature.AddressFeature,
+        .Feature.MoviesDetailFeature,
         
         .Core.JwtStore,
         .Core.DesignSystem,
