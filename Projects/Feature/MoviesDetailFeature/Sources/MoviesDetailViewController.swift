@@ -9,6 +9,11 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         $0.image = DesignSystemAsset.Images.testImage.image
     }
     
+    private let playImageIconView = UIImageView().then {
+        $0.image = UIImage(systemName: "play.circle")
+        $0.tintColor = .white
+    }
+    
     private let movieTitleLabel = UILabel().then {
         $0.text = "스파이더맨"
         $0.textColor = .white
@@ -22,6 +27,7 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         는 마블 코믹스에서 출판한 만화책뿐만 아니라 마블 유니버스를 배
         경으로 한 여러영화, tv프로이다.
         """
+        $0.numberOfLines = 0
         $0.textColor = DesignSystemAsset.Colors.gray.color
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
     }
@@ -31,6 +37,8 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
             thumbnailImageView, movieTitleLabel,
             movieDescriptionLabel
         )
+        
+        thumbnailImageView.addSubview(playImageIconView)
     }
     
     override func setLayout() {
@@ -40,6 +48,11 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
             $0.height.equalTo(222)
         }
         
+        playImageIconView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(60)
+        }
+        
         movieTitleLabel.snp.makeConstraints {
             $0.top.equalTo(thumbnailImageView.snp.bottom).offset(15)
             $0.leading.equalToSuperview().inset(25)
@@ -47,7 +60,7 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         
         movieDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(movieTitleLabel.snp.bottom).offset(8)
-            $0.leading.equalToSuperview().inset(25)
+            $0.leading.trailing.equalToSuperview().inset(25)
         }
     }
 }

@@ -1,7 +1,7 @@
 import BaseFeature
 
-class MoviesDetailCoordinator: BaseCoordinator {
-    override func start() {
+public class MoviesDetailCoordinator: BaseCoordinator {
+    public override func start() {
         let vm = MoviesDetailViewModel(coordinator: self)
         let vc = MoviesDetailViewController(viewModel: vm)
         
