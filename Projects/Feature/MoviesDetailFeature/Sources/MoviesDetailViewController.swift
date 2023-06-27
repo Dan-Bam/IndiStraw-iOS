@@ -7,7 +7,7 @@ import RxSwift
 import RxCocoa
 
 class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
-//    var highlightData: BehaviorRelay<>
+    //    var highlightData: BehaviorRelay<>
     
     private let thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Images.testImage.image
@@ -45,6 +45,16 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
     private let highlightCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         $0.register(HighlightCell.self, forCellWithReuseIdentifier: HighlightCell.identifier)
     }
+    
+    private let castLabel = UILabel().then {
+        $0.text = "출연진"
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 18)
+    }
+    
+    func bindUI() {
+        
+    }
         
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
@@ -54,7 +64,7 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         view.addSubviews(
             thumbnailImageView, movieTitleLabel,
             movieDescriptionLabel, highlightTitleLabel,
-            highlightCollectionView
+            highlightCollectionView, castLabel
         )
         
         thumbnailImageView.addSubview(playImageIconView)
@@ -90,6 +100,11 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         highlightCollectionView.snp.makeConstraints {
             $0.top.equalTo(highlightTitleLabel.snp.bottom).offset(14)
             $0.leading.equalTo(highlightTitleLabel)
+        }
+        
+        castLabel.snp.makeConstraints {
+            $0.top.equalTo(highlightCollectionView.snp.bottom).offset(40)
+            $0.leading.equalToSuperview().inset(25)
         }
     }
 }
