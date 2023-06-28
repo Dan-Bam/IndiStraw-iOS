@@ -3,8 +3,6 @@ import BaseFeature
 import DesignSystem
 import SnapKit
 import Then
-import RxSwift
-import RxCocoa
 
 class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
     private let thumbnailImageView = UIImageView().then {
@@ -34,36 +32,10 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
     }
     
-    private let highlightTitleLabel = UILabel().then {
-        $0.text = "하이라이트"
-        $0.textColor = .white
-        $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
-    }
-    
-    private let highlightCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        $0.register(HighlightCell.self, forCellWithReuseIdentifier: HighlightCell.identifier)
-    }
-    
-    private let castLabel = UILabel().then {
-        $0.text = "출연진"
-        $0.textColor = .white
-        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 18)
-    }
-    
-    private let castCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        $0.register(CastCell.self, forCellWithReuseIdentifier: CastCell.identifier)
-    }
-
-    override func configureVC() {
-        navigationController?.navigationBar.prefersLargeTitles = false
-    }
-    
     override func addView() {
         view.addSubviews(
             thumbnailImageView, movieTitleLabel,
-            movieDescriptionLabel, highlightTitleLabel,
-            highlightCollectionView, castLabel,
-            castCollectionView
+            movieDescriptionLabel
         )
         
         thumbnailImageView.addSubview(playImageIconView)
@@ -89,27 +61,6 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         movieDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(movieTitleLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview().inset(25)
-        }
-        
-        highlightTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(movieDescriptionLabel.snp.bottom).offset(44)
-            $0.leading.equalToSuperview().inset(25)
-        }
-        
-        highlightCollectionView.snp.makeConstraints {
-            $0.top.equalTo(highlightTitleLabel.snp.bottom).offset(14)
-            $0.leading.equalTo(highlightTitleLabel)
-        }
-        
-        castLabel.snp.makeConstraints {
-            $0.top.equalTo(highlightCollectionView.snp.bottom).offset(40)
-            $0.leading.equalToSuperview().inset(25)
-        }
-        
-        castCollectionView.snp.makeConstraints {
-            $0.top.equalTo(10)
-            $0.leading.equalToSuperview().inset(25)
-            $0.trailing.equalToSuperview()
         }
     }
 }
