@@ -22,6 +22,7 @@ public extension TargetDependency.Feature {
     static let SelectPhotoFeature = TargetDependency.feature(name: "SelectPhotoFeature")
     static let AddressFeature = TargetDependency.feature(name: "AddressFeature")
     static let MoviesDetailFeature = TargetDependency.feature(name: "MoviesDetailFeature")
+    static let CrowdFundingFeature = TargetDependency.feature(name: "CrowdFundingFeature")
 }
 
 public extension TargetDependency.Core {
