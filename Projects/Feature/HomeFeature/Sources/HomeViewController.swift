@@ -7,6 +7,10 @@ import RxCocoa
 import RxGesture
 import DesignSystem
 
+enum ContentSizeKey {
+    static let key = "contentSize"
+}
+
 var bannerImageSources = [
     DesignSystemAsset.Images.testImage.image,
     DesignSystemAsset.Images.testImage.image,
@@ -18,6 +22,13 @@ var segConArray = ["최근", "추천", "인기"]
 
 class HomeViewController: BaseVC<HomeViewModel> {
     var moviesData = BehaviorRelay<[MoviesModel]>(value: [])
+    var fundingData = BehaviorRelay<[FundingList]>(value: [])
+    
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
+    
+    private let contentView = UIView()
     
     private let disposeBag = DisposeBag()
     
@@ -33,7 +44,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.backgroundColor = .black
         view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
-        
         return view
     }()
     
@@ -58,7 +68,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     private let segCon = UISegmentedControl(items: segConArray).then {
-        $0.clipsToBounds = false
+        $0.clipsToBounds = true
         $0.selectedSegmentIndex = 0
         $0.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: DesignSystemAsset.Colors.darkGray.color,
@@ -74,6 +84,9 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     private let crowdFundingTableView = UITableView().then {
+        $0.rowHeight = UITableView.automaticDimension
+        $0.estimatedRowHeight = 137
+        $0.backgroundColor = .black
         $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
     }
     
@@ -117,12 +130,20 @@ class HomeViewController: BaseVC<HomeViewModel> {
     func bindUI() {
         moviesData
             .asDriver()
-            .drive(moviesCollectionView.rx.items(cellIdentifier: MoviesCell.identifier,
-                                                 cellType: MoviesCell.self)) { (row, data, cell) in
-                cell.prepare(model: data)
+            .drive(moviesCollectionView.rx.items(
+                cellIdentifier: MoviesCell.identifier,
+                cellType: MoviesCell.self)) { (row, data, cell) in
+                cell.configure(model: data)
             }.disposed(by: disposeBag)
         
-        //        crowdfund
+        fundingData
+            .asDriver()
+            .drive(crowdFundingTableView.rx.items(
+                cellIdentifier: CrowdFundingCell.identifier,
+                cellType: CrowdFundingCell.self)) { (row, data, cell) in
+                    print("fundingData")
+                    cell.configure(model: data)
+                }.disposed(by: disposeBag)
         
         segCon.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
@@ -152,12 +173,10 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.title = "hihi"
         navigationItem.rightBarButtonItem = profileButton
         setGesture()
         bindUI()
         moviesCollectionView.delegate = self
-        moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
         
         let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
         let height: CGFloat = 2.0
@@ -166,10 +185,37 @@ class HomeViewController: BaseVC<HomeViewModel> {
         let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
         underlineView.frame = frame
         segCon.addSubview(underlineView)
+        
+        moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
+
+        fundingData.accept([FundingList(idx: 0, title: "11", description: "ㅁㄴㅇㄹ\nasdfa\nasdfasfasfa\nadsfasfd", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: "")])
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.crowdFundingTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.crowdFundingTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == ContentSizeKey.key {
+            if object is UITableView {
+                if let newValue = change?[.newKey] as? CGSize {
+                    crowdFundingTableView.snp.updateConstraints {
+                        $0.height.equalTo(newValue.height + 50)
+                    }
+                }
+            }
+        }
     }
     
     override func addView() {
-        view.addSubviews(
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(
             bannerImageView, pageControl,
             segCon, moviesCollectionView,
             crowdFundingTitleLabel, crowdFundingTableView
@@ -177,27 +223,47 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     override func setLayout() {
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.edges.width.equalToSuperview()
+        }
+        
         bannerImageView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(21)
+            $0.top.equalToSuperview().inset(21)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(170)
         }
-        
+
         pageControl.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(bannerImageView.snp.bottom).offset(16)
         }
-        
-        segCon.snp.makeConstraints {
-            $0.top.equalTo(pageControl.snp.bottom).offset(20)
-            $0.leading.equalToSuperview().inset(15)
-            $0.height.equalTo(23)
-        }
-        
+
+//        segCon.snp.makeConstraints {
+//            $0.top.equalTo(pageControl.snp.bottom).offset(20)
+//            $0.leading.equalToSuperview().inset(15)
+//            $0.height.equalTo(23)
+//        }
+
         moviesCollectionView.snp.makeConstraints {
-            $0.top.equalTo(segCon.snp.bottom).offset(10)
+            $0.top.equalTo(pageControl.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(150)
+        }
+
+        crowdFundingTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(moviesCollectionView.snp.bottom).offset(26)
+            $0.leading.equalToSuperview().inset(15)
+        }
+
+        crowdFundingTableView.snp.makeConstraints {
+            $0.top.equalTo(crowdFundingTitleLabel.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
 }

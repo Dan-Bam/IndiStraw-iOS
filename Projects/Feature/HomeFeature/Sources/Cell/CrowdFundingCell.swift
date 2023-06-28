@@ -70,6 +70,7 @@ class CrowdFundingCell: UITableViewCell {
         fundingImageView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview().inset(8)
             $0.trailing.equalToSuperview().inset(7)
+            $0.size.equalTo(121)
         }
         
         fundingProgressView.snp.makeConstraints {
@@ -83,7 +84,7 @@ class CrowdFundingCell: UITableViewCell {
         }
     }
     
-    public func configure(data: FundingList) {
+    func configure(model data: FundingList) {
         fundingTitleLabel.text = data.title
         fundingDescriptionLabel.text = data.description
         fundingImageView.kf.setImage(with: URL(string: data.thumbnailUrl))
