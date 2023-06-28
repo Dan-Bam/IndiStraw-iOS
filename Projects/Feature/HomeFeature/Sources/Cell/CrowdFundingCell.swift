@@ -26,6 +26,9 @@ class CrowdFundingCell: UITableViewCell {
         
         self.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
         self.layer.cornerRadius = 10
+        
+        addView()
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -54,5 +57,9 @@ class CrowdFundingCell: UITableViewCell {
             $0.top.bottom.equalToSuperview().inset(8)
             $0.trailing.equalToSuperview().inset(7)
         }
+    }
+    
+    public func configure(data: ) {
+        
     }
 }
