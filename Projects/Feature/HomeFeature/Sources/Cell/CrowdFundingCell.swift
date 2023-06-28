@@ -3,6 +3,7 @@ import DesignSystem
 import Utility
 import SnapKit
 import Then
+import Kingfisher
 
 class CrowdFundingCell: UITableViewCell {
     static let identifier = "CrowdFundingCell"
@@ -13,14 +14,26 @@ class CrowdFundingCell: UITableViewCell {
     }
     
     private let fundingDescriptionLabel = UILabel().then {
+        $0.numberOfLines = 3
         $0.textColor = DesignSystemAsset.Colors.gray.color
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+    }
+    
+    private let fundingProgressView = UIProgressView().then {
+        $0.progress = 0.1
+        $0.progressTintColor = DesignSystemAsset.Colors.mainColor.color
+        $0.trackTintColor = DesignSystemAsset.Colors.darkgray3.color
+    }
+    
+    private let fundingPercentageLabel = UILabel().then {
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
     private let fundingImageView = UIImageView().then {
         $0.layer.cornerRadius = 3
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -38,7 +51,8 @@ class CrowdFundingCell: UITableViewCell {
     func addView() {
         self.addSubviews(
             fundingTitleLabel, fundingDescriptionLabel,
-            fundingImageView
+            fundingImageView, fundingProgressView,
+            fundingPercentageLabel
         )
     }
     
@@ -57,9 +71,21 @@ class CrowdFundingCell: UITableViewCell {
             $0.top.bottom.equalToSuperview().inset(8)
             $0.trailing.equalToSuperview().inset(7)
         }
+        
+        fundingProgressView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(13)
+            $0.bottom.equalToSuperview().inset(8)
+        }
+        
+        fundingPercentageLabel.snp.makeConstraints {
+            $0.leading.equalTo(fundingProgressView.snp.trailing).offset(5)
+            $0.bottom.equalTo(fundingProgressView)
+        }
     }
     
-//    public func configure(data: ) {
-//        
-//    }
+    public func configure(data: FundingList) {
+        fundingTitleLabel.text = data.title
+        fundingDescriptionLabel.text = data.description
+        fundingImageView.kf.setImage(with: URL(string: data.thumbnailUrl))
+    }
 }
