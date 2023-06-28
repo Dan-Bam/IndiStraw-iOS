@@ -19,6 +19,9 @@ class CastCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        addView()
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
