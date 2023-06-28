@@ -17,7 +17,7 @@ var bannerImageSources = [
 var segConArray = ["최근", "추천", "인기"]
 
 class HomeViewController: BaseVC<HomeViewModel> {
-    var moviesData = BehaviorRelay<[MovieesModel]>(value: [])
+    var moviesData = BehaviorRelay<[MoviesModel]>(value: [])
     
     private let disposeBag = DisposeBag()
     
@@ -31,8 +31,9 @@ class HomeViewController: BaseVC<HomeViewModel> {
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 9
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.backgroundColor = .black
         view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
-
+        
         return view
     }()
     
@@ -64,6 +65,16 @@ class HomeViewController: BaseVC<HomeViewModel> {
             NSAttributedString.Key.font: DesignSystemFontFamily.Suit.semiBold.font(size: 16)
         ], for: .normal)
         $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+    }
+    
+    private let crowdFundingTitleLabel = UILabel().then {
+        $0.text = "크라우드 펀딩"
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Suit.semiBold.font(size: 16)
+    }
+    
+    private let crowdFundingTableView = UITableView().then {
+        $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
     }
     
     private func removeBackgroundAndDidiver() {
@@ -111,6 +122,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
                 cell.prepare(model: data)
             }.disposed(by: disposeBag)
         
+        //        crowdfund
+        
         segCon.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
                 let underlineFinalXPosition = (self.segCon.bounds.width / CGFloat(self.segCon.numberOfSegments)) * CGFloat(self.segCon.selectedSegmentIndex)
@@ -121,7 +134,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
                     }
                 )
                 switch owner.segCon.selectedSegmentIndex {
-
+                    
                 default:
                     return
                 }
@@ -143,6 +156,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
         navigationItem.rightBarButtonItem = profileButton
         setGesture()
         bindUI()
+        moviesCollectionView.delegate = self
+        moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
         
         let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
         let height: CGFloat = 2.0
@@ -154,9 +169,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     override func addView() {
-        view.addSubviews(bannerImageView, pageControl, segCon, moviesCollectionView)
+        view.addSubviews(
+            bannerImageView, pageControl,
+            segCon, moviesCollectionView,
+            crowdFundingTitleLabel, crowdFundingTableView
+        )
     }
-
+    
     override func setLayout() {
         bannerImageView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(21)
@@ -177,9 +196,14 @@ class HomeViewController: BaseVC<HomeViewModel> {
         
         moviesCollectionView.snp.makeConstraints {
             $0.top.equalTo(segCon.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().inset(15)
-            $0.trailing.equalToSuperview()
-            $0.height.equalTo(moviesCollectionView.frame.height)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(150)
         }
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 109, height: collectionView.frame.height)
     }
 }

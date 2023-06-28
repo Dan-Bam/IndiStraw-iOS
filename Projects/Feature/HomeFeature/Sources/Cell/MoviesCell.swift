@@ -6,17 +6,17 @@ import Kingfisher
 class MoviesCell: UICollectionViewCell {
     static let identifier = "MoviesCell"
     
-    private let moviesImageView = UIImageView().then {
-        $0.layer.cornerRadius = 10
-    }
+    private let moviesImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        self.layer.cornerRadius = 10
+        
         self.addSubview(moviesImageView)
         moviesImageView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            
+            $0.top.bottom.equalToSuperview()
+            $0.width.equalTo(109)
         }
     }
     
@@ -24,7 +24,7 @@ class MoviesCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func prepare(model: MovieesModel) {
+    func prepare(model: MoviesModel) {
         print("model.imageUrl = \(model.imageUrl)")
         moviesImageView.kf.setImage(with: URL(string: model.imageUrl))
     }
