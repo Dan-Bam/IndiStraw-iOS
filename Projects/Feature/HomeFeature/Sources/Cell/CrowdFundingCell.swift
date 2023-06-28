@@ -59,7 +59,7 @@ class CrowdFundingCell: UITableViewCell {
         }
     }
     
-    public func configure(data: ) {
-        
-    }
+//    public func configure(data: ) {
+//        
+//    }
 }
