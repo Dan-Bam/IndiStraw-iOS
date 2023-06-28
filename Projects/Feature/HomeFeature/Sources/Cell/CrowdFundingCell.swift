@@ -69,8 +69,9 @@ class CrowdFundingCell: UITableViewCell {
         
         fundingImageView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview().inset(8)
+            $0.leading.equalTo(fundingDescriptionLabel.snp.trailing).offset(10)
             $0.trailing.equalToSuperview().inset(7)
-            $0.size.equalTo(121)
+//            $0.size.equalTo(121)
         }
         
         fundingProgressView.snp.makeConstraints {

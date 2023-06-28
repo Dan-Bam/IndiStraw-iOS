@@ -14,6 +14,7 @@ class MoviesCell: UICollectionViewCell {
         self.layer.cornerRadius = 10
         
         self.addSubview(moviesImageView)
+        
         moviesImageView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.width.equalTo(109)
