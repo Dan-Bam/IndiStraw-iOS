@@ -228,7 +228,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         }
 
         contentView.snp.makeConstraints {
-            $0.edges.width.equalToSuperview()
+            $0.centerX.width.top.bottom.equalToSuperview()
         }
         
         bannerImageView.snp.makeConstraints {

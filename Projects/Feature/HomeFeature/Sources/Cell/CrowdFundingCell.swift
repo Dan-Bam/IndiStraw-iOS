@@ -33,6 +33,7 @@ class CrowdFundingCell: UITableViewCell {
     }
     
     private let fundingImageView = UIImageView().then {
+        $0.clipsToBounds = true
         $0.layer.cornerRadius = 3
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
@@ -40,7 +41,7 @@ class CrowdFundingCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
+        contentView.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
         self.layer.cornerRadius = 10
         self.selectionStyle = .none
         
@@ -52,15 +53,19 @@ class CrowdFundingCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addView() {
-        self.addSubviews(
+    override func layoutSubviews() {
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0))
+    }
+    
+    private func addView() {
+        contentView.addSubviews(
             fundingTitleLabel, fundingDescriptionLabel,
             fundingImageView, fundingProgressView,
             fundingPercentageLabel
         )
     }
     
-    func setLayout() {
+    private func setLayout() {
         fundingTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(15)
             $0.leading.equalToSuperview().inset(13)
@@ -69,25 +74,24 @@ class CrowdFundingCell: UITableViewCell {
         fundingDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(fundingTitleLabel.snp.bottom).offset(8)
             $0.leading.equalTo(fundingTitleLabel)
+            $0.trailing.equalTo(fundingImageView.snp.leading).offset(-10)
         }
         
         fundingImageView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview().inset(8)
-            $0.leading.equalTo(fundingDescriptionLabel.snp.trailing).offset(10)
-            $0.trailing.equalToSuperview().inset(7)
+            $0.top.trailing.bottom.equalToSuperview().inset(8)
             $0.size.equalTo(121)
         }
         
         fundingProgressView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(13)
-            $0.bottom.equalToSuperview().inset(8)
+            $0.bottom.equalToSuperview().inset(9)
             $0.height.equalTo(16)
         }
         
         fundingPercentageLabel.snp.makeConstraints {
             $0.trailing.equalTo(fundingImageView.snp.leading).offset(-14)
             $0.leading.equalTo(fundingProgressView.snp.trailing).offset(5)
-            $0.bottom.equalTo(fundingProgressView)
+            $0.bottom.equalToSuperview().inset(8)
         }
     }
     
