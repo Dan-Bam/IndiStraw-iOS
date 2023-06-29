@@ -18,8 +18,6 @@ var bannerImageSources = [
     DesignSystemAsset.Images.testImage.image
 ]
 
-var segConArray = ["최근", "추천", "인기"]
-
 class HomeViewController: BaseVC<HomeViewModel> {
     var moviesData = BehaviorRelay<[MoviesModel]>(value: [])
     var fundingData = BehaviorRelay<[FundingList]>(value: [])
@@ -67,7 +65,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.layer.cornerRadius = 10
     }
     
-    private let segCon = UISegmentedControl(items: segConArray).then {
+    private let segCon = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
 //        $0.clipsToBounds = true
         $0.selectedSegmentIndex = 0
         $0.setTitleTextAttributes([
@@ -84,8 +82,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     private let crowdFundingTableView = UITableView().then {
-        $0.estimatedRowHeight = 137
-        $0.rowHeight = UITableView.automaticDimension
+        $0.rowHeight = 150
         $0.backgroundColor = .black
         $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
     }
@@ -143,6 +140,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
                 cellType: CrowdFundingCell.self)) { (row, data, cell) in
                     cell.configure(model: data)
                 }.disposed(by: disposeBag)
+        
+        crowdFundingTableView.rx.modelSelected(FundingList.self)
+            .bind(with: self) { owner, _ in
+//                print("asdfasfas")
+            }.disposed(by: disposeBag)
         
         segCon.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
@@ -232,7 +234,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         }
         
         bannerImageView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaInsets).inset(21)
+            $0.top.equalToSuperview().inset(21)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(170)
         }
@@ -261,9 +263,9 @@ class HomeViewController: BaseVC<HomeViewModel> {
 
         crowdFundingTableView.snp.makeConstraints {
             $0.top.equalTo(crowdFundingTitleLabel.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(1)
+            $0.height.equalTo(100)
         }
     }
 }
