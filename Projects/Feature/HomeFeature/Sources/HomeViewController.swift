@@ -40,7 +40,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     lazy var moviesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 9
+        flowLayout.minimumLineSpacing = 12
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.backgroundColor = .black
         view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
@@ -68,7 +68,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     private let segCon = UISegmentedControl(items: segConArray).then {
-        $0.clipsToBounds = true
+//        $0.clipsToBounds = true
         $0.selectedSegmentIndex = 0
         $0.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: DesignSystemAsset.Colors.darkGray.color,
@@ -84,8 +84,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     private let crowdFundingTableView = UITableView().then {
-        $0.rowHeight = UITableView.automaticDimension
         $0.estimatedRowHeight = 137
+        $0.rowHeight = UITableView.automaticDimension
         $0.backgroundColor = .black
         $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
     }
@@ -141,7 +141,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
             .drive(crowdFundingTableView.rx.items(
                 cellIdentifier: CrowdFundingCell.identifier,
                 cellType: CrowdFundingCell.self)) { (row, data, cell) in
-                    print("fundingData")
                     cell.configure(model: data)
                 }.disposed(by: disposeBag)
         
@@ -181,25 +180,25 @@ class HomeViewController: BaseVC<HomeViewModel> {
         let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
         let height: CGFloat = 2.0
         let xPosition = CGFloat(segCon.selectedSegmentIndex) * width
-        let yPosition = segCon.bounds.size.height - height - 8
+        let yPosition = segCon.bounds.size.height - height - 9
         let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
         underlineView.frame = frame
         segCon.addSubview(underlineView)
         
         moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
 
-        fundingData.accept([FundingList(idx: 0, title: "11", description: "ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㅁㄴㄹㅁㄴㅇㄹㄴㅇㅁㄹㅁㄹㄴㅇ\nasdfa\nasdfasfasfa\nadsfasfd", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: "")])
+        fundingData.accept([FundingList(idx: 0, title: "11", description: "ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㅁㄴㄹㅁㄴㅇㄹㄴㅇㅁㄹㅁㄹㄴㅇ\nasdfa\nasdfasfasfa\nadsfasfd", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: "")])
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.crowdFundingTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         self.crowdFundingTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
-    
+
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
@@ -215,12 +214,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        
-        view.addSubviews(
-            bannerImageView, pageControl,
-            segCon, moviesCollectionView,
-            crowdFundingTitleLabel, crowdFundingTableView
-        )
+
         contentView.addSubviews(
             bannerImageView, pageControl,
             segCon, moviesCollectionView,
@@ -234,12 +228,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
         }
 
         contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.width.equalToSuperview()
+            $0.edges.width.equalToSuperview()
         }
         
         bannerImageView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(21)
+            $0.top.equalTo(view.safeAreaInsets).inset(21)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(170)
         }
@@ -248,15 +241,15 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(bannerImageView.snp.bottom).offset(16)
         }
-
-        segCon.snp.makeConstraints {
-            $0.top.equalTo(pageControl.snp.bottom).offset(20)
-            $0.leading.equalToSuperview().inset(15)
-            $0.height.equalTo(23)
-        }
+ 
+//        segCon.snp.makeConstraints {
+//            $0.top.equalTo(pageControl.snp.bottom).offset(20)
+//            $0.leading.equalToSuperview().inset(15)
+//            $0.height.equalTo(23)
+//        }
 
         moviesCollectionView.snp.makeConstraints {
-            $0.top.equalTo(segCon.snp.bottom).offset(20)
+            $0.top.equalTo(pageControl.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(150)
         }
@@ -270,7 +263,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.top.equalTo(crowdFundingTitleLabel.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(100)
+            $0.height.equalTo(1)
         }
     }
 }

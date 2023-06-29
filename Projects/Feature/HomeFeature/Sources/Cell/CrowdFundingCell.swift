@@ -20,12 +20,15 @@ class CrowdFundingCell: UITableViewCell {
     }
     
     private let fundingProgressView = UIProgressView().then {
-        $0.progress = 0.1
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 8
+        $0.progress = 0.3
         $0.progressTintColor = DesignSystemAsset.Colors.mainColor.color
         $0.trackTintColor = DesignSystemAsset.Colors.darkgray3.color
     }
     
     private let fundingPercentageLabel = UILabel().then {
+        $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
@@ -39,6 +42,7 @@ class CrowdFundingCell: UITableViewCell {
         
         self.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
         self.layer.cornerRadius = 10
+        self.selectionStyle = .none
         
         addView()
         setLayout()
@@ -71,15 +75,17 @@ class CrowdFundingCell: UITableViewCell {
             $0.top.bottom.equalToSuperview().inset(8)
             $0.leading.equalTo(fundingDescriptionLabel.snp.trailing).offset(10)
             $0.trailing.equalToSuperview().inset(7)
-//            $0.size.equalTo(121)
+            $0.size.equalTo(121)
         }
         
         fundingProgressView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(13)
             $0.bottom.equalToSuperview().inset(8)
+            $0.height.equalTo(16)
         }
         
         fundingPercentageLabel.snp.makeConstraints {
+            $0.trailing.equalTo(fundingImageView.snp.leading).offset(-14)
             $0.leading.equalTo(fundingProgressView.snp.trailing).offset(5)
             $0.bottom.equalTo(fundingProgressView)
         }
@@ -89,5 +95,6 @@ class CrowdFundingCell: UITableViewCell {
         fundingTitleLabel.text = data.title
         fundingDescriptionLabel.text = data.description
         fundingImageView.kf.setImage(with: URL(string: data.thumbnailUrl))
+        fundingPercentageLabel.text = "\(data.percentage)%"
     }
 }
