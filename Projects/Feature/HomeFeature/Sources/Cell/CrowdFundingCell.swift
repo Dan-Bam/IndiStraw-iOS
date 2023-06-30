@@ -103,13 +103,11 @@ class CrowdFundingCell: UITableViewCell {
         fundingTitleLabel.text = data.title
         fundingDescriptionLabel.text = data.description
         fundingImageView.kf.setImage(with: URL(string: data.thumbnailUrl))
-//        UIView.animate(
-//            withDuration: 0.5,
-//            animations: {
-//            }
-//        )
-        fundingProgressView.setProgress(0.7, animated: true)
-        self.fundingProgressView.progress = Float(data.percentage) / 100
+        DispatchQueue.main.async {
+            self.fundingProgressView.setProgress(0.7, animated: true)
+            self.fundingProgressView.progress = Float(data.percentage) / 100
+        }
         fundingPercentageLabel.text = "\(data.percentage)%"
     }
 }
+
