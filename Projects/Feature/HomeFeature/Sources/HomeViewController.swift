@@ -186,7 +186,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
         let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
         underlineView.frame = frame
         segCon.addSubview(underlineView)
-        viewModel.requestCrowdFundingList()
         
         moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
 
@@ -197,6 +196,15 @@ class HomeViewController: BaseVC<HomeViewModel> {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.crowdFundingTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
+        
+        viewModel.requestCrowdFundingList { [weak self] result in
+            switch result {
+            case .success(let dataArray):
+                self?.fundingData.accept(dataArray)
+            case .failure:
+                return
+            }
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
