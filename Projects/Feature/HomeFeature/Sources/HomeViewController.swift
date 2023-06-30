@@ -186,10 +186,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
         let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
         underlineView.frame = frame
         segCon.addSubview(underlineView)
+        viewModel.requestCrowdFundingList()
         
         moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
 
-        fundingData.accept([FundingList(idx: 0, title: "11", description: "ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㅁㄴㄹㅁㄴㅇㄹㄴㅇㅁㄹㅁㄹㄴㅇ\nasdfa\nasdfasfasfa\nadsfasfd", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: ""), FundingList(idx: 1, title: "22", description: "ㅁㄴㅇㄹ", percentage: 30, thumbnailUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg", activity: "")])
+//        fundingData.accept([FundingList(idx: 0, title: "11"
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -1,12 +1,11 @@
 //Endocable
 struct CrowdFundingRequest: Encodable {
-    var page: String
-    var size: String
+    var page: Int
+    var size: Int = 10
 }
 
 //Decodable
 struct CrowdFundingResponse: Decodable {
-    var pageSize: Int
     var isLast: Bool
     var list: [FundingList]
 }
@@ -17,5 +16,5 @@ struct FundingList: Decodable {
     var description: String
     var percentage: Int
     var thumbnailUrl: String
-    var activity: String
+    var status: String
 }
