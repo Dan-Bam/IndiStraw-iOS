@@ -42,8 +42,9 @@ class CrowdFundingCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
+        self.backgroundColor = .black
         contentView.layer.cornerRadius = 10
-//        self.selectionStyle = .none
+        self.selectionStyle = .none
         
         addView()
         setLayout()
@@ -54,6 +55,8 @@ class CrowdFundingCell: UITableViewCell {
     }
         
     override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 15, bottom: 16, right: 15))
         
     }
     
@@ -63,11 +66,6 @@ class CrowdFundingCell: UITableViewCell {
             fundingImageView, fundingProgressView,
             fundingPercentageLabel
         )
-    }
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 15, bottom: 16, right: 15))
     }
     
     private func setLayout() {
@@ -105,13 +103,13 @@ class CrowdFundingCell: UITableViewCell {
         fundingTitleLabel.text = data.title
         fundingDescriptionLabel.text = data.description
         fundingImageView.kf.setImage(with: URL(string: data.thumbnailUrl))
-        UIView.animate(
-            withDuration: 0.5,
-            animations: {
-                self.fundingProgressView.progress = Float(data.percentage) / 100
-            }
-        )
-        print(Float(data.percentage) / 100)
+//        UIView.animate(
+//            withDuration: 0.5,
+//            animations: {
+//            }
+//        )
+        fundingProgressView.setProgress(0.7, animated: true)
+        self.fundingProgressView.progress = Float(data.percentage) / 100
         fundingPercentageLabel.text = "\(data.percentage)%"
     }
 }

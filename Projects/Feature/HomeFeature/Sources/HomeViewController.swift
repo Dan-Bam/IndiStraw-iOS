@@ -54,17 +54,14 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
         $0.layer.cornerRadius = 10
     }
-//    let a = UISegmentedControl(frame: CGRect(x: 100, y: 100, width: 0, height: 0), primaryAction: UIAction(handler: { _ in
-//
-//    }))
-    private let segCon = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
-        $0.clipsToBounds = false
+
+    private let segmentedControl = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
         $0.selectedSegmentIndex = 0
-        $0.setTitleTextAttributes([
-            NSAttributedString.Key.foregroundColor: DesignSystemAsset.Colors.darkGray.color,
-            NSAttributedString.Key.font: DesignSystemFontFamily.Suit.semiBold.font(size: 16)
-        ], for: .normal)
-        $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+//        $0.setTitleTextAttributes([
+//            NSAttributedString.Key.foregroundColor: DesignSystemAsset.Colors.darkGray.color,
+//            NSAttributedString.Key.font: DesignSystemFontFamily.Suit.semiBold.font(size: 16)
+//        ], for: .normal)
+//        $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
     }
     
     lazy var moviesCollectionView: UICollectionView = {
@@ -91,11 +88,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     private func removeBackgroundAndDidiver() {
         let image = UIImage()
-        segCon.setBackgroundImage(image, for: .normal, barMetrics: .default)
-        segCon.setBackgroundImage(image, for: .selected, barMetrics: .default)
-        segCon.setBackgroundImage(image, for: .highlighted, barMetrics: .default)
+        segmentedControl.setBackgroundImage(image, for: .normal, barMetrics: .default)
+        segmentedControl.setBackgroundImage(image, for: .selected, barMetrics: .default)
+        segmentedControl.setBackgroundImage(image, for: .highlighted, barMetrics: .default)
         
-        segCon.setDividerImage(image, forLeftSegmentState: .selected, rightSegmentState: .normal, barMetrics: .default)
+        segmentedControl.setDividerImage(image, forLeftSegmentState: .selected, rightSegmentState: .normal, barMetrics: .default)
     }
     
     private func setGesture() {
@@ -145,19 +142,19 @@ class HomeViewController: BaseVC<HomeViewModel> {
         
         crowdFundingTableView.rx.modelSelected(FundingList.self)
             .bind(with: self) { owner, _ in
-//                print("asdfasfas")
+                print("asdfasfas")
             }.disposed(by: disposeBag)
         
-        segCon.rx.selectedSegmentIndex.changed
+        segmentedControl.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
-                let underlineFinalXPosition = (self.segCon.bounds.width / CGFloat(self.segCon.numberOfSegments)) * CGFloat(self.segCon.selectedSegmentIndex)
+                let underlineFinalXPosition = (self.segmentedControl.bounds.width / CGFloat(self.segmentedControl.numberOfSegments)) * CGFloat(self.segmentedControl.selectedSegmentIndex)
                 UIView.animate(
                     withDuration: 0.1,
                     animations: {
                         self.underlineView.frame.origin.x = underlineFinalXPosition
                     }
                 )
-                switch owner.segCon.selectedSegmentIndex {
+                switch owner.segmentedControl.selectedSegmentIndex {
 
                 default:
                     return
@@ -181,13 +178,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
         bindUI()
         moviesCollectionView.delegate = self
         
-        let width = segCon.bounds.size.width / CGFloat(segCon.numberOfSegments)
+        let width = segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)
         let height: CGFloat = 2.0
-        let xPosition = CGFloat(segCon.selectedSegmentIndex) * width
-        let yPosition = segCon.bounds.size.height - height - 9
+        let xPosition = CGFloat(segmentedControl.selectedSegmentIndex) * width
+        let yPosition = segmentedControl.bounds.size.height - height - 9
         let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
         underlineView.frame = frame
-        segCon.addSubview(underlineView)
+        segmentedControl.addSubview(underlineView)
         
         moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
     }
@@ -227,10 +224,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
         scrollView.addSubview(contentView)
 
         contentView.addSubviews(
-            bannerImageView, pageControl,
-            segCon, moviesCollectionView,
+            segmentedControl, pageControl,
+            bannerImageView, moviesCollectionView,
             crowdFundingTitleLabel, crowdFundingTableView
         )
+        
+        segmentedControl.center = view.center
     }
     
     override func setLayout() {
@@ -253,10 +252,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.top.equalTo(bannerImageView.snp.bottom).offset(16)
         }
  
-        segCon.translatesAutoresizingMaskIntoConstraints = true
-//        NSLayoutConstraint.activate([
-//            segCon.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 20)
-//        ])
+//        segmentedControl.snp.makeConstraints {
+//            $0.top.equalTo(pageControl.snp.bottom).offset(20)
+//            $0.leading.equalToSuperview().inset(15)
+//            $0.height.equalTo(23)
+//        }
 
         moviesCollectionView.snp.makeConstraints {
             $0.top.equalTo(pageControl.snp.bottom).offset(20)
