@@ -35,16 +35,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.tintColor = .white
     }
     
-    lazy var moviesCollectionView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 12
-        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        view.backgroundColor = .black
-        view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
-        return view
-    }()
-    
     private let bannerImageView = UIImageView().then {
         $0.layer.cornerRadius = 10
         $0.image = bannerImageSources[0]
@@ -64,9 +54,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
         $0.layer.cornerRadius = 10
     }
-    
+//    let a = UISegmentedControl(frame: CGRect(x: 100, y: 100, width: 0, height: 0), primaryAction: UIAction(handler: { _ in
+//
+//    }))
     private let segCon = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
-//        $0.clipsToBounds = true
+        $0.clipsToBounds = false
         $0.selectedSegmentIndex = 0
         $0.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: DesignSystemAsset.Colors.darkGray.color,
@@ -74,6 +66,16 @@ class HomeViewController: BaseVC<HomeViewModel> {
         ], for: .normal)
         $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
     }
+    
+    lazy var moviesCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 12
+        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.backgroundColor = .black
+        view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
+        return view
+    }()
     
     private let crowdFundingTitleLabel = UILabel().then {
         $0.text = "크라우드 펀딩"
@@ -156,7 +158,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
                     }
                 )
                 switch owner.segCon.selectedSegmentIndex {
-                    
+
                 default:
                     return
                 }
@@ -188,9 +190,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
         segCon.addSubview(underlineView)
         
         moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
-
-//        fundingData.accept([FundingList(idx: 0, title: "11"
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -254,11 +253,10 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.top.equalTo(bannerImageView.snp.bottom).offset(16)
         }
  
-//        segCon.snp.makeConstraints {
-//            $0.top.equalTo(pageControl.snp.bottom).offset(20)
-//            $0.leading.equalToSuperview().inset(15)
-//            $0.height.equalTo(23)
-//        }
+        segCon.translatesAutoresizingMaskIntoConstraints = true
+//        NSLayoutConstraint.activate([
+//            segCon.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 20)
+//        ])
 
         moviesCollectionView.snp.makeConstraints {
             $0.top.equalTo(pageControl.snp.bottom).offset(20)

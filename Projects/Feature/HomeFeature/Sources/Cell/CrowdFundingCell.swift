@@ -54,7 +54,7 @@ class CrowdFundingCell: UITableViewCell {
     }
         
     override func layoutSubviews() {
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 15, bottom: 16, right: 15))
+        
     }
     
     private func addView() {
@@ -63,6 +63,11 @@ class CrowdFundingCell: UITableViewCell {
             fundingImageView, fundingProgressView,
             fundingPercentageLabel
         )
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 15, bottom: 16, right: 15))
     }
     
     private func setLayout() {
@@ -100,6 +105,13 @@ class CrowdFundingCell: UITableViewCell {
         fundingTitleLabel.text = data.title
         fundingDescriptionLabel.text = data.description
         fundingImageView.kf.setImage(with: URL(string: data.thumbnailUrl))
+        UIView.animate(
+            withDuration: 0.5,
+            animations: {
+                self.fundingProgressView.progress = Float(data.percentage) / 100
+            }
+        )
+        print(Float(data.percentage) / 100)
         fundingPercentageLabel.text = "\(data.percentage)%"
     }
 }
