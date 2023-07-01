@@ -28,22 +28,22 @@ open class AppCoordinator: Coordinator {
         let rootCoordinator = RootCoordinator(navigationController: navigationController)
         let homeCoordinator = HomeCoordinator(navigationController: navigationController)
         window?.rootViewController = navigationController
-        start(coordinator: MoviesDetailCoordinator(navigationController: navigationController))
-//        AF.request(url,
-//                   method: .patch,
-//                   encoding: JSONEncoding.default,
-//                   headers: headers)
-//        .validate()
-//        .responseDecodable(of: ManageTokenModel.self) { [weak self] response in
-//            switch response.result {
-//            case .success(let data):
-//                container.saveToken(type: .refreshToken, token: data.refreshToken)
-//                self?.start(coordinator: homeCoordinator)
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//                self?.start(coordinator: rootCoordinator)
-//            }
-//        }
+//        start(coordinator: MoviesDetailCoordinator(navigationController: navigationController))
+        AF.request(url,
+                   method: .patch,
+                   encoding: JSONEncoding.default,
+                   headers: headers)
+        .validate()
+        .responseDecodable(of: ManageTokenModel.self) { [weak self] response in
+            switch response.result {
+            case .success(let data):
+                container.saveToken(type: .refreshToken, token: data.refreshToken)
+                self?.start(coordinator: homeCoordinator)
+            case .failure(let error):
+                print(error.localizedDescription)
+                self?.start(coordinator: rootCoordinator)
+            }
+        }
     }
     
     public func start(coordinator: Coordinator) {
