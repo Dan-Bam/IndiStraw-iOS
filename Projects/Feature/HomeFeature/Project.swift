@@ -8,6 +8,7 @@ let project = Project.makeModule(
         .Feature.BaseFeature,
         .Feature.ProfileFeature,
         .Feature.MoviesDetailFeature,
+        .Feature.CrowdFundingFeature,
         
         .Core.DesignSystem,
         .Domain.AuthDomain,
