@@ -1,6 +1,7 @@
 import Foundation
 import BaseFeature
 import ProfileFeature
+import CrowdFundingFeature
 
 public class HomeCoordinator: BaseCoordinator {
     public override func start() {
@@ -12,6 +13,8 @@ public class HomeCoordinator: BaseCoordinator {
     
     public override func navigate(to step: IndiStrawStep) {
         switch step {
+        case .crowdFundingIsRequired:
+            crowdFundingIsRequired()
         case .profileIsRequired:
             profileIsRequired()
         default:
@@ -21,6 +24,12 @@ public class HomeCoordinator: BaseCoordinator {
 }
 
 extension HomeCoordinator {
+    func crowdFundingIsRequired() {
+        let vc = CrowdFundingCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
+    }
     func profileIsRequired() {
         let vc = ProfileCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self

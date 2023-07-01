@@ -20,6 +20,10 @@ class HomeViewModel: BaseViewModel {
         }
     }
     
+    func pushCrowdFundingVC() {
+        coordinator.navigate(to: .crowdFundingIsRequired)
+    }
+    
     func pushProfileVC() {
         coordinator.navigate(to: .profileIsRequired)
     }

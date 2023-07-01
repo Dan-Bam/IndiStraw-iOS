@@ -142,7 +142,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         
         crowdFundingTableView.rx.modelSelected(FundingList.self)
             .bind(with: self) { owner, _ in
-                print("asdfasfas")
+                owner.viewModel.pushCrowdFundingVC()
             }.disposed(by: disposeBag)
         
         segmentedControl.rx.selectedSegmentIndex.changed
