@@ -30,6 +30,7 @@ extension HomeCoordinator {
         childCoordinators.append(vc)
         vc.start()
     }
+    
     func profileIsRequired() {
         let vc = ProfileCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
