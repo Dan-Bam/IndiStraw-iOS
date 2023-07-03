@@ -30,12 +30,19 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.textColor = DesignSystemAsset.Colors.purple2.color
     }
     
+    private let remainingDayLabel = UIButton().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 5
+        $0.setTitleColor(DesignSystemAsset.Colors.purple2.color, for: .normal)
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+        $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
+    }
+    
     private let achivementCountLabel = UILabel().then {
         $0.textColor = .white
     }
     
     override func configureVC() {
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,7 +56,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     override func addView() {
         view.addSubviews(
             fundingImageView, writerLabel,
-            fundingTitleLabel
+            fundingTitleLabel, achivementPercentageLabel,
+            remainingDayLabel, achivementCountLabel
         )
     }
     
@@ -69,6 +77,18 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.top.equalTo(writerLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
+        
+        achivementPercentageLabel.snp.makeConstraints {
+            $0.top.equalTo(fundingTitleLabel.snp.bottom).offset(20)
+            $0.leading.equalTo(fundingTitleLabel)
+        }
+        
+        remainingDayLabel.snp.makeConstraints {
+            $0.centerY.equalTo(achivementPercentageLabel)
+            $0.leading.equalTo(achivementPercentageLabel.snp.trailing).offset(10)
+            $0.width.equalTo(54)
+            $0.height.equalTo(17)
+        }
     }
 }
 
@@ -77,10 +97,20 @@ extension CrowdFundingViewController {
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
         fundingTitleLabel.text = model.title
-        achivementPercentageLabel.text = "\(model.amount.percentage)" + "% 달성"
+        achivementPercentageLabel.text = "\(model.amount.percentage)" + "%" + " 달성"
+        setPercentageTextFont(percentage: model.amount.percentage)
+        remainingDayLabel.setTitle("\(model.remainingDay)" + "일 남음", for: .normal)
     }
     
-    func changeAchivementPercentageLabel() {
+    private func setPercentageTextFont(percentage: Int) {
+        let attributeString = NSMutableAttributedString()
+        let amoutPercentageString = NSMutableAttributedString(string: "\(percentage)", attributes: [.font: DesignSystemFontFamily.Suit.bold.font(size: 18)])
+        let percentageString = NSMutableAttributedString(string: "%", attributes: [.font: DesignSystemFontFamily.Suit.medium.font(size: 12)])
+        let achivementString = NSMutableAttributedString(string: " 달성", attributes: [.font: DesignSystemFontFamily.Suit.regular.font(size: 14)])
         
+        attributeString.append(amoutPercentageString)
+        attributeString.append(percentageString)
+        attributeString.append(achivementString)
+        achivementPercentageLabel.attributedText = attributeString
     }
 }
