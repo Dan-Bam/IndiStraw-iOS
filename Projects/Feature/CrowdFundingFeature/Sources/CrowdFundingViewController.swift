@@ -30,16 +30,12 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.textColor = DesignSystemAsset.Colors.purple2.color
     }
     
-    private let remainingDayLabel = UIButton().then {
-//        $0.configuration = UIButton.Configuration.filled()
-//        $0.configuration?.baseForegroundColor = DesignSystemAsset.Colors.purple2.color
-        $0.clipsToBounds = true
-        $0.titleLabel?.textColor = DesignSystemAsset.Colors.purple2.color
-        $0.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 4, bottom: 1, trailing: 4)
+    private let remainingDayLabel = UILabel().then {
         $0.isEnabled = false
+        $0.clipsToBounds = true
+        $0.textColor = .white
         $0.layer.cornerRadius = 5
-        $0.setTitleColor(DesignSystemAsset.Colors.purple2.color, for: .normal)
-        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+        $0.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
     }
     
@@ -47,14 +43,25 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.textColor = .white
     }
     
-    private let fundingCount = UIButton(configuration: .plain()).then {
-        $0.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 4, bottom: 1, trailing: 4)
+    private let fundingCountLabel = UIButton().then {
+        $0.setImage(UIImage(systemName: "person.fill",
+                            withConfiguration: UIImage.SymbolConfiguration(pointSize: 15)),
+                    for: .normal)
+        $0.tintColor = .white
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 15)
         $0.isEnabled = false
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 5
-        $0.setTitleColor(DesignSystemAsset.Colors.lightGray.color, for: .normal)
-        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
+    }
+    
+    private let fundingProgressView = UIProgressView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 8
+        $0.progress = 0.3
+        $0.progressTintColor = DesignSystemAsset.Colors.mainColor.color
+        $0.trackTintColor = DesignSystemAsset.Colors.darkgray3.color
     }
     
     override func configureVC() {
@@ -74,7 +81,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             fundingImageView, writerLabel,
             fundingTitleLabel, achivementPercentageLabel,
             remainingDayLabel, totalAmountLabel,
-            fundingCount
+            fundingCountLabel, fundingProgressView
         )
     }
     
@@ -110,9 +117,15 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.leading.equalTo(fundingTitleLabel)
         }
         
-        fundingCount.snp.makeConstraints {
+        fundingCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(totalAmountLabel)
             $0.leading.equalTo(totalAmountLabel.snp.trailing).offset(12)
+        }
+        
+        fundingProgressView.snp.makeConstraints {
+            $0.top.equalTo(fundingCountLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(14)
         }
     }
 }
@@ -124,10 +137,12 @@ extension CrowdFundingViewController {
         fundingTitleLabel.text = model.title
         achivementPercentageLabel.text = "\(model.amount.percentage)" + "%" + " 달성"
         setPercentageTextFont(percentage: model.amount.percentage)
-        remainingDayLabel.setTitle("D-" + "\(model.remainingDay)", for: .normal)
+        remainingDayLabel.text = "D-" + "\(model.remainingDay)"
         totalAmountLabel.text = "\(model.amount.totalAmount)" + "/" + "\(model.amount.targetAmount)" + " 원 달성"
         setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
-        fundingCount.setTitle("\(model.fundingCount)" + "참여", for: .normal)
+        fundingCountLabel.setTitle("\(123)", for: .normal)
+        fundingProgressView.setProgress(0.7, animated: true)
+        fundingProgressView.progress = Float(model.amount.percentage) / 100
     }
     
     private func setPercentageTextFont(percentage: Int) {
@@ -142,7 +157,7 @@ extension CrowdFundingViewController {
         achivementPercentageLabel.attributedText = attributeString
     }
     
-    private func setTotalAmountTextFont(totalAmount: Float, targetAmount: Float) {
+    private func setTotalAmountTextFont(totalAmount: Int, targetAmount: Int) {
         let attributeString = NSMutableAttributedString()
         let totalAmountString = NSMutableAttributedString(
             string: "\(totalAmount)",

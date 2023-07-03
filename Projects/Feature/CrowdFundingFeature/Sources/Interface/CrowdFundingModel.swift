@@ -20,8 +20,8 @@ struct Writer: Decodable {
 }
 
 struct Amount: Decodable {
-    var targetAmount: Float
-    var totalAmount: Float
+    var targetAmount: Int
+    var totalAmount: Int
     var percentage: Int
 }
 
