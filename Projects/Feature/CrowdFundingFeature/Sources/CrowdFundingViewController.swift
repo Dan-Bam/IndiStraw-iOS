@@ -106,6 +106,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     }
     
     private let attachmentListTableView = UITableView().then {
+        $0.backgroundColor = .black
         $0.estimatedRowHeight = 30
         $0.rowHeight = UITableView.automaticDimension
         $0.register(AttachmentCell.self, forCellReuseIdentifier: AttachmentCell.identifier)
@@ -241,12 +242,12 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         
         attachmentLabel.snp.makeConstraints {
             $0.top.equalTo(descriptionImageView.snp.bottom).offset(28)
-            $0.leading.equalToSuperview().inset(15)
+            $0.leading.equalToSuperview().inset(14)
         }
         
         attachmentListTableView.snp.makeConstraints {
             $0.top.equalTo(attachmentLabel.snp.bottom).offset(6)
-            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.height.equalTo(100)
         }
