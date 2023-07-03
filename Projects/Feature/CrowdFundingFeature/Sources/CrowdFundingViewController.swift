@@ -46,7 +46,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.textColor = .white
     }
     
-    private let fundingCountLabel = UIButton().then {
+    private let fundingCountLabel = BasePaddingButton(padding: UIEdgeInsets(top: 1, left: 4, bottom: 1, right: 4)).then {
         $0.setImage(UIImage(systemName: "person.fill",
                             withConfiguration: UIImage.SymbolConfiguration(pointSize: 15)),
                     for: .normal)
