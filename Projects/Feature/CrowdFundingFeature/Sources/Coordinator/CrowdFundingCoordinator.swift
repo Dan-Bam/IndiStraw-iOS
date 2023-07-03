@@ -1,8 +1,8 @@
 import BaseFeature
 
 public class CrowdFundingCoordinator: BaseCoordinator {
-    public override func start() {
-        let vm = CrowdFundingViewModel(coordinator: self)
+    public func startCrowdFundingCoordinator(idx: Int) {
+        let vm = CrowdFundingViewModel(coordinator: self, idx: idx)
         let vc = CrowdFundingViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
