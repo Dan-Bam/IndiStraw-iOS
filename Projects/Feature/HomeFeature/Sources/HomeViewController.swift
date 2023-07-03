@@ -141,8 +141,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
                 }.disposed(by: disposeBag)
         
         crowdFundingTableView.rx.modelSelected(FundingList.self)
-            .bind(with: self) { owner, _ in
-                print("asdfasfas")
+            .bind(with: self) { owner, arg in
+                owner.viewModel.pushCrowdFundingVC(idx: arg.idx)
             }.disposed(by: disposeBag)
         
         segmentedControl.rx.selectedSegmentIndex.changed
