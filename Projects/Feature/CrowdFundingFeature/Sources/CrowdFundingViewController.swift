@@ -85,10 +85,12 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     private let pageControl = UIPageControl().then {
         $0.isUserInteractionEnabled = false
-//        $0.setCurrentPageIndicatorImage(
-//            DesignSystemAsset.Images.pageControlIndicator.image,
-//            forPage: $0.currentPage
-//        )
+    }
+    
+    private let attachmentLabel = UILabel().then {
+        $0.text = "첨부파일"
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 16)
     }
     
     override func configureVC() {
@@ -110,7 +112,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             remainingDayLabel, totalAmountLabel,
             fundingCountLabel, fundingProgressView,
             separatorLineView, descriptionLabel,
-            descriptionImageView, pageControl
+            descriptionImageView, pageControl,
+            attachmentLabel
         )
     }
     
@@ -173,6 +176,16 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(140)
         }
+        
+        pageControl.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(descriptionImageView.snp.bottom).offset(-8)
+        }
+        
+        attachmentLabel.snp.makeConstraints {
+            $0.top.equalTo(descriptionImageView.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().inset(15)
+        }
     }
 }
 
@@ -184,11 +197,10 @@ extension CrowdFundingViewController {
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
         fundingTitleLabel.text = model.title
-//        achivementPercentageLabel.text = "\(model.amount.percentage)" + "%" + " 달성"
         setPercentageTextFont(percentage: model.amount.percentage)
         remainingDayLabel.text = "D-" + "\(model.remainingDay)"
-//        totalAmountLabel.text = "\(model.amount.totalAmount)" + "/" + "\(model.amount.targetAmount)" + " 원 달성"
         setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
+        
         fundingCountLabel.setTitle("\(model.fundingCount)", for: .normal)
         fundingProgressView.setProgress(0.7, animated: true)
         fundingProgressView.progress = Float(model.amount.percentage) / 100
