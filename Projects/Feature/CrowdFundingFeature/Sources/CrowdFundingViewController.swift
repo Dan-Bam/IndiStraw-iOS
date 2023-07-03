@@ -34,9 +34,9 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     private let remainingDayLabel = BasePaddingLabel(padding: UIEdgeInsets(
         top: 1, left: 6, bottom: 1, right: 6)
     ).then {
+        $0.textColor = .white
         $0.isEnabled = false
         $0.clipsToBounds = true
-        $0.textColor = .white
         $0.layer.cornerRadius = 5
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
@@ -46,7 +46,9 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.textColor = .white
     }
     
-    private let fundingCountLabel = BasePaddingButton(padding: UIEdgeInsets(top: 1, left: 4, bottom: 1, right: 4)).then {
+    private let fundingCountLabel = BasePaddingButton(padding: UIEdgeInsets(
+        top: 1, left: 4, bottom: 1, right: 4)
+    ).then {
         $0.setImage(UIImage(systemName: "person.fill",
                             withConfiguration: UIImage.SymbolConfiguration(pointSize: 15)),
                     for: .normal)
@@ -61,7 +63,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     private let fundingProgressView = UIProgressView().then {
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 8
+        $0.layer.cornerRadius = 7
         $0.progress = 0.3
         $0.progressTintColor = DesignSystemAsset.Colors.mainColor.color
         $0.trackTintColor = DesignSystemAsset.Colors.darkgray3.color
