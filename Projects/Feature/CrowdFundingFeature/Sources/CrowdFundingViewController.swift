@@ -31,6 +31,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     }
     
     private let remainingDayLabel = UIButton().then {
+        $0.isEnabled = false
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 5
         $0.setTitleColor(DesignSystemAsset.Colors.purple2.color, for: .normal)
