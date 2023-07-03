@@ -3,7 +3,7 @@ import Alamofire
 import AuthDomain
 
 enum CrowdFundingTarget {
-    case requestCrowdFundingDetail(idx: String)
+    case requestCrowdFundingDetail(idx: Int)
 }
 
 extension CrowdFundingTarget: BaseRouter {

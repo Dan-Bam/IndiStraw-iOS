@@ -22,6 +22,10 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.numberOfLines = 0
     }
     
+    override func configureVC() {
+        viewModel.requestCrowdFundingList()
+    }
+    
     override func addView() {
         view.addSubviews(
             fundingImageView, mcLabel,
