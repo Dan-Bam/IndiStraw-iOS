@@ -55,10 +55,8 @@ class CrowdFundingCell: UITableViewCell {
     }
         
     override func layoutSubviews() {
-        print("before - layoutSubviews = \(contentView.frame)")
         super.layoutSubviews()
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 15, bottom: 16, right: 15))
-        print("after - layoutSubviews = \(contentView.frame)")
     }
     
     private func addView() {

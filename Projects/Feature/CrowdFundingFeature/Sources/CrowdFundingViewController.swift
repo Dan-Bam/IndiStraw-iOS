@@ -39,11 +39,12 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
     }
     
-    private let achivementCountLabel = UILabel().then {
+    private let totalAmountLabel = UILabel().then {
         $0.textColor = .white
     }
     
     override func configureVC() {
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,7 +59,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         view.addSubviews(
             fundingImageView, writerLabel,
             fundingTitleLabel, achivementPercentageLabel,
-            remainingDayLabel, achivementCountLabel
+            remainingDayLabel, totalAmountLabel
         )
     }
     
@@ -90,6 +91,11 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.width.equalTo(54)
             $0.height.equalTo(17)
         }
+        
+        totalAmountLabel.snp.makeConstraints {
+            $0.top.equalTo(remainingDayLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(fundingTitleLabel)
+        }
     }
 }
 
@@ -101,6 +107,8 @@ extension CrowdFundingViewController {
         achivementPercentageLabel.text = "\(model.amount.percentage)" + "%" + " 달성"
         setPercentageTextFont(percentage: model.amount.percentage)
         remainingDayLabel.setTitle("\(model.remainingDay)" + "일 남음", for: .normal)
+        totalAmountLabel.text = "\(model.amount.totalAmount)" + "/" + "\(model.amount.targetAmount)" + "원 달성"
+        setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
     }
     
     private func setPercentageTextFont(percentage: Int) {
@@ -113,5 +121,33 @@ extension CrowdFundingViewController {
         attributeString.append(percentageString)
         attributeString.append(achivementString)
         achivementPercentageLabel.attributedText = attributeString
+    }
+    
+    private func setTotalAmountTextFont(totalAmount: Float, targetAmount: Float) {
+        let attributeString = NSMutableAttributedString()
+        let totalAmountString = NSMutableAttributedString(
+            string: "\(totalAmount)",
+            attributes: [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18)]
+        )
+        let slashString = NSMutableAttributedString(
+            string: "/",
+            attributes: [.font: DesignSystemFontFamily.Suit.light.font(size: 18)]
+        )
+        let targetAmountString = NSMutableAttributedString(
+            string: "\(targetAmount)",
+            attributes: [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18),
+                         .foregroundColor: DesignSystemAsset.Colors.lightGray.color]
+        )
+        let wonString = NSMutableAttributedString(
+            string: "원",
+            attributes: [.font: DesignSystemFontFamily.Suit.regular.font(size: 14),
+                         .foregroundColor: UIColor.white]
+        )
+        
+        attributeString.append(totalAmountString)
+        attributeString.append(slashString)
+        attributeString.append(targetAmountString)
+        attributeString.append(wonString)
+        totalAmountLabel.attributedText = attributeString
     }
 }
