@@ -10,23 +10,30 @@ class CrowdFundingViewModel: BaseViewModel {
     var crowdFundingCurrentPage = -1
     var idx: Int
     
+    
     init(coordinator: Coordinator, idx: Int) {
         self.idx = idx
         super.init(coordinator: coordinator)
     }
     
-    func requestCrowdFundingList() {
-        AF.request(
-            CrowdFundingTarget.requestCrowdFundingDetail(idx: idx),
-            interceptor: JwtRequestInterceptor(jwtStore: container))
-        .validate()
-        .responseDecodable(of: CrowdFundingDetailResponse.self) { [weak self] response in
-            switch response.result {
-            case .success(let data):
-                print("success")
-            case .failure(let error):
-                print("error = \(response.response?.statusCode)")
+    func requestCrowdFundingList() -> Observable<CrowdFundingDetailResponse> {
+        return Observable.create { [weak self] (observer) -> Disposable in
+            AF.request(
+                CrowdFundingTarget.requestCrowdFundingDetail(idx: self!.idx),
+                interceptor: JwtRequestInterceptor(jwtStore: self!.container))
+            .validate()
+            .responseDecodable(of: CrowdFundingDetailResponse.self) { [weak self] response in
+                switch response.result {
+                case .success(let data):
+                    print("success")
+                    observer.onNext(data)
+                case .failure(let error):
+                    print("error = \(response.response?.statusCode)")
+                    observer.onError(error)
+                }
             }
+            return Disposables.create()
         }
+        
     }
 }
