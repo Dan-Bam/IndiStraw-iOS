@@ -81,7 +81,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.trackTintColor = DesignSystemAsset.Colors.darkgray3.color
     }
     
-    private let separatorLineView = UIView().then {
+    private let fundingSeparatorLineView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
     
@@ -112,6 +112,10 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.register(AttachmentCell.self, forCellReuseIdentifier: AttachmentCell.identifier)
     }
     
+    private let descriptionSeparatorLineView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         attachmentBehaviorRelay
@@ -130,7 +134,6 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, arg in
-                print("crowdfundingData = \(arg)")
                 owner.configure(model: arg)
                 owner.attachmentBehaviorRelay.accept(arg.imageList)
             }.disposed(by: disposeBag)
@@ -145,7 +148,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             if object is UITableView {
                 if let newValue = change?[.newKey] as? CGSize {
                     attachmentListTableView.snp.updateConstraints {
-                        $0.height.equalTo(newValue.height + 50)
+                        $0.height.equalTo(newValue.height + 28)
                     }
                 }
             }
@@ -161,9 +164,10 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             fundingTitleLabel, achivementPercentageLabel,
             remainingDayLabel, totalAmountLabel,
             fundingCountLabel, fundingProgressView,
-            separatorLineView, descriptionLabel,
+            fundingSeparatorLineView, descriptionLabel,
             descriptionImageView, pageControl,
-            attachmentLabel, attachmentListTableView
+            attachmentLabel, attachmentListTableView,
+            descriptionSeparatorLineView
         )
     }
     
@@ -218,14 +222,14 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.height.equalTo(14)
         }
         
-        separatorLineView.snp.makeConstraints {
+        fundingSeparatorLineView.snp.makeConstraints {
             $0.top.equalTo(fundingProgressView.snp.bottom).offset(28)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
         
         descriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(separatorLineView).offset(28)
+            $0.top.equalTo(fundingSeparatorLineView).offset(28)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
         
@@ -249,7 +253,13 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.top.equalTo(attachmentLabel.snp.bottom).offset(6)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(100)
+            $0.height.equalTo(1)
+        }
+        
+        descriptionSeparatorLineView.snp.makeConstraints {
+            $0.top.equalTo(attachmentListTableView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
 }
