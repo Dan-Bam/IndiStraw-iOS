@@ -31,8 +31,12 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     }
     
     private let remainingDayLabel = UIButton().then {
-        $0.isEnabled = false
+//        $0.configuration = UIButton.Configuration.filled()
+//        $0.configuration?.baseForegroundColor = DesignSystemAsset.Colors.purple2.color
         $0.clipsToBounds = true
+        $0.titleLabel?.textColor = DesignSystemAsset.Colors.purple2.color
+        $0.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 4, bottom: 1, trailing: 4)
+        $0.isEnabled = false
         $0.layer.cornerRadius = 5
         $0.setTitleColor(DesignSystemAsset.Colors.purple2.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
@@ -41,6 +45,16 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     private let totalAmountLabel = UILabel().then {
         $0.textColor = .white
+    }
+    
+    private let fundingCount = UIButton(configuration: .plain()).then {
+        $0.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 4, bottom: 1, trailing: 4)
+        $0.isEnabled = false
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 5
+        $0.setTitleColor(DesignSystemAsset.Colors.lightGray.color, for: .normal)
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+        $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
     
     override func configureVC() {
@@ -59,7 +73,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         view.addSubviews(
             fundingImageView, writerLabel,
             fundingTitleLabel, achivementPercentageLabel,
-            remainingDayLabel, totalAmountLabel
+            remainingDayLabel, totalAmountLabel,
+            fundingCount
         )
     }
     
@@ -88,13 +103,16 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         remainingDayLabel.snp.makeConstraints {
             $0.centerY.equalTo(achivementPercentageLabel)
             $0.leading.equalTo(achivementPercentageLabel.snp.trailing).offset(10)
-            $0.width.equalTo(54)
-            $0.height.equalTo(17)
         }
         
         totalAmountLabel.snp.makeConstraints {
             $0.top.equalTo(remainingDayLabel.snp.bottom).offset(8)
             $0.leading.equalTo(fundingTitleLabel)
+        }
+        
+        fundingCount.snp.makeConstraints {
+            $0.centerY.equalTo(totalAmountLabel)
+            $0.leading.equalTo(totalAmountLabel.snp.trailing).offset(12)
         }
     }
 }
@@ -106,9 +124,10 @@ extension CrowdFundingViewController {
         fundingTitleLabel.text = model.title
         achivementPercentageLabel.text = "\(model.amount.percentage)" + "%" + " 달성"
         setPercentageTextFont(percentage: model.amount.percentage)
-        remainingDayLabel.setTitle("\(model.remainingDay)" + "일 남음", for: .normal)
-        totalAmountLabel.text = "\(model.amount.totalAmount)" + "/" + "\(model.amount.targetAmount)" + "원 달성"
+        remainingDayLabel.setTitle("D-" + "\(model.remainingDay)", for: .normal)
+        totalAmountLabel.text = "\(model.amount.totalAmount)" + "/" + "\(model.amount.targetAmount)" + " 원 달성"
         setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
+        fundingCount.setTitle("\(model.fundingCount)" + "참여", for: .normal)
     }
     
     private func setPercentageTextFont(percentage: Int) {
