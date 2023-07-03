@@ -25,9 +25,14 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.numberOfLines = 0
     }
     
-//    private let achivementPercentageLabel = UILabel().then {
-//        $0.textColor = DesignSystemAsset.Colors.pu
-//    }
+    private let achivementPercentageLabel = UILabel().then {
+        $0.font = DesignSystemFontFamily.Suit.bold.font(size: 18)
+        $0.textColor = DesignSystemAsset.Colors.purple2.color
+    }
+    
+    private let achivementCountLabel = UILabel().then {
+        $0.textColor = .white
+    }
     
     override func configureVC() {
 
@@ -72,5 +77,10 @@ extension CrowdFundingViewController {
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
         fundingTitleLabel.text = model.title
+        achivementPercentageLabel.text = "\(model.amount.percentage)" + "% 달성"
+    }
+    
+    func changeAchivementPercentageLabel() {
+        
     }
 }
