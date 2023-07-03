@@ -73,6 +73,24 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
     
+    private let descriptionLabel = UILabel().then {
+        $0.textColor = DesignSystemAsset.Colors.lightGray.color
+        $0.font = DesignSystemFontFamily.Suit.regular.font(size: 14)
+    }
+    
+    private let descriptionImageView = UIImageView().then {
+        $0.backgroundColor = .gray
+        $0.layer.cornerRadius = 10
+    }
+    
+    private let pageControl = UIPageControl().then {
+        $0.isUserInteractionEnabled = false
+//        $0.setCurrentPageIndicatorImage(
+//            DesignSystemAsset.Images.pageControlIndicator.image,
+//            forPage: $0.currentPage
+//        )
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
@@ -91,7 +109,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             fundingTitleLabel, achivementPercentageLabel,
             remainingDayLabel, totalAmountLabel,
             fundingCountLabel, fundingProgressView,
-            separatorLineView
+            separatorLineView, descriptionLabel,
+            descriptionImageView, pageControl
         )
     }
     
@@ -143,22 +162,38 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
+        
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(separatorLineView).offset(28)
+            $0.leading.trailing.equalToSuperview().inset(15)
+        }
+        
+        descriptionImageView.snp.makeConstraints {
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(140)
+        }
     }
 }
 
 extension CrowdFundingViewController {
     func prepare(model: CrowdFundingDetailResponse) {
+        pageControl.numberOfPages = model.imageList.count
+        pageControl.currentPage = 0
+        
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
         fundingTitleLabel.text = model.title
-        achivementPercentageLabel.text = "\(model.amount.percentage)" + "%" + " 달성"
+//        achivementPercentageLabel.text = "\(model.amount.percentage)" + "%" + " 달성"
         setPercentageTextFont(percentage: model.amount.percentage)
         remainingDayLabel.text = "D-" + "\(model.remainingDay)"
-        totalAmountLabel.text = "\(model.amount.totalAmount)" + "/" + "\(model.amount.targetAmount)" + " 원 달성"
+//        totalAmountLabel.text = "\(model.amount.totalAmount)" + "/" + "\(model.amount.targetAmount)" + " 원 달성"
         setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
         fundingCountLabel.setTitle("\(model.fundingCount)", for: .normal)
         fundingProgressView.setProgress(0.7, animated: true)
         fundingProgressView.progress = Float(model.amount.percentage) / 100
+        
+        descriptionLabel.text = model.description
     }
     
     private func setPercentageTextFont(percentage: Int) {
