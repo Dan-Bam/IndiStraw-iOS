@@ -6,6 +6,7 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 import Kingfisher
+import Utility
 
 class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     var disposeBag = DisposeBag()
@@ -30,7 +31,9 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.textColor = DesignSystemAsset.Colors.purple2.color
     }
     
-    private let remainingDayLabel = UILabel().then {
+    private let remainingDayLabel = BasePaddingLabel(padding: UIEdgeInsets(
+        top: 1, left: 6, bottom: 1, right: 6)
+    ).then {
         $0.isEnabled = false
         $0.clipsToBounds = true
         $0.textColor = .white
