@@ -64,6 +64,10 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.trackTintColor = DesignSystemAsset.Colors.darkgray3.color
     }
     
+    private let separatorLineView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
@@ -81,7 +85,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             fundingImageView, writerLabel,
             fundingTitleLabel, achivementPercentageLabel,
             remainingDayLabel, totalAmountLabel,
-            fundingCountLabel, fundingProgressView
+            fundingCountLabel, fundingProgressView,
+            separatorLineView
         )
     }
     
@@ -127,6 +132,12 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(14)
         }
+        
+        separatorLineView.snp.makeConstraints {
+            $0.top.equalTo(fundingProgressView.snp.bottom).offset(28)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
     }
 }
 
@@ -140,7 +151,7 @@ extension CrowdFundingViewController {
         remainingDayLabel.text = "D-" + "\(model.remainingDay)"
         totalAmountLabel.text = "\(model.amount.totalAmount)" + "/" + "\(model.amount.targetAmount)" + " 원 달성"
         setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
-        fundingCountLabel.setTitle("\(123)", for: .normal)
+        fundingCountLabel.setTitle("\(model.fundingCount)", for: .normal)
         fundingProgressView.setProgress(0.7, animated: true)
         fundingProgressView.progress = Float(model.amount.percentage) / 100
     }
