@@ -11,6 +11,12 @@ import Utility
 class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     var disposeBag = DisposeBag()
     
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
+    
+    private let contentView = UIView()
+    
     private let fundingImageView = UIImageView().then {
         $0.backgroundColor = .gray
     }
@@ -93,35 +99,48 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 16)
     }
     
-//    private let attachmentListTableView = UITableView().then {
-//
-//    }
+    private let attachmentListTableView = UITableView().then {
+        $0.register(AttachmentCell.self, forCellReuseIdentifier: AttachmentCell.identifier)
+    }
     
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, arg in
+                print("crowdfundingData = \(arg)")
                 owner.prepare(model: arg)
             }.disposed(by: disposeBag)
     }
     
     override func addView() {
-        view.addSubviews(
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(
             fundingImageView, writerLabel,
             fundingTitleLabel, achivementPercentageLabel,
             remainingDayLabel, totalAmountLabel,
             fundingCountLabel, fundingProgressView,
             separatorLineView, descriptionLabel,
             descriptionImageView, pageControl,
-            attachmentLabel
+            attachmentLabel, attachmentListTableView
         )
     }
     
     override func setLayout() {
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+
+        contentView.snp.makeConstraints {
+            $0.centerX.width.top.bottom.equalToSuperview()
+        }
+        
         fundingImageView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(17)
             $0.leading.trailing.equalToSuperview()
@@ -189,6 +208,13 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         attachmentLabel.snp.makeConstraints {
             $0.top.equalTo(descriptionImageView.snp.bottom).offset(28)
             $0.leading.equalToSuperview().inset(15)
+        }
+        
+        attachmentListTableView.snp.makeConstraints {
+            $0.top.equalTo(attachmentLabel.snp.bottom).offset(6)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
 }
