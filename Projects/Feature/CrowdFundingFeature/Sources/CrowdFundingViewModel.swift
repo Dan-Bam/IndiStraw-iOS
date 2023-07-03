@@ -13,8 +13,6 @@ class CrowdFundingViewModel: BaseViewModel {
         super.init(coordinator: coordinator)
     }
     
-//    func requestCrowdFundingList() {
-//        AF.request(CrowdFundingTarget.requestCrowdFundingList(
-//            CrowdFundingRequest(page: crowdFundingCurrentPage)))
-//    }
+    func requestCrowdFundingList() {
+    }
 }
