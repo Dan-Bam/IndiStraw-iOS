@@ -8,8 +8,20 @@ import RxCocoa
 import Kingfisher
 import Utility
 
+enum ContentSizeKey {
+    static let key = "contentSize"
+}
+
 class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     var disposeBag = DisposeBag()
+    
+    var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
+    
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
+    
+    private let contentView = UIView()
     
     private let fundingImageView = UIImageView().then {
         $0.backgroundColor = .gray
@@ -69,35 +81,107 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.trackTintColor = DesignSystemAsset.Colors.darkgray3.color
     }
     
-    private let separatorLineView = UIView().then {
+    private let fundingSeparatorLineView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
+    }
+    
+    private let descriptionLabel = UILabel().then {
+        $0.textColor = DesignSystemAsset.Colors.lightGray.color
+        $0.font = DesignSystemFontFamily.Suit.regular.font(size: 14)
+    }
+    
+    private let descriptionImageView = UIImageView().then {
+        $0.backgroundColor = .gray
+        $0.layer.cornerRadius = 10
+    }
+    
+    private let pageControl = UIPageControl().then {
+        $0.isUserInteractionEnabled = false
+    }
+    
+    private let attachmentLabel = UILabel().then {
+        $0.text = "첨부파일"
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 16)
+    }
+    
+    private let attachmentListTableView = UITableView().then {
+        $0.backgroundColor = .black
+        $0.estimatedRowHeight = 30
+        $0.rowHeight = UITableView.automaticDimension
+        $0.register(AttachmentCell.self, forCellReuseIdentifier: AttachmentCell.identifier)
+    }
+    
+    private let descriptionSeparatorLineView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
     
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
+        attachmentBehaviorRelay
+            .asDriver()
+            .drive(attachmentListTableView.rx.items(
+                cellIdentifier: AttachmentCell.identifier,
+                cellType: AttachmentCell.self)) { (row, data, cell) in
+                    cell.configure(linkText: data)
+                }.disposed(by: disposeBag)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.attachmentListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
+        
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, arg in
-                owner.prepare(model: arg)
+                owner.configure(model: arg)
+                owner.attachmentBehaviorRelay.accept(arg.imageList)
             }.disposed(by: disposeBag)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        self.attachmentListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == ContentSizeKey.key {
+            if object is UITableView {
+                if let newValue = change?[.newKey] as? CGSize {
+                    attachmentListTableView.snp.updateConstraints {
+                        $0.height.equalTo(newValue.height + 28)
+                    }
+                }
+            }
+        }
     }
     
     override func addView() {
-        view.addSubviews(
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubviews(
             fundingImageView, writerLabel,
             fundingTitleLabel, achivementPercentageLabel,
             remainingDayLabel, totalAmountLabel,
             fundingCountLabel, fundingProgressView,
-            separatorLineView
+            fundingSeparatorLineView, descriptionLabel,
+            descriptionImageView, pageControl,
+            attachmentLabel, attachmentListTableView,
+            descriptionSeparatorLineView
         )
     }
     
     override func setLayout() {
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+
+        contentView.snp.makeConstraints {
+            $0.centerX.width.top.bottom.equalToSuperview()
+        }
+        
         fundingImageView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(17)
+            $0.top.equalTo(view.safeAreaInsets).inset(17)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(170)
         }
@@ -138,8 +222,42 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.height.equalTo(14)
         }
         
-        separatorLineView.snp.makeConstraints {
+        fundingSeparatorLineView.snp.makeConstraints {
             $0.top.equalTo(fundingProgressView.snp.bottom).offset(28)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(fundingSeparatorLineView).offset(28)
+            $0.leading.trailing.equalToSuperview().inset(15)
+        }
+        
+        descriptionImageView.snp.makeConstraints {
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(140)
+        }
+        
+        pageControl.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(descriptionImageView.snp.bottom).offset(-8)
+        }
+        
+        attachmentLabel.snp.makeConstraints {
+            $0.top.equalTo(descriptionImageView.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().inset(14)
+        }
+        
+        attachmentListTableView.snp.makeConstraints {
+            $0.top.equalTo(attachmentLabel.snp.bottom).offset(6)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
+        descriptionSeparatorLineView.snp.makeConstraints {
+            $0.top.equalTo(attachmentListTableView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
@@ -147,18 +265,22 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
 }
 
 extension CrowdFundingViewController {
-    func prepare(model: CrowdFundingDetailResponse) {
+    func configure(model: CrowdFundingDetailResponse) {
+        pageControl.numberOfPages = model.imageList.count
+        pageControl.currentPage = 0
+        
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
         fundingTitleLabel.text = model.title
-        achivementPercentageLabel.text = "\(model.amount.percentage)" + "%" + " 달성"
         setPercentageTextFont(percentage: model.amount.percentage)
         remainingDayLabel.text = "D-" + "\(model.remainingDay)"
-        totalAmountLabel.text = "\(model.amount.totalAmount)" + "/" + "\(model.amount.targetAmount)" + " 원 달성"
         setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
+        
         fundingCountLabel.setTitle("\(model.fundingCount)", for: .normal)
         fundingProgressView.setProgress(0.7, animated: true)
         fundingProgressView.progress = Float(model.amount.percentage) / 100
+        
+        descriptionLabel.text = model.description
     }
     
     private func setPercentageTextFont(percentage: Int) {
