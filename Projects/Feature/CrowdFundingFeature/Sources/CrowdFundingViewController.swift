@@ -8,8 +8,14 @@ import RxCocoa
 import Kingfisher
 import Utility
 
+enum ContentSizeKey {
+    static let key = "contentSize"
+}
+
 class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     var disposeBag = DisposeBag()
+    
+    var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
     
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
@@ -100,27 +106,55 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     }
     
     private let attachmentListTableView = UITableView().then {
+        $0.estimatedRowHeight = 30
+        $0.rowHeight = UITableView.automaticDimension
         $0.register(AttachmentCell.self, forCellReuseIdentifier: AttachmentCell.identifier)
     }
     
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
-        
+        attachmentBehaviorRelay
+            .asDriver()
+            .drive(attachmentListTableView.rx.items(
+                cellIdentifier: AttachmentCell.identifier,
+                cellType: AttachmentCell.self)) { (row, data, cell) in
+                    cell.configure(linkText: data)
+                }.disposed(by: disposeBag)
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.attachmentListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
+        
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, arg in
                 print("crowdfundingData = \(arg)")
-                owner.prepare(model: arg)
+                owner.configure(model: arg)
+                owner.attachmentBehaviorRelay.accept(arg.imageList)
             }.disposed(by: disposeBag)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        self.attachmentListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == ContentSizeKey.key {
+            if object is UITableView {
+                if let newValue = change?[.newKey] as? CGSize {
+                    attachmentListTableView.snp.updateConstraints {
+                        $0.height.equalTo(newValue.height + 50)
+                    }
+                }
+            }
+        }
     }
     
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        
         contentView.addSubviews(
             fundingImageView, writerLabel,
             fundingTitleLabel, achivementPercentageLabel,
@@ -142,7 +176,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         }
         
         fundingImageView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(17)
+            $0.top.equalTo(view.safeAreaInsets).inset(17)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(170)
         }
@@ -214,13 +248,13 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.top.equalTo(attachmentLabel.snp.bottom).offset(6)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(1)
+            $0.height.equalTo(100)
         }
     }
 }
 
 extension CrowdFundingViewController {
-    func prepare(model: CrowdFundingDetailResponse) {
+    func configure(model: CrowdFundingDetailResponse) {
         pageControl.numberOfPages = model.imageList.count
         pageControl.currentPage = 0
         
