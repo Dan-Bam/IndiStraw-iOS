@@ -93,6 +93,10 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 16)
     }
     
+//    private let attachmentListTableView = UITableView().then {
+//
+//    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
