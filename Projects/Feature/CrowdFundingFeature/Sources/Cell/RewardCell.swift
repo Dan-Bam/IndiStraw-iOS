@@ -18,7 +18,7 @@ class RewardCell: UITableViewCell {
     }
     
     private let rewardDescriptionLabel = UILabel().then {
-        $0.numberOfLines = 2
+//        $0.numberOfLines = 2q
         $0.textColor = DesignSystemAsset.Colors.gray.color
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 14)
     }
@@ -31,9 +31,11 @@ class RewardCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 10
+        contentView.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
+        self.backgroundColor = .black
+        selectionStyle = .none
         
         addView()
         setLayout()
@@ -63,7 +65,7 @@ class RewardCell: UITableViewCell {
         }
         
         rewardTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(rewardImageView)
+            $0.top.equalTo(rewardImageView.snp.top)
             $0.leading.equalTo(rewardImageView.snp.trailing).offset(8)
             $0.trailing.equalToSuperview().inset(11)
         }
@@ -87,6 +89,6 @@ extension RewardCell {
         rewardImageView.kf.setImage(with: URL(string: model.imageUrl))
         rewardTitleLabel.text = model.title
         rewardDescriptionLabel.text = model.description
-        rewardPriceLabel.text = "\(model.price)"
+        rewardPriceLabel.text = "\(model.price)" + "원"
     }
 }

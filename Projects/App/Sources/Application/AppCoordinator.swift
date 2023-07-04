@@ -40,6 +40,7 @@ open class AppCoordinator: Coordinator {
                 container.saveToken(type: .refreshToken, token: data.refreshToken)
                 self?.start(coordinator: homeCoordinator)
             case .failure(let error):
+                print("AppCoordinator: \(response.response?.statusCode)")
                 print(error.localizedDescription)
                 self?.start(coordinator: rootCoordinator)
             }

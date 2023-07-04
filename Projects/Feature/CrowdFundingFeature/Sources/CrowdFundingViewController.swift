@@ -17,9 +17,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     var disposeBag = DisposeBag()
     
     var fundingImageDataSources = BehaviorRelay<[String]>(value: [""])
-    
     var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
-    
     var rewardBehaviorRelay = BehaviorRelay<[Reward]>(value: [])
     
     private let scrollView = UIScrollView().then {
@@ -131,8 +129,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     private let rewardListTableView = UITableView().then {
         $0.backgroundColor = .black
-        $0.rowHeight = UITableView.automaticDimension
         $0.estimatedRowHeight = 114
+        $0.rowHeight = UITableView.automaticDimension
         $0.register(RewardCell.self, forCellReuseIdentifier: RewardCell.identifier)
     }
 
@@ -188,12 +186,11 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
                 cellType: RewardCell.self)) { (row, data, cell) in
                     cell.configure(model: data)
                 }.disposed(by: disposeBag)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.attachmentListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
-        self.rewardListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
+//        self.rewardListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
@@ -205,16 +202,17 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     override func viewWillDisappear(_ animated: Bool) {
         self.attachmentListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
-        self.rewardListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
+//        self.rewardListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
                 if let newValue = change?[.newKey] as? CGSize {
-                    attachmentListTableView.snp.updateConstraints {
-                        $0.height.equalTo(newValue.height + 28)
-                    }
+                    print(newValue.height)
+//                    attachmentListTableView.snp.updateConstraints {
+//                        $0.height.equalTo(newValue.height + 28)
+//                    }
                     
                     rewardListTableView.snp.updateConstraints {
                         $0.height.equalTo(newValue.height + 28)
@@ -326,7 +324,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         }
         
         descriptionSeparatorLineView.snp.makeConstraints {
-            $0.top.equalTo(attachmentListTableView.snp.bottom)
+            $0.top.equalTo(attachmentListTableView.snp.bottom).offset(28)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
@@ -345,7 +343,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         fundingButton.snp.makeConstraints {
             $0.top.equalTo(rewardListTableView.snp.bottom).offset(37)
             $0.bottom.equalToSuperview().inset(61)
-            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(54)
         }
     }
@@ -353,7 +351,6 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
 
 extension CrowdFundingViewController {
     func configure(model: CrowdFundingDetailResponse) {
-        
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
         fundingTitleLabel.text = model.title
