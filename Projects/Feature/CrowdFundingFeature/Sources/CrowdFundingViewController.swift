@@ -7,6 +7,7 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 import Utility
+import RxGesture
 
 enum ContentSizeKey {
     static let key = "contentSize"
@@ -14,6 +15,8 @@ enum ContentSizeKey {
 
 class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     var disposeBag = DisposeBag()
+    
+    var fundingImageDataSources = BehaviorRelay<[String]>(value: [""])
     
     var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
     
@@ -116,8 +119,29 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
     
+    private func setGesture() {
+        Observable
+            .merge(
+                fundingImageView.rx.gesture(.swipe(direction: .left)).asObservable(),
+                fundingImageView.rx.gesture(.swipe(direction: .right)).asObservable()
+            )
+            .bind(with: self) { owner, gesture in
+                guard let gesture = gesture as? UISwipeGestureRecognizer else { return }
+                
+                switch gesture.direction {
+                case .left:
+                    owner.pageControl.currentPage += 1
+                case .right:
+                    owner.pageControl.currentPage -= 1
+                default:
+                    break
+                }
+            }.disposed(by: disposeBag)
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
+        setGesture()
         attachmentBehaviorRelay
             .asDriver()
             .drive(attachmentListTableView.rx.items(
@@ -125,6 +149,20 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
                 cellType: AttachmentCell.self)) { (row, data, cell) in
                     cell.configure(linkText: data)
                 }.disposed(by: disposeBag)
+        
+        fundingImageDataSources
+            .asDriver()
+            .drive(with: self) { owner, _ in
+                UIView.transition(
+                    with: owner.fundingImageView,
+                    duration: 0.3,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        owner.fundingImageView.kf.setImage(with: URL(
+                            string: owner.fundingImageDataSources.value[owner.pageControl.currentPage])
+                        )
+                    })
+            }.disposed(by: disposeBag)
         
     }
     
@@ -138,11 +176,11 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
                 owner.attachmentBehaviorRelay.accept(arg.imageList)
             }.disposed(by: disposeBag)
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         self.attachmentListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
-
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
@@ -175,7 +213,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-
+        
         contentView.snp.makeConstraints {
             $0.centerX.width.top.bottom.equalToSuperview()
         }
@@ -266,8 +304,6 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
 
 extension CrowdFundingViewController {
     func configure(model: CrowdFundingDetailResponse) {
-        pageControl.numberOfPages = model.imageList.count
-        pageControl.currentPage = 0
         
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
@@ -281,6 +317,11 @@ extension CrowdFundingViewController {
         fundingProgressView.progress = Float(model.amount.percentage) / 100
         
         descriptionLabel.text = model.description
+        
+        fundingImageDataSources.accept(model.imageList)
+        
+        pageControl.numberOfPages = model.imageList.count
+        pageControl.currentPage = 0
     }
     
     private func setPercentageTextFont(percentage: Int) {
