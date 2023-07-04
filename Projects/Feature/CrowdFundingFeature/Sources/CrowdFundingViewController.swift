@@ -119,12 +119,16 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
     
-    private let rewardSelectionLabel = UILabel().then {
+    private let rewardTitleLabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 16)
         $0.textColor = .white
-        $0.text = "리워드 선택"
+        $0.text = "리워드 종류"
     }
     
+//    private let rewardListTableView = UITableView().then {
+//
+//    }
+//
     private let fundingButton = ButtonComponent().then {
         $0.setTitle("펀딩하기", for: .normal)
     }
@@ -170,20 +174,6 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
                     cell.configure(linkText: data)
                 }.disposed(by: disposeBag)
         
-//        fundingImageDataSources
-//            .asDriver()
-//            .drive(with: self) { owner, _ in
-//                UIView.transition(
-//                    with: owner.fundingImageView,
-//                    duration: 0.3,
-//                    options: .transitionCrossDissolve,
-//                    animations: {
-//                        owner.fundingImageView.kf.setImage(with: URL(
-//                            string: owner.fundingImageDataSources.value[owner.pageControl.currentPage])
-//                        )
-//                    })
-//            }.disposed(by: disposeBag)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -225,7 +215,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             fundingSeparatorLineView, descriptionLabel,
             descriptionImageView, pageControl,
             attachmentLabel, attachmentListTableView,
-            descriptionSeparatorLineView, rewardSelectionLabel,
+            descriptionSeparatorLineView, rewardTitleLabel,
             fundingButton
         )
     }
@@ -320,13 +310,13 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.height.equalTo(1)
         }
         
-        rewardSelectionLabel.snp.makeConstraints {
+        rewardTitleLabel.snp.makeConstraints {
             $0.top.equalTo(descriptionSeparatorLineView.snp.bottom).offset(28)
             $0.leading.equalToSuperview().inset(15)
         }
         
         fundingButton.snp.makeConstraints {
-            $0.top.equalTo(rewardSelectionLabel.snp.bottom)
+            $0.top.equalTo(rewardTitleLabel.snp.bottom)
             $0.bottom.equalToSuperview().inset(126)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
@@ -357,6 +347,7 @@ extension CrowdFundingViewController {
         
         pageControl.numberOfPages = model.imageList.count
         pageControl.currentPage = 0
+        pageControl.setIndicatorImage(DesignSystemAsset.Images.pageControlIndicator.image, forPage: 1)
     }
     
     private func setPercentageTextFont(percentage: Int) {
