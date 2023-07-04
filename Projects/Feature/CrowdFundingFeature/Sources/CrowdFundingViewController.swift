@@ -99,8 +99,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     }
     
     private let pageControl = UIPageControl().then {
-        $0.tintColor = .clear
-        $0.clipsToBounds = true
+        $0.pageIndicatorTintColor = DesignSystemAsset.Colors.gray.color
+        $0.currentPageIndicatorTintColor = DesignSystemAsset.Colors.mainColor.color
         $0.isUserInteractionEnabled = false
     }
     
@@ -344,12 +344,10 @@ extension CrowdFundingViewController {
         
         fundingImageDataSources.accept(model.imageList)
         
-        print(fundingImageDataSources.value[0])
         descriptionImageView.kf.setImage(with: URL(string: fundingImageDataSources.value[0]))
         
         pageControl.numberOfPages = model.imageList.count
         pageControl.currentPage = 0
-        pageControl.preferredIndicatorImage = DesignSystemAsset.Images.pagecontrol.image
     }
     
     private func setPercentageTextFont(percentage: Int) {
