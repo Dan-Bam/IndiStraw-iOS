@@ -77,11 +77,13 @@ class CrowdFundingCell: UITableViewCell {
         fundingTitleLabel.snp.makeConstraints {
             $0.top.equalTo(fundingImageView)
             $0.leading.equalTo(fundingImageView.snp.trailing).offset(12)
+            $0.trailing.equalToSuperview().inset(11)
         }
 
         fundingDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(fundingTitleLabel.snp.bottom).offset(8)
             $0.leading.equalTo(fundingTitleLabel)
+            $0.trailing.equalToSuperview().inset(12)
         }
 
         fundingProgressView.snp.makeConstraints {
@@ -93,7 +95,7 @@ class CrowdFundingCell: UITableViewCell {
 
         fundingPercentageLabel.snp.makeConstraints {
             $0.leading.equalTo(fundingProgressView.snp.trailing).offset(5)
-            $0.trailing.equalToSuperview().inset(14)
+            $0.trailing.equalToSuperview().inset(12)
             $0.centerY.equalTo(fundingProgressView)
         }
     }
