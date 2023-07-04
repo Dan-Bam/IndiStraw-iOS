@@ -1,6 +1,5 @@
 import UIKit
 import DesignSystem
-import Utility
 import SnapKit
 import Then
 import Kingfisher
@@ -42,8 +41,8 @@ class CrowdFundingCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
-        self.backgroundColor = .black
         contentView.layer.cornerRadius = 10
+        self.backgroundColor = .black
         self.selectionStyle = .none
         
         addView()
@@ -56,7 +55,9 @@ class CrowdFundingCell: UITableViewCell {
         
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 15, bottom: 16, right: 15))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(
+            top: 0, left: 15, bottom: 16, right: 15)
+        )
     }
     
     private func addView() {
