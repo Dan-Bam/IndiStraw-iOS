@@ -18,6 +18,7 @@ class RewardCell: UITableViewCell {
     }
     
     private let rewardDescriptionLabel = UILabel().then {
+        $0.numberOfLines = 2
         $0.textColor = DesignSystemAsset.Colors.gray.color
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 14)
     }

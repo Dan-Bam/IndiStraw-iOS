@@ -20,6 +20,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
     
+    var rewardBehaviorRelay = BehaviorRelay<[Reward]>(value: [])
+    
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
     }
@@ -174,6 +176,14 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
                 cellIdentifier: AttachmentCell.identifier,
                 cellType: AttachmentCell.self)) { (row, data, cell) in
                     cell.configure(linkText: data)
+                }.disposed(by: disposeBag)
+        
+        rewardBehaviorRelay
+            .asDriver()
+            .drive(rewardListTableView.rx.items(
+                cellIdentifier: RewardCell.identifier,
+                cellType: RewardCell.self)) { (row, data, cell) in
+                    cell.configure(model: data)
                 }.disposed(by: disposeBag)
         
     }
@@ -354,6 +364,8 @@ extension CrowdFundingViewController {
         
         pageControl.numberOfPages = model.imageList.count
         pageControl.currentPage = 0
+        
+        rewardBehaviorRelay.accept(model.reward)
     }
     
     private func setPercentageTextFont(percentage: Int) {
