@@ -122,8 +122,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     private func setGesture() {
         Observable
             .merge(
-                fundingImageView.rx.gesture(.swipe(direction: .left)).asObservable(),
-                fundingImageView.rx.gesture(.swipe(direction: .right)).asObservable()
+                descriptionImageView.rx.gesture(.swipe(direction: .left)).asObservable(),
+                descriptionImageView.rx.gesture(.swipe(direction: .right)).asObservable()
             )
             .bind(with: self) { owner, gesture in
                 guard let gesture = gesture as? UISwipeGestureRecognizer else { return }
@@ -136,6 +136,16 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
                 default:
                     break
                 }
+                
+                UIView.transition(
+                    with: owner.descriptionImageView,
+                    duration: 0.3,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        owner.descriptionImageView.kf.setImage(with: URL(
+                            string: owner.fundingImageDataSources.value[owner.pageControl.currentPage])
+                        )
+                    })
             }.disposed(by: disposeBag)
     }
     
@@ -150,19 +160,19 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
                     cell.configure(linkText: data)
                 }.disposed(by: disposeBag)
         
-        fundingImageDataSources
-            .asDriver()
-            .drive(with: self) { owner, _ in
-                UIView.transition(
-                    with: owner.fundingImageView,
-                    duration: 0.3,
-                    options: .transitionCrossDissolve,
-                    animations: {
-                        owner.fundingImageView.kf.setImage(with: URL(
-                            string: owner.fundingImageDataSources.value[owner.pageControl.currentPage])
-                        )
-                    })
-            }.disposed(by: disposeBag)
+//        fundingImageDataSources
+//            .asDriver()
+//            .drive(with: self) { owner, _ in
+//                UIView.transition(
+//                    with: owner.fundingImageView,
+//                    duration: 0.3,
+//                    options: .transitionCrossDissolve,
+//                    animations: {
+//                        owner.fundingImageView.kf.setImage(with: URL(
+//                            string: owner.fundingImageDataSources.value[owner.pageControl.currentPage])
+//                        )
+//                    })
+//            }.disposed(by: disposeBag)
         
     }
     
@@ -279,7 +289,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         
         pageControl.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(descriptionImageView.snp.bottom).offset(-8)
+            $0.bottom.equalTo(descriptionImageView.snp.bottom).offset(18)
         }
         
         attachmentLabel.snp.makeConstraints {
@@ -319,6 +329,9 @@ extension CrowdFundingViewController {
         descriptionLabel.text = model.description
         
         fundingImageDataSources.accept(model.imageList)
+        
+        print(fundingImageDataSources.value[0])
+        descriptionImageView.kf.setImage(with: URL(string: fundingImageDataSources.value[0]))
         
         pageControl.numberOfPages = model.imageList.count
         pageControl.currentPage = 0
