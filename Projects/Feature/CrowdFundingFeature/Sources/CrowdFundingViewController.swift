@@ -130,6 +130,9 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     }
     
     private let rewardListTableView = UITableView().then {
+        $0.backgroundColor = .black
+        $0.rowHeight = UITableView.automaticDimension
+        $0.estimatedRowHeight = 114
         $0.register(RewardCell.self, forCellReuseIdentifier: RewardCell.identifier)
     }
 
@@ -190,6 +193,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     override func viewWillAppear(_ animated: Bool) {
         self.attachmentListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
+        self.rewardListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
@@ -201,6 +205,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     override func viewWillDisappear(_ animated: Bool) {
         self.attachmentListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
+        self.rewardListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -208,6 +213,10 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             if object is UITableView {
                 if let newValue = change?[.newKey] as? CGSize {
                     attachmentListTableView.snp.updateConstraints {
+                        $0.height.equalTo(newValue.height + 28)
+                    }
+                    
+                    rewardListTableView.snp.updateConstraints {
                         $0.height.equalTo(newValue.height + 28)
                     }
                 }
@@ -364,6 +373,8 @@ extension CrowdFundingViewController {
         
         pageControl.numberOfPages = model.imageList.count
         pageControl.currentPage = 0
+        
+        print(model.reward)
         
         rewardBehaviorRelay.accept(model.reward)
     }

@@ -31,12 +31,22 @@ class RewardCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        contentView.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
+        contentView.clipsToBounds = true
+        contentView.layer.cornerRadius = 10
+        
         addView()
         setLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 15, bottom: 16, right: 15))
     }
     
     private func addView() {
@@ -67,6 +77,7 @@ class RewardCell: UITableViewCell {
         rewardPriceLabel.snp.makeConstraints {
             $0.top.equalTo(rewardDescriptionLabel.snp.bottom).offset(12)
             $0.leading.equalTo(rewardTitleLabel)
+            $0.bottom.equalToSuperview().inset(20)
         }
     }
 }
