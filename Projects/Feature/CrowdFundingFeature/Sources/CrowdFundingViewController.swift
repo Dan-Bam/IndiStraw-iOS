@@ -289,7 +289,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         
         pageControl.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(descriptionImageView.snp.bottom).offset(18)
+            $0.top.equalTo(descriptionImageView.snp.bottom).offset(8)
         }
         
         attachmentLabel.snp.makeConstraints {
