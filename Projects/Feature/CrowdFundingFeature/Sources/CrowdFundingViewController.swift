@@ -125,6 +125,10 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.text = "리워드 선택"
     }
     
+    private let fundingButton = ButtonComponent().then {
+        $0.setTitle("펀딩하기", for: .normal)
+    }
+    
     private func setGesture() {
         Observable
             .merge(
@@ -196,7 +200,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     override func viewWillDisappear(_ animated: Bool) {
         self.attachmentListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
-    
+
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
@@ -221,7 +225,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             fundingSeparatorLineView, descriptionLabel,
             descriptionImageView, pageControl,
             attachmentLabel, attachmentListTableView,
-            descriptionSeparatorLineView, rewardSelectionLabel
+            descriptionSeparatorLineView, rewardSelectionLabel,
+            fundingButton
         )
     }
     
@@ -306,7 +311,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         attachmentListTableView.snp.makeConstraints {
             $0.top.equalTo(attachmentLabel.snp.bottom).offset(6)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+//            $0.bottom.equalToSuperview()
             $0.height.equalTo(1)
         }
         
@@ -319,6 +324,13 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         rewardSelectionLabel.snp.makeConstraints {
             $0.top.equalTo(descriptionSeparatorLineView.snp.bottom).offset(28)
             $0.leading.equalToSuperview().inset(15)
+        }
+        
+        fundingButton.snp.makeConstraints {
+            $0.top.equalTo(rewardSelectionLabel.snp.bottom)
+            $0.bottom.equalToSuperview().inset(126)
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(54)
         }
     }
 }
