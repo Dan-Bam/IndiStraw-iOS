@@ -45,7 +45,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.currentPage = 0
         $0.numberOfPages = bannerImageSources.count
         $0.setCurrentPageIndicatorImage(
-            DesignSystemAsset.Images.pageControlIndicator.image,
+            DesignSystemAsset.Images.pagecontrol.image,
             forPage: $0.currentPage
         )
     }
