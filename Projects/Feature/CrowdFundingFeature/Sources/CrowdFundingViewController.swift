@@ -127,10 +127,10 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.text = "리워드 종류"
     }
     
-//    private let rewardListTableView = UITableView().then {
-//
-//    }
-//
+    private let rewardListTableView = UITableView().then {
+        $0.register(RewardCell.self, forCellReuseIdentifier: RewardCell.identifier)
+    }
+
     private let fundingButton = ButtonComponent().then {
         $0.setTitle("펀딩하기", for: .normal)
     }
@@ -218,7 +218,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             descriptionImageView, pageControl,
             attachmentLabel, attachmentListTableView,
             descriptionSeparatorLineView, rewardTitleLabel,
-            fundingButton
+            rewardListTableView , fundingButton
         )
     }
     
@@ -317,9 +317,15 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.leading.equalToSuperview().inset(15)
         }
         
+        rewardListTableView.snp.makeConstraints {
+            $0.top.equalTo(rewardTitleLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
         fundingButton.snp.makeConstraints {
-            $0.top.equalTo(rewardTitleLabel.snp.bottom)
-            $0.bottom.equalToSuperview().inset(126)
+            $0.top.equalTo(rewardListTableView.snp.bottom).offset(37)
+            $0.bottom.equalToSuperview().inset(61)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }

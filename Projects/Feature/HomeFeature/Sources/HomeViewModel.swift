@@ -14,7 +14,7 @@ class HomeViewModel: BaseViewModel {
             case .success(let data):
                 completion(.success(data))
             case .failure(let error):
-                print("error = \(error.localizedDescription)")
+                print("Popular CrowdFunding List - error = \(error.localizedDescription)")
             }
         }
     }

@@ -2,6 +2,7 @@ import UIKit
 import DesignSystem
 import SnapKit
 import Then
+import Kingfisher
 
 class RewardCell: UITableViewCell {
     static let identifier = "RewardCell"
@@ -66,5 +67,14 @@ class RewardCell: UITableViewCell {
             $0.top.equalTo(rewardDescriptionLabel.snp.bottom).offset(12)
             $0.leading.equalTo(rewardTitleLabel)
         }
+    }
+}
+
+extension RewardCell {
+    func configure(model: Reward) {
+        rewardImageView.kf.setImage(with: URL(string: model.imageUrl))
+        rewardTitleLabel.text = model.title
+        rewardDescriptionLabel.text = model.description
+        rewardPriceLabel.text = "\(model.price)"
     }
 }
