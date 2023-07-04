@@ -119,6 +119,12 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
     
+    private let rewardSelectionLabel = UILabel().then {
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 16)
+        $0.textColor = .white
+        $0.text = "리워드 선택"
+    }
+    
     private func setGesture() {
         Observable
             .merge(
@@ -215,7 +221,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             fundingSeparatorLineView, descriptionLabel,
             descriptionImageView, pageControl,
             attachmentLabel, attachmentListTableView,
-            descriptionSeparatorLineView
+            descriptionSeparatorLineView, rewardSelectionLabel
         )
     }
     
@@ -308,6 +314,11 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             $0.top.equalTo(attachmentListTableView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
+        }
+        
+        rewardSelectionLabel.snp.makeConstraints {
+            $0.top.equalTo(descriptionSeparatorLineView.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().inset(15)
         }
     }
 }
