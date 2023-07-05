@@ -89,6 +89,6 @@ extension RewardCell {
         rewardImageView.kf.setImage(with: URL(string: model.imageUrl))
         rewardTitleLabel.text = model.title
         rewardDescriptionLabel.text = model.description
-        rewardPriceLabel.text = "\(model.price)" + "원"
+        rewardPriceLabel.text = "\(model.price.setMoneyType())" + "원"
     }
 }
