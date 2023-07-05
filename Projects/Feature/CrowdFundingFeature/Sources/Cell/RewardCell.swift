@@ -8,6 +8,7 @@ class RewardCell: UITableViewCell {
     static let identifier = "RewardCell"
     
     private let rewardImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 3
     }
@@ -18,7 +19,6 @@ class RewardCell: UITableViewCell {
     }
     
     private let rewardDescriptionLabel = UILabel().then {
-//        $0.numberOfLines = 2q
         $0.textColor = DesignSystemAsset.Colors.gray.color
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 14)
     }
