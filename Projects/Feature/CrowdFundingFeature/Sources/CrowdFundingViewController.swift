@@ -377,13 +377,17 @@ extension CrowdFundingViewController {
     
     private func setPercentageTextFont(percentage: Int) {
         let attributeString = NSMutableAttributedString()
-        let amoutPercentageString = NSMutableAttributedString(string: "\(percentage)", attributes: [.font: DesignSystemFontFamily.Suit.bold.font(size: 18)])
-        let percentageString = NSMutableAttributedString(string: "%", attributes: [.font: DesignSystemFontFamily.Suit.medium.font(size: 12)])
-        let achivementString = NSMutableAttributedString(string: " 달성", attributes: [.font: DesignSystemFontFamily.Suit.regular.font(size: 14)])
         
-        attributeString.append(amoutPercentageString)
-        attributeString.append(percentageString)
-        attributeString.append(achivementString)
+        let items: [(text: String, attributes: [NSAttributedString.Key: Any])] = [
+            ("\(percentage)", [.font: DesignSystemFontFamily.Suit.bold.font(size: 18)]),
+            ("%", [.font: DesignSystemFontFamily.Suit.medium.font(size: 12)]),
+            ("달성", [.font: DesignSystemFontFamily.Suit.regular.font(size: 14)])
+        ]
+        
+        items.forEach {
+            attributeString.append(NSAttributedString(string: $0.text, attributes: $0.attributes))
+        }
+        
         achivementPercentageLabel.attributedText = attributeString
     }
     
