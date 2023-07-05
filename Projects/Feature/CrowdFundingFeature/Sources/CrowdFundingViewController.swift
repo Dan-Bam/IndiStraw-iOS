@@ -194,9 +194,11 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, arg in
-                owner.configure(model: arg)
-                owner.attachmentBehaviorRelay.accept(arg.imageList)
+            .subscribe(with: self) { owner, model in
+                owner.configure(model: model)
+                owner.attachmentBehaviorRelay.accept(model.imageList)
+                owner.fundingImageDataSources.accept(model.imageList)
+                owner.rewardBehaviorRelay.accept(model.reward)
             }.disposed(by: disposeBag)
     }
     
@@ -211,7 +213,9 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
                 if let newValue = change?[.newKey] as? CGSize {
                     print(newValue.height)
                     attachmentListTableView.snp.updateConstraints {
-                        $0.height.equalTo(attachmentListTableView.rowHeight * CGFloat(attachmentBehaviorRelay.value.count))
+                        $0.height.equalTo(
+                            attachmentListTableView.rowHeight * CGFloat(attachmentBehaviorRelay.value.count)
+                        )
                     }
                     
                     rewardListTableView.snp.updateConstraints {
@@ -365,17 +369,10 @@ extension CrowdFundingViewController {
         fundingProgressView.progress = Float(model.amount.percentage) / 100
         
         descriptionLabel.text = model.description
-        
-        fundingImageDataSources.accept(model.imageList)
-        
         descriptionImageView.kf.setImage(with: URL(string: fundingImageDataSources.value[0]))
         
         pageControl.numberOfPages = model.imageList.count
         pageControl.currentPage = 0
-        
-        print(model.reward)
-        
-        rewardBehaviorRelay.accept(model.reward)
     }
     
     private func setPercentageTextFont(percentage: Int) {
