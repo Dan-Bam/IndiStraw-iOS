@@ -195,11 +195,11 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, model in
-                owner.configure(model: model)
-                
                 owner.attachmentBehaviorRelay.accept(model.imageList)
                 owner.fundingImageDataSources.accept(model.imageList)
                 owner.rewardBehaviorRelay.accept(model.reward)
+                
+                owner.configure(model: model)
             }.disposed(by: disposeBag)
     }
     
@@ -207,22 +207,20 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         self.attachmentListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
         self.rewardListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
-
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
-                if let newValue = change?[.newKey] as? CGSize {
-                    attachmentListTableView.snp.updateConstraints {
-                        $0.height.equalTo(
-                            attachmentListTableView.rowHeight * CGFloat(attachmentBehaviorRelay.value.count)
-                        )
-                    }
-                    
-                    rewardListTableView.snp.updateConstraints {
-                        $0.height.equalTo(
-                            rewardListTableView.rowHeight * CGFloat(rewardBehaviorRelay.value.count)
-                        )
-                    }
+                attachmentListTableView.snp.updateConstraints {
+                    $0.height.equalTo(
+                        attachmentListTableView.rowHeight * CGFloat(attachmentBehaviorRelay.value.count)
+                    )
+                }
+                
+                rewardListTableView.snp.updateConstraints {
+                    $0.height.equalTo(
+                        rewardListTableView.rowHeight * CGFloat(rewardBehaviorRelay.value.count)
+                    )
                 }
             }
         }
