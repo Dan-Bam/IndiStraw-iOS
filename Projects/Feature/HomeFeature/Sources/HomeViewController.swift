@@ -42,7 +42,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     private let underlineView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
-        $0.layer.cornerRadius = 10
+//        $0.layer.cornerRadius = 0.5
     }
 
     private let segmentedControl = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
@@ -109,7 +109,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         
         segmentedControl.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
-                let underlineFinalXPosition = (self.segmentedControl.bounds.width / CGFloat(self.segmentedControl.numberOfSegments)) * CGFloat(self.segmentedControl.selectedSegmentIndex)
+                let underlineFinalXPosition = ((self.segmentedControl.bounds.width / CGFloat(self.segmentedControl.numberOfSegments)) * CGFloat(self.segmentedControl.selectedSegmentIndex)) + 9
                 UIView.animate(
                     withDuration: 0.1,
                     animations: {
@@ -129,23 +129,20 @@ class HomeViewController: BaseVC<HomeViewModel> {
             }.disposed(by: disposeBag)
     }
     
-    override func viewWillLayoutSubviews() {
-        
-    }
-    
     override func configureVC() {
-        print("viewDidLoad")
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.rightBarButtonItem = profileButton
         bindUI()
         moviesCollectionView.delegate = self
         removeBackgroundAndDidiver()
         
-        let width = segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)
+        let width = (segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)) - 18
         let height: CGFloat = 2.0
+        print("width = \(width)")
         let xPosition = CGFloat(segmentedControl.selectedSegmentIndex) * width
-        let yPosition = segmentedControl.bounds.size.height - height
-        let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+        print(xPosition)
+        let yPosition = segmentedControl.bounds.size.height + 23 - height
+        let frame = CGRect(x: xPosition + 9, y: yPosition, width: width, height: height)
         underlineView.frame = frame
         segmentedControl.addSubview(underlineView)
         
@@ -214,10 +211,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.leading.equalToSuperview().inset(15)
             $0.height.equalTo(23)
         }
- 
-//        segmentedControl.snp.makeConstraints {
-//            $0.center.equalToSuperview()
-//        }
 
         moviesCollectionView.snp.makeConstraints {
             $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
