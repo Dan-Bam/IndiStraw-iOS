@@ -7,6 +7,7 @@ class AttachmentCell: UITableViewCell {
     static let identifier = "AttachmentCell"
     
     private let linkImageView = UIImageView().then {
+        $0.sizeToFit()
         $0.image = UIImage(systemName: "link")
         $0.tintColor = .white
     }
@@ -25,7 +26,7 @@ class AttachmentCell: UITableViewCell {
         contentView.addSubviews(linkImageView, linkUrlButton)
         
         linkImageView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview().inset(4)
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(14)
             $0.size.equalTo(20)
         }

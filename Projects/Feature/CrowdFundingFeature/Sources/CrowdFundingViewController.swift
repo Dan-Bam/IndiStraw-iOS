@@ -7,6 +7,7 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 import Utility
+import RxGesture
 
 enum ContentSizeKey {
     static let key = "contentSize"
@@ -15,7 +16,9 @@ enum ContentSizeKey {
 class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     var disposeBag = DisposeBag()
     
+    var fundingImageDataSources = BehaviorRelay<[String]>(value: [""])
     var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
+    var rewardBehaviorRelay = BehaviorRelay<[Reward]>(value: [])
     
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
@@ -96,6 +99,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     }
     
     private let pageControl = UIPageControl().then {
+        $0.pageIndicatorTintColor = DesignSystemAsset.Colors.gray.color
+        $0.currentPageIndicatorTintColor = DesignSystemAsset.Colors.mainColor.color
         $0.isUserInteractionEnabled = false
     }
     
@@ -107,8 +112,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     private let attachmentListTableView = UITableView().then {
         $0.backgroundColor = .black
-        $0.estimatedRowHeight = 30
-        $0.rowHeight = UITableView.automaticDimension
+//        $0.estimatedRowHeight = 30
+        $0.rowHeight = 30
         $0.register(AttachmentCell.self, forCellReuseIdentifier: AttachmentCell.identifier)
     }
     
@@ -116,8 +121,56 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.darkGray.color
     }
     
+    private let rewardTitleLabel = UILabel().then {
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 16)
+        $0.textColor = .white
+        $0.text = "리워드 종류"
+    }
+    
+    private let rewardListTableView = UITableView().then {
+        $0.backgroundColor = .black
+//        $0.estimatedRowHeight = 116
+        $0.rowHeight = 116
+        $0.register(RewardCell.self, forCellReuseIdentifier: RewardCell.identifier)
+    }
+
+    private let fundingButton = ButtonComponent().then {
+        $0.setTitle("펀딩하기", for: .normal)
+    }
+    
+    private func setGesture() {
+        Observable
+            .merge(
+                descriptionImageView.rx.gesture(.swipe(direction: .left)).asObservable(),
+                descriptionImageView.rx.gesture(.swipe(direction: .right)).asObservable()
+            )
+            .bind(with: self) { owner, gesture in
+                guard let gesture = gesture as? UISwipeGestureRecognizer else { return }
+                
+                switch gesture.direction {
+                case .left:
+                    owner.pageControl.currentPage += 1
+                case .right:
+                    owner.pageControl.currentPage -= 1
+                default:
+                    break
+                }
+                
+                UIView.transition(
+                    with: owner.descriptionImageView,
+                    duration: 0.3,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        owner.descriptionImageView.kf.setImage(with: URL(
+                            string: owner.fundingImageDataSources.value[owner.pageControl.currentPage])
+                        )
+                    })
+            }.disposed(by: disposeBag)
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
+        setGesture()
         attachmentBehaviorRelay
             .asDriver()
             .drive(attachmentListTableView.rx.items(
@@ -126,21 +179,33 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
                     cell.configure(linkText: data)
                 }.disposed(by: disposeBag)
         
+        rewardBehaviorRelay
+            .asDriver()
+            .drive(rewardListTableView.rx.items(
+                cellIdentifier: RewardCell.identifier,
+                cellType: RewardCell.self)) { (row, data, cell) in
+                    cell.configure(model: data)
+                }.disposed(by: disposeBag)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.attachmentListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
+        self.rewardListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, arg in
-                owner.configure(model: arg)
-                owner.attachmentBehaviorRelay.accept(arg.imageList)
+            .subscribe(with: self) { owner, model in
+                owner.configure(model: model)
+                
+                owner.attachmentBehaviorRelay.accept(model.imageList)
+                owner.fundingImageDataSources.accept(model.imageList)
+                owner.rewardBehaviorRelay.accept(model.reward)
             }.disposed(by: disposeBag)
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         self.attachmentListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
+        self.rewardListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -148,7 +213,15 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             if object is UITableView {
                 if let newValue = change?[.newKey] as? CGSize {
                     attachmentListTableView.snp.updateConstraints {
-                        $0.height.equalTo(newValue.height + 28)
+                        $0.height.equalTo(
+                            attachmentListTableView.rowHeight * CGFloat(attachmentBehaviorRelay.value.count)
+                        )
+                    }
+                    
+                    rewardListTableView.snp.updateConstraints {
+                        $0.height.equalTo(
+                            rewardListTableView.rowHeight * CGFloat(rewardBehaviorRelay.value.count)
+                        )
                     }
                 }
             }
@@ -167,7 +240,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             fundingSeparatorLineView, descriptionLabel,
             descriptionImageView, pageControl,
             attachmentLabel, attachmentListTableView,
-            descriptionSeparatorLineView
+            descriptionSeparatorLineView, rewardTitleLabel,
+            rewardListTableView , fundingButton
         )
     }
     
@@ -175,7 +249,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-
+        
         contentView.snp.makeConstraints {
             $0.centerX.width.top.bottom.equalToSuperview()
         }
@@ -241,7 +315,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         
         pageControl.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(descriptionImageView.snp.bottom).offset(-8)
+            $0.top.equalTo(descriptionImageView.snp.bottom).offset(8)
         }
         
         attachmentLabel.snp.makeConstraints {
@@ -252,23 +326,37 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         attachmentListTableView.snp.makeConstraints {
             $0.top.equalTo(attachmentLabel.snp.bottom).offset(6)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
             $0.height.equalTo(1)
         }
         
         descriptionSeparatorLineView.snp.makeConstraints {
-            $0.top.equalTo(attachmentListTableView.snp.bottom)
+            $0.top.equalTo(attachmentListTableView.snp.bottom).offset(28)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
+        }
+        
+        rewardTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(descriptionSeparatorLineView.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().inset(15)
+        }
+        
+        rewardListTableView.snp.makeConstraints {
+            $0.top.equalTo(rewardTitleLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
+        fundingButton.snp.makeConstraints {
+            $0.top.equalTo(rewardListTableView.snp.bottom).offset(37)
+            $0.bottom.equalToSuperview().inset(61)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
         }
     }
 }
 
 extension CrowdFundingViewController {
     func configure(model: CrowdFundingDetailResponse) {
-        pageControl.numberOfPages = model.imageList.count
-        pageControl.currentPage = 0
-        
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
         fundingTitleLabel.text = model.title
@@ -276,11 +364,15 @@ extension CrowdFundingViewController {
         remainingDayLabel.text = "D-" + "\(model.remainingDay)"
         setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
         
-        fundingCountLabel.setTitle("\(model.fundingCount)", for: .normal)
+        fundingCountLabel.setTitle("\(model.fundingCount.setMoneyType())", for: .normal)
         fundingProgressView.setProgress(0.7, animated: true)
         fundingProgressView.progress = Float(model.amount.percentage) / 100
         
         descriptionLabel.text = model.description
+        descriptionImageView.kf.setImage(with: URL(string: fundingImageDataSources.value[0]))
+        
+        pageControl.numberOfPages = model.imageList.count
+        pageControl.currentPage = 0
     }
     
     private func setPercentageTextFont(percentage: Int) {
@@ -298,7 +390,7 @@ extension CrowdFundingViewController {
     private func setTotalAmountTextFont(totalAmount: Int, targetAmount: Int) {
         let attributeString = NSMutableAttributedString()
         let totalAmountString = NSMutableAttributedString(
-            string: "\(totalAmount)",
+            string: "\(totalAmount.setMoneyType())",
             attributes: [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18)]
         )
         let slashString = NSMutableAttributedString(
@@ -306,7 +398,7 @@ extension CrowdFundingViewController {
             attributes: [.font: DesignSystemFontFamily.Suit.light.font(size: 18)]
         )
         let targetAmountString = NSMutableAttributedString(
-            string: "\(targetAmount)",
+            string: "\(targetAmount.setMoneyType())",
             attributes: [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18),
                          .foregroundColor: DesignSystemAsset.Colors.lightGray.color]
         )
