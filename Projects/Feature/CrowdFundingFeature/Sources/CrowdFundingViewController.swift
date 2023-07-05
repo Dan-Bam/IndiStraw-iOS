@@ -377,41 +377,37 @@ extension CrowdFundingViewController {
     
     private func setPercentageTextFont(percentage: Int) {
         let attributeString = NSMutableAttributedString()
-        let amoutPercentageString = NSMutableAttributedString(string: "\(percentage)", attributes: [.font: DesignSystemFontFamily.Suit.bold.font(size: 18)])
-        let percentageString = NSMutableAttributedString(string: "%", attributes: [.font: DesignSystemFontFamily.Suit.medium.font(size: 12)])
-        let achivementString = NSMutableAttributedString(string: " 달성", attributes: [.font: DesignSystemFontFamily.Suit.regular.font(size: 14)])
         
-        attributeString.append(amoutPercentageString)
-        attributeString.append(percentageString)
-        attributeString.append(achivementString)
+        let items: [(text: String, attributes: [NSAttributedString.Key: Any])] = [
+            ("\(percentage)", [.font: DesignSystemFontFamily.Suit.bold.font(size: 18)]),
+            ("%", [.font: DesignSystemFontFamily.Suit.medium.font(size: 12)]),
+            ("달성", [.font: DesignSystemFontFamily.Suit.regular.font(size: 14)])
+        ]
+        
+        items.forEach {
+            attributeString.append(NSAttributedString(string: $0.text, attributes: $0.attributes))
+        }
+        
         achivementPercentageLabel.attributedText = attributeString
     }
     
     private func setTotalAmountTextFont(totalAmount: Int, targetAmount: Int) {
         let attributeString = NSMutableAttributedString()
-        let totalAmountString = NSMutableAttributedString(
-            string: "\(totalAmount.setMoneyType())",
-            attributes: [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18)]
-        )
-        let slashString = NSMutableAttributedString(
-            string: "/",
-            attributes: [.font: DesignSystemFontFamily.Suit.light.font(size: 18)]
-        )
-        let targetAmountString = NSMutableAttributedString(
-            string: "\(targetAmount.setMoneyType())",
-            attributes: [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18),
-                         .foregroundColor: DesignSystemAsset.Colors.lightGray.color]
-        )
-        let wonString = NSMutableAttributedString(
-            string: "원",
-            attributes: [.font: DesignSystemFontFamily.Suit.regular.font(size: 14),
-                         .foregroundColor: UIColor.white]
-        )
         
-        attributeString.append(totalAmountString)
-        attributeString.append(slashString)
-        attributeString.append(targetAmountString)
-        attributeString.append(wonString)
+        let items: [(text: String, attributes: [NSAttributedString.Key: Any])] = [
+            (totalAmount.setMoneyType(), [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18)]),
+            ("/", [.font: DesignSystemFontFamily.Suit.light.font(size: 18)]),
+            (targetAmount.setMoneyType(), [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18),
+                                           .foregroundColor: DesignSystemAsset.Colors.lightGray.color]),
+            ("원", [.font: DesignSystemFontFamily.Suit.regular.font(size: 14),
+                   .foregroundColor: UIColor.white])
+        ]
+        
+        items.forEach {
+            attributeString.append(NSAttributedString(string: $0.text, attributes: $0.attributes))
+        }
+        
         totalAmountLabel.attributedText = attributeString
+        
     }
 }
