@@ -36,6 +36,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     private let bannerImageView = UIImageView().then {
+        $0.backgroundColor = DesignSystemAsset.Colors.gray.color
         $0.layer.cornerRadius = 10
         $0.image = bannerImageSources[0]
     }
