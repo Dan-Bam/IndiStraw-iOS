@@ -6,15 +6,14 @@ import RxSwift
 import RxCocoa
 import RxGesture
 
-class ImageViewPageControl: UIView {
+public class ImageViewPageControl: UIView {
     private let disposeBag = DisposeBag()
-    private let imageDataSources = BehaviorRelay<[String]>(value: [])
+    private let imageDataSources = BehaviorRelay<[String]>(value: [""])
     
     private let pagecontrolImageView = UIImageView().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
         $0.backgroundColor = DesignSystemAsset.Colors.gray.color
-//        $0.image = bannerImageSources[0]
     }
     
     private let pageControl = UIPageControl().then {
@@ -74,7 +73,7 @@ class ImageViewPageControl: UIView {
     private func setLayout() {
         pagecontrolImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(170)
+            $0.height.equalTo(140)
         }
         
         pageControl.snp.makeConstraints {
@@ -85,8 +84,10 @@ class ImageViewPageControl: UIView {
     }
 }
 
-extension ImageViewPageControl {
+public extension ImageViewPageControl {
     func configure(imageList: [String]) {
+        imageDataSources.accept(imageList)
         pagecontrolImageView.kf.setImage(with: URL(string: imageList[0]))
+        pageControl.numberOfPages = imageList.count
     }
 }

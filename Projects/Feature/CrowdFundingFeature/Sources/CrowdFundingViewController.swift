@@ -16,7 +16,6 @@ enum ContentSizeKey {
 class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     var disposeBag = DisposeBag()
     
-    var fundingImageDataSources = BehaviorRelay<[String]>(value: [""])
     var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
     var rewardBehaviorRelay = BehaviorRelay<[Reward]>(value: [])
     
@@ -93,15 +92,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 14)
     }
     
-    private let descriptionImageView = UIImageView().then {
-        $0.backgroundColor = .gray
+    private let descriptionImageView = ImageViewPageControl().then {
         $0.layer.cornerRadius = 10
-    }
-    
-    private let pageControl = UIPageControl().then {
-        $0.pageIndicatorTintColor = DesignSystemAsset.Colors.gray.color
-        $0.currentPageIndicatorTintColor = DesignSystemAsset.Colors.mainColor.color
-        $0.isUserInteractionEnabled = false
     }
     
     private let attachmentLabel = UILabel().then {
@@ -138,39 +130,8 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.setTitle("펀딩하기", for: .normal)
     }
     
-    private func setGesture() {
-        Observable
-            .merge(
-                descriptionImageView.rx.gesture(.swipe(direction: .left)).asObservable(),
-                descriptionImageView.rx.gesture(.swipe(direction: .right)).asObservable()
-            )
-            .bind(with: self) { owner, gesture in
-                guard let gesture = gesture as? UISwipeGestureRecognizer else { return }
-                
-                switch gesture.direction {
-                case .left:
-                    owner.pageControl.currentPage += 1
-                case .right:
-                    owner.pageControl.currentPage -= 1
-                default:
-                    break
-                }
-                
-                UIView.transition(
-                    with: owner.descriptionImageView,
-                    duration: 0.3,
-                    options: .transitionCrossDissolve,
-                    animations: {
-                        owner.descriptionImageView.kf.setImage(with: URL(
-                            string: owner.fundingImageDataSources.value[owner.pageControl.currentPage])
-                        )
-                    })
-            }.disposed(by: disposeBag)
-    }
-    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
-        setGesture()
         attachmentBehaviorRelay
             .asDriver()
             .drive(attachmentListTableView.rx.items(
@@ -196,7 +157,6 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, model in
                 owner.attachmentBehaviorRelay.accept(model.imageList)
-                owner.fundingImageDataSources.accept(model.imageList)
                 owner.rewardBehaviorRelay.accept(model.reward)
                 
                 owner.configure(model: model)
@@ -236,10 +196,10 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
             remainingDayLabel, totalAmountLabel,
             fundingCountLabel, fundingProgressView,
             fundingSeparatorLineView, descriptionLabel,
-            descriptionImageView, pageControl,
-            attachmentLabel, attachmentListTableView,
-            descriptionSeparatorLineView, rewardTitleLabel,
-            rewardListTableView , fundingButton
+            descriptionImageView, attachmentLabel,
+            attachmentListTableView, descriptionSeparatorLineView,
+            rewardTitleLabel, rewardListTableView,
+            fundingButton
         )
     }
     
@@ -308,12 +268,6 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         descriptionImageView.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview().inset(15)
-            $0.height.equalTo(140)
-        }
-        
-        pageControl.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(descriptionImageView.snp.bottom).offset(8)
         }
         
         attachmentLabel.snp.makeConstraints {
@@ -367,10 +321,7 @@ extension CrowdFundingViewController {
         fundingProgressView.progress = Float(model.amount.percentage) / 100
         
         descriptionLabel.text = model.description
-        descriptionImageView.kf.setImage(with: URL(string: fundingImageDataSources.value[0]))
-        
-        pageControl.numberOfPages = model.imageList.count
-        pageControl.currentPage = 0
+        descriptionImageView.configure(imageList: model.imageList)
     }
     
     private func setPercentageTextFont(percentage: Int) {
