@@ -212,7 +212,6 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
                 if let newValue = change?[.newKey] as? CGSize {
-                    print(newValue.height)
                     attachmentListTableView.snp.updateConstraints {
                         $0.height.equalTo(
                             attachmentListTableView.rowHeight * CGFloat(attachmentBehaviorRelay.value.count)
