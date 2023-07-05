@@ -364,7 +364,7 @@ extension CrowdFundingViewController {
         remainingDayLabel.text = "D-" + "\(model.remainingDay)"
         setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
         
-        fundingCountLabel.setTitle("\(model.fundingCount)", for: .normal)
+        fundingCountLabel.setTitle("\(model.fundingCount.setMoneyType())", for: .normal)
         fundingProgressView.setProgress(0.7, animated: true)
         fundingProgressView.progress = Float(model.amount.percentage) / 100
         
@@ -390,7 +390,7 @@ extension CrowdFundingViewController {
     private func setTotalAmountTextFont(totalAmount: Int, targetAmount: Int) {
         let attributeString = NSMutableAttributedString()
         let totalAmountString = NSMutableAttributedString(
-            string: "\(totalAmount)",
+            string: "\(totalAmount.setMoneyType())",
             attributes: [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18)]
         )
         let slashString = NSMutableAttributedString(
@@ -398,7 +398,7 @@ extension CrowdFundingViewController {
             attributes: [.font: DesignSystemFontFamily.Suit.light.font(size: 18)]
         )
         let targetAmountString = NSMutableAttributedString(
-            string: "\(targetAmount)",
+            string: "\(targetAmount.setMoneyType())",
             attributes: [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18),
                          .foregroundColor: DesignSystemAsset.Colors.lightGray.color]
         )
