@@ -1,33 +1,19 @@
-import Foundation
+//Endocable
+struct CrowdFundingListRequest: Encodable {
+    var page: Int
+    var size: Int = 10
+}
 
-struct CrowdFundingDetailResponse: Decodable {
+struct CrowdFundingListResopnse: Decodable {
+    var isLast: Bool
+    var list: [FundingDataList]
+}
+
+struct FundingDataList: Decodable {
+    var idx: Int
     var title: String
     var description: String
-    var writer: Writer
-    var amount: Amount
-    var remainingDay: Int
-    var fundingCount: Int
-    var reward: [Reward]
-    var status: String
-    var thumbnailUrl: String
-    var imageList: [String]
-    var fileList: [String]
-}
-
-struct Writer: Decodable {
-    var idx = UUID().uuidString
-    var name: String
-}
-
-struct Amount: Decodable {
-    var targetAmount: Int
-    var totalAmount: Int
     var percentage: Int
-}
-
-struct Reward: Decodable {
-    var title: String
-    var description: String
-    var price: Int
-    var imageUrl: String
+    var thumbnailUrl: String
+    var status: String
 }

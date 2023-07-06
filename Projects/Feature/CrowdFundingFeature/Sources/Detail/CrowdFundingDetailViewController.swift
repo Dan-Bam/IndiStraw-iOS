@@ -13,7 +13,7 @@ enum ContentSizeKey {
     static let key = "contentSize"
 }
 
-class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
+class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
     var disposeBag = DisposeBag()
     
     var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
@@ -153,7 +153,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         self.attachmentListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         self.rewardListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         
-        viewModel.requestCrowdFundingList()
+        viewModel.requestCrowdFundingDetailList()
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, model in
                 owner.attachmentBehaviorRelay.accept(model.imageList)
@@ -307,7 +307,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     }
 }
 
-extension CrowdFundingViewController {
+extension CrowdFundingDetailViewController {
     func configure(model: CrowdFundingDetailResponse) {
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name

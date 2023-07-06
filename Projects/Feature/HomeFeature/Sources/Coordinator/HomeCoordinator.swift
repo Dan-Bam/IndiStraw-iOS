@@ -28,7 +28,7 @@ extension HomeCoordinator {
         let vc = CrowdFundingCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
-        vc.startCrowdFundingCoordinator(idx: idx)
+        vc.startCrowdFundingDetailCoordinator(idx: idx)
     }
     
     func profileIsRequired() {

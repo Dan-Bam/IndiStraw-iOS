@@ -3,6 +3,7 @@ import Alamofire
 import AuthDomain
 
 enum CrowdFundingTarget {
+    case requestCrowdFundingList(CrowdFundingListRequest)
     case requestCrowdFundingDetail(idx: Int)
 }
 
@@ -27,11 +28,19 @@ extension CrowdFundingTarget: BaseRouter {
         switch self {
         case .requestCrowdFundingDetail(let idx):
             return "/crowdfunding/\(idx)"
+        case .requestCrowdFundingList(let data):
+            return "/crowdfunding/list"
         }
     }
     
     var parameters: RequestParams {
         switch self {
+        case .requestCrowdFundingList(let data):
+            let body: [String: Any] = [
+                "page": data.page,
+                "size": data.size
+            ]
+            return .requestBody(body)
         default: return .requestPlain
         }
     }

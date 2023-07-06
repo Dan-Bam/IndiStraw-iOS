@@ -126,7 +126,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
                 cellType: CrowdFundingCell.self)) { (row, data, cell) in
                     cell.configure(model: data)
                 }.disposed(by: disposeBag)
-        
+
         crowdFundingTableView.rx.modelSelected(FundingList.self)
             .bind(with: self) { owner, arg in
                 owner.viewModel.pushCrowdFundingVC(idx: arg.idx)

@@ -1,9 +1,3 @@
-//Endocable
-struct CrowdFundingRequest: Encodable {
-    var page: Int
-    var size: Int = 10
-}
-
 //Decodable
 struct CrowdFundingResponse: Decodable {
     var isLast: Bool

@@ -87,7 +87,12 @@ public class CrowdFundingViewComponent: UIView {
         }
     }
     
-    public func configure(title: String, description: String, thumbnailUrl: String, percentage: Int) {
+    public func configure(
+        title: String,
+        description: String,
+        thumbnailUrl: String,
+        percentage: Int
+    ) {
         fundingTitleLabel.text = title
         fundingDescriptionLabel.text = description
         fundingImageView.kf.setImage(with: URL(string: thumbnailUrl))
