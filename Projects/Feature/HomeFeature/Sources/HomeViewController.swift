@@ -83,6 +83,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
     }
     
+    private let crowdFundingViewAllButton = UIButton().then {
+        $0.setTitle("전체 보기 >", for: .normal)
+        $0.setTitleColor(DesignSystemAsset.Colors.gray.color, for: .normal)
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+        $0.backgroundColor = .black
+    }
+    
     private func removeBackgroundAndDidiver() {
         let image = UIImage()
         segmentedControl.setBackgroundImage(image, for: .normal, barMetrics: .default)
@@ -196,7 +203,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
         contentView.addSubviews(
             bannerImageView, segmentedControl,
             moviesCollectionView, moviesViewAllButton,
-            crowdFundingTitleLabel, crowdFundingTableView
+            crowdFundingTitleLabel, crowdFundingTableView,
+            crowdFundingViewAllButton
         )
     }
     
@@ -243,6 +251,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.height.equalTo(1)
+        }
+        
+        crowdFundingViewAllButton.snp.makeConstraints {
+            $0.top.equalTo(crowdFundingTitleLabel)
+            $0.centerY.equalTo(crowdFundingTitleLabel)
+            $0.trailing.equalToSuperview().inset(15)
         }
     }
 }
