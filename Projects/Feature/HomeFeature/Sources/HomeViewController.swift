@@ -42,7 +42,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     private let underlineView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
-//        $0.layer.cornerRadius = 0.5
+        $0.layer.cornerRadius = 1
     }
 
     private let segmentedControl = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
