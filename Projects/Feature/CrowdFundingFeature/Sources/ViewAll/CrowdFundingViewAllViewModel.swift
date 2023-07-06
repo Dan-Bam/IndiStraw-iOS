@@ -15,13 +15,12 @@ class CrowdFundingViewAllViewModel: BaseViewModel {
                 CrowdFundingTarget.requestCrowdFundingList(CrowdFundingListRequest(page: self!.fundingListCurrentPage)),
                 interceptor: JwtRequestInterceptor(jwtStore: self!.container))
             .validate()
-            .responseDecodable(of: CrowdFundingListResopnse.self) { [weak self] response in
+            .responseDecodable(of: CrowdFundingListResopnse.self) { response in
                 switch response.result {
                 case .success(let data):
-                    print("success")
                     observer.onNext(data.list)
                 case .failure(let error):
-                    print("error = \(error.localizedDescription)")
+                    print("Error - CrowdFundingList = \(error.localizedDescription)")
                     observer.onError(error)
                 }
             }
