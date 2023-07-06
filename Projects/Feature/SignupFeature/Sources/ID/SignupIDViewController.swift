@@ -7,7 +7,7 @@ import RxCocoa
 class SignupIDViewController: BaseVC<SignupIDViewModel> {
     private let disposeBag = DisposeBag()
     
-    private let inputIDTextField = TextFieldBox().then {
+    private let inputIDTextField = TextFieldBoxComponent().then {
         $0.setPlaceholer(text: "아이디")
     }
     

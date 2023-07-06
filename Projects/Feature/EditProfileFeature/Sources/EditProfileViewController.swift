@@ -14,11 +14,11 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     
     private let imagePickerController = UIImagePickerController()
     
-    private let inputNameTextField = TextFieldBox().then {
+    private let inputNameTextField = TextFieldBoxComponent().then {
         $0.setPlaceholer(text: "이름")
     }
     
-    private let inputPhoneNumberTextField = TextFieldBox().then {
+    private let inputPhoneNumberTextField = TextFieldBoxComponent().then {
         $0.isEnabled = false
         $0.setPlaceholer(text: "전화번호")
     }
@@ -29,7 +29,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         $0.setTitleColor(DesignSystemAsset.Colors.skyblue.color, for: .normal)
     }
     
-    private let inputAddressTextField = TextFieldBox().then {
+    private let inputAddressTextField = TextFieldBoxComponent().then {
         $0.isEnabled = false
         $0.setPlaceholer(text: "주소")
     }

@@ -28,7 +28,7 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
         $0.textColor = .white
     }
     
-    private let inputDetailAddressTextField = TextFieldBox().then {
+    private let inputDetailAddressTextField = TextFieldBoxComponent().then {
         $0.setPlaceholer(text: "상세주소")
     }
     

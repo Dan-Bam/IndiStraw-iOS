@@ -19,12 +19,12 @@ public class InputPhoneNumberComponent: UIView {
     
     var timerDisposable: Disposable?
     
-    public let inputPhoneNumberTextField = TextFieldBox().then {
+    public let inputPhoneNumberTextField = TextFieldBoxComponent().then {
         $0.keyboardType = .numberPad
         $0.setPlaceholer(text: "전화번호")
     }
     
-    let inputAuthNumberTextField = TextFieldBox().then {
+    let inputAuthNumberTextField = TextFieldBoxComponent().then {
         $0.keyboardType = .numberPad
         $0.setPlaceholer(text: "인증번호")
     }

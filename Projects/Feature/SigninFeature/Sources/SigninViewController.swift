@@ -8,11 +8,11 @@ import RxCocoa
 public class SigninViewController: BaseVC<SigninViewModel> {
     private let disposeBag = DisposeBag()
     
-    private let inputIDTextField = TextFieldBox().then {
+    private let inputIDTextField = TextFieldBoxComponent().then {
         $0.setPlaceholer(text: "아이디")
     }
     
-    private let inputPasswordTextField = TextFieldBox().then {
+    private let inputPasswordTextField = TextFieldBoxComponent().then {
         $0.setPlaceholer(text: "비밀번호")
         $0.eyeIconButtonVisible()
     }

@@ -16,11 +16,11 @@ public class InputPasswordComponent: UIView {
 
     private let disposeBag = DisposeBag()
     
-    public let inputPasswordTextField = TextFieldBox().then {
+    public let inputPasswordTextField = TextFieldBoxComponent().then {
         $0.setPlaceholer(text: "비밀번호")
     }
     
-    public let inputCheckPasswordTextField = TextFieldBox().then {
+    public let inputCheckPasswordTextField = TextFieldBoxComponent().then {
         $0.setPlaceholer(text: "비밀번호 확인")
     }
     
