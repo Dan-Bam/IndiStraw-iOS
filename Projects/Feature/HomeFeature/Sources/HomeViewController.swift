@@ -64,6 +64,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
         return view
     }()
     
+    private let moviesViewAllButton = UIButton().then {
+        $0.setTitle("전체 보기 >", for: .normal)
+        $0.setTitleColor(DesignSystemAsset.Colors.gray.color, for: .normal)
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+        $0.backgroundColor = .black
+    }
+    
     private let crowdFundingTitleLabel = UILabel().then {
         $0.text = "크라우드 펀딩"
         $0.textColor = .white
@@ -188,8 +195,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
 
         contentView.addSubviews(
             bannerImageView, segmentedControl,
-            moviesCollectionView, crowdFundingTitleLabel,
-            crowdFundingTableView
+            moviesCollectionView, moviesViewAllButton,
+            crowdFundingTitleLabel, crowdFundingTableView
         )
     }
     
@@ -218,6 +225,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(150)
+        }
+        
+        moviesViewAllButton.snp.makeConstraints {
+            $0.top.equalTo(segmentedControl)
+            $0.centerY.equalTo(segmentedControl)
+            $0.trailing.equalToSuperview().inset(15)
         }
 
         crowdFundingTitleLabel.snp.makeConstraints {
