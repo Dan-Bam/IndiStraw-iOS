@@ -42,7 +42,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     
     private let underlineView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
-//        $0.layer.cornerRadius = 0.5
+        $0.layer.cornerRadius = 1
     }
 
     private let segmentedControl = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
@@ -64,6 +64,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
         return view
     }()
     
+    private let moviesViewAllButton = UIButton().then {
+        $0.setTitle("전체 보기 >", for: .normal)
+        $0.setTitleColor(DesignSystemAsset.Colors.gray.color, for: .normal)
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+        $0.backgroundColor = .black
+    }
+    
     private let crowdFundingTitleLabel = UILabel().then {
         $0.text = "크라우드 펀딩"
         $0.textColor = .white
@@ -74,6 +81,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.rowHeight = 150
         $0.backgroundColor = .black
         $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
+    }
+    
+    private let crowdFundingViewAllButton = UIButton().then {
+        $0.setTitle("전체 보기 >", for: .normal)
+        $0.setTitleColor(DesignSystemAsset.Colors.gray.color, for: .normal)
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+        $0.backgroundColor = .black
     }
     
     private func removeBackgroundAndDidiver() {
@@ -188,8 +202,9 @@ class HomeViewController: BaseVC<HomeViewModel> {
 
         contentView.addSubviews(
             bannerImageView, segmentedControl,
-            moviesCollectionView, crowdFundingTitleLabel,
-            crowdFundingTableView
+            moviesCollectionView, moviesViewAllButton,
+            crowdFundingTitleLabel, crowdFundingTableView,
+            crowdFundingViewAllButton
         )
     }
     
@@ -219,6 +234,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(150)
         }
+        
+        moviesViewAllButton.snp.makeConstraints {
+            $0.top.equalTo(segmentedControl)
+            $0.centerY.equalTo(segmentedControl)
+            $0.trailing.equalToSuperview().inset(15)
+        }
 
         crowdFundingTitleLabel.snp.makeConstraints {
             $0.top.equalTo(moviesCollectionView.snp.bottom).offset(26)
@@ -230,6 +251,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.height.equalTo(1)
+        }
+        
+        crowdFundingViewAllButton.snp.makeConstraints {
+            $0.top.equalTo(crowdFundingTitleLabel)
+            $0.centerY.equalTo(crowdFundingTitleLabel)
+            $0.trailing.equalToSuperview().inset(15)
         }
     }
 }

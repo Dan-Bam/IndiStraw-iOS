@@ -5,7 +5,7 @@ import RxSwift
 import RxCocoa
 import Utility
 
-public class TextFieldBox: UITextField {
+public class TextFieldBoxComponent: UITextField {
     private var iconTaped = false
     
     private let disposeBag = DisposeBag()
@@ -69,7 +69,7 @@ public class TextFieldBox: UITextField {
     }
 }
 
-extension TextFieldBox {
+extension TextFieldBoxComponent {
     public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         var padding = super.rightViewRect(forBounds: bounds)
         padding.origin.x -= 12
