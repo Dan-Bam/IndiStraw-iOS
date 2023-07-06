@@ -7,7 +7,7 @@ import Alamofire
 
 class CrowdFundingViewAllViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
-    let fundingListCurrentPage = -1
+    let fundingListCurrentPage = 0
     
     func requestCrowdFundingList() -> Observable<[FundingDataList]> {
         return Observable.create { [weak self] (observer) -> Disposable in
@@ -15,13 +15,13 @@ class CrowdFundingViewAllViewModel: BaseViewModel {
                 CrowdFundingTarget.requestCrowdFundingList(CrowdFundingListRequest(page: self!.fundingListCurrentPage)),
                 interceptor: JwtRequestInterceptor(jwtStore: self!.container))
             .validate()
-            .responseDecodable(of: [FundingDataList].self) { [weak self] response in
+            .responseDecodable(of: CrowdFundingListResopnse.self) { [weak self] response in
                 switch response.result {
                 case .success(let data):
                     print("success")
-                    observer.onNext(data)
+                    observer.onNext(data.list)
                 case .failure(let error):
-                    print("error = \(response.response?.statusCode)")
+                    print("error = \(error.localizedDescription)")
                     observer.onError(error)
                 }
             }

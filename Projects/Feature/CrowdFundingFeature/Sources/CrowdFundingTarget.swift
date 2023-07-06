@@ -36,11 +36,11 @@ extension CrowdFundingTarget: BaseRouter {
     var parameters: RequestParams {
         switch self {
         case .requestCrowdFundingList(let data):
-            let body: [String: Any] = [
+            let query: [String: Any] = [
                 "page": data.page,
                 "size": data.size
             ]
-            return .requestBody(body)
+            return .query(query )
         default: return .requestPlain
         }
     }

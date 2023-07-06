@@ -6,7 +6,11 @@ import RxCocoa
 
 class CrowdFundingViewAllViewController: BaseVC<CrowdFundingViewAllViewModel> {
     private let disposeBag = DisposeBag()
-    private let crowdFundingListTableView = UITableView()
+    private let crowdFundingListTableView = UITableView().then {
+        $0.rowHeight = 154
+        $0.backgroundColor = .black
+        $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
+    }
     
     var fundingListData = BehaviorRelay<[FundingDataList]>(value: [])
     

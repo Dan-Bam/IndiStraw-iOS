@@ -13,8 +13,10 @@ public class HomeCoordinator: BaseCoordinator {
     
     public override func navigate(to step: IndiStrawStep) {
         switch step {
-        case .crowdFundingIsRequired(let idx):
+        case .crowdFundingDetailIsRequired(let idx):
             crowdFundingIsRequired(idx: idx)
+        case .crowdFundingListIsRequired:
+            crowdFundingListIsRequired()
         case .profileIsRequired:
             profileIsRequired()
         default:
@@ -29,6 +31,13 @@ extension HomeCoordinator {
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.startCrowdFundingDetailCoordinator(idx: idx)
+    }
+    
+    func crowdFundingListIsRequired() {
+        let vc = CrowdFundingCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.startCrowdFundingListCoordinator()
     }
     
     func profileIsRequired() {
