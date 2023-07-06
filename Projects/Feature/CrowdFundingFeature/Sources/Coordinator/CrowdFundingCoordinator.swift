@@ -14,4 +14,19 @@ public class CrowdFundingCoordinator: BaseCoordinator {
         
         navigationController.pushViewController(vc, animated: true)
     }
+    
+    public override func navigate(to step: IndiStrawStep) {
+        switch step {
+        case .crowdFundingDetailIsRequired(let idx):
+            crowdFundingDetailIsRequired(idx: idx)
+        default:
+            return
+        }
+    }
+}
+
+extension CrowdFundingCoordinator {
+    func crowdFundingDetailIsRequired(idx: Int) {
+        startCrowdFundingDetailCoordinator(idx: idx)
+    }
 }

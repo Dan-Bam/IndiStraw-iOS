@@ -42,7 +42,7 @@ class CrowdFundingCell: UITableViewCell {
         }
     }
     
-    func configure(model data: FundingDataList) {
+    func configure(model data: FundingList) {
         component.configure(
             title: data.title,
             description: data.description,

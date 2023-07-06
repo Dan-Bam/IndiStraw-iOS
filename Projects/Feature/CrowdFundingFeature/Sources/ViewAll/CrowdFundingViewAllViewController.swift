@@ -7,7 +7,7 @@ import RxCocoa
 class CrowdFundingViewAllViewController: BaseVC<CrowdFundingViewAllViewModel> {
     private let disposeBag = DisposeBag()
     
-    var fundingListData = BehaviorRelay<[FundingDataList]>(value: [])
+    var fundingListData = BehaviorRelay<[FundingList]>(value: [])
     
     private let crowdFundingListTableView = UITableView().then {
         $0.rowHeight = 154
@@ -15,8 +15,12 @@ class CrowdFundingViewAllViewController: BaseVC<CrowdFundingViewAllViewModel> {
         $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
     }
     
-    
     override func configureVC() {
+        crowdFundingListTableView.rx.modelSelected(FundingList.self)
+            .bind(with: self) { owner, arg in
+                owner.viewModel.pushCrowdFundingDetailVC(idx: arg.idx)
+            }.disposed(by: disposeBag)
+        
         viewModel.requestCrowdFundingList()
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, model in

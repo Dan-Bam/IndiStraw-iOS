@@ -9,7 +9,7 @@ class CrowdFundingViewAllViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     let fundingListCurrentPage = 0
     
-    func requestCrowdFundingList() -> Observable<[FundingDataList]> {
+    func requestCrowdFundingList() -> Observable<[FundingList]> {
         return Observable.create { [weak self] (observer) -> Disposable in
             AF.request(
                 CrowdFundingTarget.requestCrowdFundingList(CrowdFundingListRequest(page: self!.fundingListCurrentPage)),
@@ -27,6 +27,9 @@ class CrowdFundingViewAllViewModel: BaseViewModel {
             }
             return Disposables.create()
         }
-        
+    }
+    
+    func pushCrowdFundingDetailVC(idx: Int) {
+        coordinator.navigate(to: .crowdFundingDetailIsRequired(idx: idx))
     }
 }

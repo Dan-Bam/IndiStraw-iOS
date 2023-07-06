@@ -6,10 +6,10 @@ struct CrowdFundingListRequest: Encodable {
 
 struct CrowdFundingListResopnse: Decodable {
     var isLast: Bool
-    var list: [FundingDataList]
+    var list: [FundingList]
 }
 
-struct FundingDataList: Decodable {
+struct FundingList: Decodable {
     var idx: Int
     var title: String
     var description: String

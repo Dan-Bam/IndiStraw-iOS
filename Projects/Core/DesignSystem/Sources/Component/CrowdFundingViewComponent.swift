@@ -17,7 +17,6 @@ public class CrowdFundingViewComponent: UIView {
     private let fundingProgressView = UIProgressView().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 8
-        $0.progress = 0.3
         $0.progressTintColor = DesignSystemAsset.Colors.mainColor.color
         $0.trackTintColor = DesignSystemAsset.Colors.darkgray3.color
     }
