@@ -15,7 +15,7 @@ class SignupNameViewController: BaseVC<SignupNameViewModel> {
         $0.setTitle("계속하기", for: .normal)
     }
     
-    private let errorLabel = ErrorLabel()
+    private let errorLabel = ErrorLabelComponent()
     
     override func configureVC() {
         navigationItem.title = "이름을 입력해주세요."

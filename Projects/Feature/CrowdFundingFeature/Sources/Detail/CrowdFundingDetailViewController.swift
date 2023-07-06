@@ -13,7 +13,7 @@ enum ContentSizeKey {
     static let key = "contentSize"
 }
 
-class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
+class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
     var disposeBag = DisposeBag()
     
     var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
@@ -92,7 +92,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 14)
     }
     
-    private let descriptionImageView = ImageViewPageControl().then {
+    private let descriptionImageView = ImageViewPageControlComponent().then {
         $0.layer.cornerRadius = 10
     }
     
@@ -104,7 +104,6 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     private let attachmentListTableView = UITableView().then {
         $0.backgroundColor = .black
-//        $0.estimatedRowHeight = 30
         $0.rowHeight = 30
         $0.register(AttachmentCell.self, forCellReuseIdentifier: AttachmentCell.identifier)
     }
@@ -121,7 +120,6 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     
     private let rewardListTableView = UITableView().then {
         $0.backgroundColor = .black
-//        $0.estimatedRowHeight = 116
         $0.rowHeight = 116
         $0.register(RewardCell.self, forCellReuseIdentifier: RewardCell.identifier)
     }
@@ -153,7 +151,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         self.attachmentListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         self.rewardListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         
-        viewModel.requestCrowdFundingList()
+        viewModel.requestCrowdFundingDetailList()
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, model in
                 owner.attachmentBehaviorRelay.accept(model.imageList)
@@ -307,7 +305,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
     }
 }
 
-extension CrowdFundingViewController {
+extension CrowdFundingDetailViewController {
     func configure(model: CrowdFundingDetailResponse) {
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
@@ -344,10 +342,12 @@ extension CrowdFundingViewController {
         let attributeString = NSMutableAttributedString()
         
         let items: [(text: String, attributes: [NSAttributedString.Key: Any])] = [
-            (totalAmount.setMoneyType(), [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18)]),
+            (totalAmount.setMoneyType(),
+             [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18)]),
             ("/", [.font: DesignSystemFontFamily.Suit.light.font(size: 18)]),
-            (targetAmount.setMoneyType(), [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18),
-                                           .foregroundColor: DesignSystemAsset.Colors.lightGray.color]),
+            (targetAmount.setMoneyType(),
+             [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18),
+              .foregroundColor: DesignSystemAsset.Colors.lightGray.color]),
             ("원", [.font: DesignSystemFontFamily.Suit.regular.font(size: 14),
                    .foregroundColor: UIColor.white])
         ]

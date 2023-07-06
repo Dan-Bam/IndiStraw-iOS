@@ -1,5 +1,10 @@
-//Decodable
-struct CrowdFundingResponse: Decodable {
+//Endocable
+struct CrowdFundingListRequest: Encodable {
+    var page: Int
+    var size: Int = 10
+}
+
+struct CrowdFundingListResopnse: Decodable {
     var isLast: Bool
     var list: [FundingList]
 }

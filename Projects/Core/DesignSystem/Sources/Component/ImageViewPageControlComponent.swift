@@ -6,7 +6,7 @@ import RxSwift
 import RxCocoa
 import RxGesture
 
-public class ImageViewPageControl: UIView {
+public class ImageViewPageControlComponent: UIView {
     private let disposeBag = DisposeBag()
     private let imageDataSources = BehaviorRelay<[String]>(value: [""])
     
@@ -84,7 +84,7 @@ public class ImageViewPageControl: UIView {
     }
 }
 
-public extension ImageViewPageControl {
+public extension ImageViewPageControlComponent {
     func configure(imageList: [String]) {
         imageDataSources.accept(imageList)
         pagecontrolImageView.kf.setImage(with: URL(string: imageList[0]))

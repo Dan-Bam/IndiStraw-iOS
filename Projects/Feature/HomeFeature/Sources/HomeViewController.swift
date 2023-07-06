@@ -35,7 +35,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.tintColor = .white
     }
     
-    private let bannerImageView = ImageViewPageControl().then {
+    private let bannerImageView = ImageViewPageControlComponent().then {
         $0.backgroundColor = DesignSystemAsset.Colors.gray.color
         $0.layer.cornerRadius = 10
     }
@@ -78,7 +78,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     }
     
     private let crowdFundingTableView = UITableView().then {
-        $0.rowHeight = 150
+        $0.rowHeight = 154
         $0.backgroundColor = .black
         $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
     }
@@ -103,7 +103,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
         let width = (segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)) - 18
         let height: CGFloat = 2.0
         let xPosition = CGFloat(segmentedControl.selectedSegmentIndex) * width
-        print(xPosition)
         let yPosition = segmentedControl.bounds.size.height + 23 - height
         let frame = CGRect(x: xPosition + 9, y: yPosition, width: width, height: height)
         underlineView.frame = frame
@@ -126,10 +125,10 @@ class HomeViewController: BaseVC<HomeViewModel> {
                 cellType: CrowdFundingCell.self)) { (row, data, cell) in
                     cell.configure(model: data)
                 }.disposed(by: disposeBag)
-        
+
         crowdFundingTableView.rx.modelSelected(FundingList.self)
             .bind(with: self) { owner, arg in
-                owner.viewModel.pushCrowdFundingVC(idx: arg.idx)
+                owner.viewModel.pushCrowdFundingDetailVC(idx: arg.idx)
             }.disposed(by: disposeBag)
         
         segmentedControl.rx.selectedSegmentIndex.changed
@@ -151,6 +150,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
         profileButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.pushProfileVC()
+            }.disposed(by: disposeBag)
+        
+        crowdFundingViewAllButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushCrowdFundingListVC()
             }.disposed(by: disposeBag)
     }
     

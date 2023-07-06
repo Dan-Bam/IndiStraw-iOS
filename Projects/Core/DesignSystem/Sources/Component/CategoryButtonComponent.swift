@@ -1,6 +1,6 @@
 import UIKit
 
-public class CategoryButton: UIButton {
+public class CategoryButtonComponent: UIButton {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         

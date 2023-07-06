@@ -17,7 +17,7 @@ public class SigninViewController: BaseVC<SigninViewModel> {
         $0.eyeIconButtonVisible()
     }
     
-    private let errorLabel = ErrorLabel()
+    private let errorLabel = ErrorLabelComponent()
     
     private let signinButton = ButtonComponent().then {
         $0.setTitle("로그인", for: .normal)
