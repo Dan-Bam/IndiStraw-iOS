@@ -9,7 +9,7 @@ let project = Project.makeModule(
         .Feature.EditProfileFeature,
         
         .Core.DesignSystem,
-        .Domain.AuthDomain,
+        .Domain.RouterDomain,
         .Shared.Utility,
         .Shared.GlobalThirdPartyLib
     ]

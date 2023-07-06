@@ -11,7 +11,7 @@ let project = Project.makeModule(
         .Feature.AddressFeature,
         
         .Core.DesignSystem,
-        .Domain.AuthDomain,
+        .Domain.RouterDomain,
         .Shared.Utility,
         .Shared.GlobalThirdPartyLib
     ]

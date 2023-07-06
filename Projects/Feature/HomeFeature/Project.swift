@@ -11,7 +11,7 @@ let project = Project.makeModule(
         .Feature.CrowdFundingFeature,
         
         .Core.DesignSystem,
-        .Domain.AuthDomain,
+        .Domain.RouterDomain,
         .Shared.Utility,
         .Shared.GlobalThirdPartyLib
     ]

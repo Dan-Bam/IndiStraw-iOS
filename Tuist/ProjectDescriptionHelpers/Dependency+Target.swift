@@ -31,7 +31,7 @@ public extension TargetDependency.Core {
 }
 
 public extension TargetDependency.Domain {
-    static let AuthDomain = TargetDependency.domain(name: "AuthDomain")
+    static let RouterDomain = TargetDependency.domain(name: "RouterDomain")
 }
 
 public extension TargetDependency.Shared {

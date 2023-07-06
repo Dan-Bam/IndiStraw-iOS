@@ -8,7 +8,7 @@ let project = Project.makeModule(
         .Feature.BaseFeature,
         .Feature.SettingFeature,
         .Core.DesignSystem,
-        .Domain.AuthDomain,
+        .Domain.RouterDomain,
         .Shared.Utility,
         .Shared.GlobalThirdPartyLib
     ]
