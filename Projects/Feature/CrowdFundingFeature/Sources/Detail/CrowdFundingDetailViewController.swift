@@ -104,7 +104,6 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
     
     private let attachmentListTableView = UITableView().then {
         $0.backgroundColor = .black
-//        $0.estimatedRowHeight = 30
         $0.rowHeight = 30
         $0.register(AttachmentCell.self, forCellReuseIdentifier: AttachmentCell.identifier)
     }
@@ -121,7 +120,6 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
     
     private let rewardListTableView = UITableView().then {
         $0.backgroundColor = .black
-//        $0.estimatedRowHeight = 116
         $0.rowHeight = 116
         $0.register(RewardCell.self, forCellReuseIdentifier: RewardCell.identifier)
     }
@@ -344,10 +342,12 @@ extension CrowdFundingDetailViewController {
         let attributeString = NSMutableAttributedString()
         
         let items: [(text: String, attributes: [NSAttributedString.Key: Any])] = [
-            (totalAmount.setMoneyType(), [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18)]),
+            (totalAmount.setMoneyType(),
+             [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18)]),
             ("/", [.font: DesignSystemFontFamily.Suit.light.font(size: 18)]),
-            (targetAmount.setMoneyType(), [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18),
-                                           .foregroundColor: DesignSystemAsset.Colors.lightGray.color]),
+            (targetAmount.setMoneyType(),
+             [.font: DesignSystemFontFamily.Suit.semiBold.font(size: 18),
+              .foregroundColor: DesignSystemAsset.Colors.lightGray.color]),
             ("원", [.font: DesignSystemFontFamily.Suit.regular.font(size: 14),
                    .foregroundColor: UIColor.white])
         ]
