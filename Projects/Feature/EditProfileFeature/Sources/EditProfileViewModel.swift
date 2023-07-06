@@ -2,7 +2,6 @@ import Foundation
 import BaseFeature
 import Alamofire
 import JwtStore
-import AuthDomain
 import Swinject
 
 
