@@ -35,33 +35,23 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.tintColor = .white
     }
     
-    private let bannerImageView = UIImageView().then {
+    private let bannerImageView = ImageViewPageControl().then {
+        $0.backgroundColor = DesignSystemAsset.Colors.gray.color
         $0.layer.cornerRadius = 10
-        $0.image = bannerImageSources[0]
-    }
-    
-    private let pageControl = UIPageControl().then {
-        $0.isUserInteractionEnabled = false
-        $0.currentPage = 0
-        $0.numberOfPages = bannerImageSources.count
-        $0.setCurrentPageIndicatorImage(
-            DesignSystemAsset.Images.pagecontrol.image,
-            forPage: $0.currentPage
-        )
     }
     
     private let underlineView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
-        $0.layer.cornerRadius = 10
+//        $0.layer.cornerRadius = 0.5
     }
 
     private let segmentedControl = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
         $0.selectedSegmentIndex = 0
-//        $0.setTitleTextAttributes([
-//            NSAttributedString.Key.foregroundColor: DesignSystemAsset.Colors.darkGray.color,
-//            NSAttributedString.Key.font: DesignSystemFontFamily.Suit.semiBold.font(size: 16)
-//        ], for: .normal)
-//        $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        $0.setTitleTextAttributes([
+            .foregroundColor: DesignSystemAsset.Colors.darkGray.color,
+            .font: DesignSystemFontFamily.Suit.semiBold.font(size: 16)
+        ], for: .normal)
+        $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
     }
     
     lazy var moviesCollectionView: UICollectionView = {
@@ -95,35 +85,18 @@ class HomeViewController: BaseVC<HomeViewModel> {
         segmentedControl.setDividerImage(image, forLeftSegmentState: .selected, rightSegmentState: .normal, barMetrics: .default)
     }
     
-    private func setGesture() {
-        Observable
-            .merge(
-                bannerImageView.rx.gesture(.swipe(direction: .left)).asObservable(),
-                bannerImageView.rx.gesture(.swipe(direction: .right)).asObservable()
-            )
-            .bind(with: self) { owner, gesture in
-                guard let gesture = gesture as? UISwipeGestureRecognizer else { return }
-                
-                switch gesture.direction {
-                case .left:
-                    owner.pageControl.currentPage += 1
-                case .right:
-                    owner.pageControl.currentPage -= 1
-                default:
-                    break
-                }
-                
-                UIView.transition(
-                    with: owner.bannerImageView,
-                    duration: 0.3,
-                    options: .transitionCrossDissolve,
-                    animations: {
-                        owner.bannerImageView.image = bannerImageSources[owner.pageControl.currentPage]
-                    })
-            }.disposed(by: disposeBag)
+    private func addSegmentedControlUnderLinde() {
+        let width = (segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)) - 18
+        let height: CGFloat = 2.0
+        let xPosition = CGFloat(segmentedControl.selectedSegmentIndex) * width
+        print(xPosition)
+        let yPosition = segmentedControl.bounds.size.height + 23 - height
+        let frame = CGRect(x: xPosition + 9, y: yPosition, width: width, height: height)
+        underlineView.frame = frame
+        segmentedControl.addSubview(underlineView)
     }
     
-    func bindUI() {
+    private func bindUI() {
         moviesData
             .asDriver()
             .drive(moviesCollectionView.rx.items(
@@ -147,7 +120,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         
         segmentedControl.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
-                let underlineFinalXPosition = (self.segmentedControl.bounds.width / CGFloat(self.segmentedControl.numberOfSegments)) * CGFloat(self.segmentedControl.selectedSegmentIndex)
+                let underlineFinalXPosition = ((self.segmentedControl.bounds.width / CGFloat(self.segmentedControl.numberOfSegments)) * CGFloat(self.segmentedControl.selectedSegmentIndex)) + 9
                 UIView.animate(
                     withDuration: 0.1,
                     animations: {
@@ -167,24 +140,13 @@ class HomeViewController: BaseVC<HomeViewModel> {
             }.disposed(by: disposeBag)
     }
     
-    override func viewWillLayoutSubviews() {
-        removeBackgroundAndDidiver()
-    }
-    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.rightBarButtonItem = profileButton
-        setGesture()
         bindUI()
         moviesCollectionView.delegate = self
-        
-        let width = segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)
-        let height: CGFloat = 2.0
-        let xPosition = CGFloat(segmentedControl.selectedSegmentIndex) * width
-        let yPosition = segmentedControl.bounds.size.height - height - 9
-        let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
-        underlineView.frame = frame
-        segmentedControl.addSubview(underlineView)
+        removeBackgroundAndDidiver()
+        addSegmentedControlUnderLinde()
         
         moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
     }
@@ -211,6 +173,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
                 if let newValue = change?[.newKey] as? CGSize {
+                    print(newValue)
                     crowdFundingTableView.snp.updateConstraints {
                         $0.height.equalTo(newValue.height + 50)
                     }
@@ -224,12 +187,10 @@ class HomeViewController: BaseVC<HomeViewModel> {
         scrollView.addSubview(contentView)
 
         contentView.addSubviews(
-            segmentedControl, pageControl,
-            bannerImageView, moviesCollectionView,
-            crowdFundingTitleLabel, crowdFundingTableView
+            bannerImageView, segmentedControl,
+            moviesCollectionView, crowdFundingTitleLabel,
+            crowdFundingTableView
         )
-        
-        segmentedControl.center = view.center
     }
     
     override func setLayout() {
@@ -246,20 +207,15 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(170)
         }
-
-        pageControl.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(bannerImageView.snp.bottom).offset(16)
+        
+        segmentedControl.snp.makeConstraints {
+            $0.top.equalTo(bannerImageView.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(15)
+            $0.height.equalTo(23)
         }
- 
-//        segmentedControl.snp.makeConstraints {
-//            $0.top.equalTo(pageControl.snp.bottom).offset(20)
-//            $0.leading.equalToSuperview().inset(15)
-//            $0.height.equalTo(23)
-//        }
 
         moviesCollectionView.snp.makeConstraints {
-            $0.top.equalTo(pageControl.snp.bottom).offset(20)
+            $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(150)
         }
@@ -273,7 +229,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.top.equalTo(crowdFundingTitleLabel.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(100)
+            $0.height.equalTo(1)
         }
     }
 }
