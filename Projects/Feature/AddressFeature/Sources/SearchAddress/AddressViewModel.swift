@@ -3,7 +3,6 @@ import BaseFeature
 import RxSwift
 import RxCocoa
 import Alamofire
-import AuthDomain
 import JwtStore
 
 protocol ViewModelType {

@@ -1,6 +1,6 @@
 import UIKit
 import Alamofire
-import AuthDomain
+import RouterDomain
 import BaseFeature
 
 enum AddressTarget {
@@ -18,7 +18,7 @@ extension AddressTarget: BaseRouter {
         }
     }
     
-    var header: AuthDomain.HeaderType {
+    var header: RouterDomain.HeaderType {
         switch self {
         case .searchAddress: return .notHeader
         case .changeAddress: return .withToken
