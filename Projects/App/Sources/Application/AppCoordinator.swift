@@ -1,12 +1,9 @@
 import UIKit
-import AuthDomain
 import Alamofire
 import JwtStore
 import BaseFeature
 import RootFeature
-import ProfileFeature
 import HomeFeature
-import MoviesDetailFeature
 
 open class AppCoordinator: Coordinator {
     public var navigationController: UINavigationController
@@ -28,7 +25,6 @@ open class AppCoordinator: Coordinator {
         let rootCoordinator = RootCoordinator(navigationController: navigationController)
         let homeCoordinator = HomeCoordinator(navigationController: navigationController)
         window?.rootViewController = navigationController
-//        start(coordinator: MoviesDetailCoordinator(navigationController: navigationController))
         AF.request(url,
                    method: .patch,
                    encoding: JSONEncoding.default,
