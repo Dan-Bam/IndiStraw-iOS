@@ -34,7 +34,7 @@ public class InputPhoneNumberComponent: UIView {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
-    public let errorLabel = ErrorLabel()
+    public let errorLabel = ErrorLabelComponent()
     
     public let continueButton = ButtonComponent().then {
         $0.tag = 0

@@ -35,7 +35,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.tintColor = .white
     }
     
-    private let bannerImageView = ImageViewPageControl().then {
+    private let bannerImageView = ImageViewPageControlComponent().then {
         $0.backgroundColor = DesignSystemAsset.Colors.gray.color
         $0.layer.cornerRadius = 10
     }

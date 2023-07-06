@@ -15,7 +15,7 @@ class SignupIDViewController: BaseVC<SignupIDViewModel> {
         $0.setTitle("계속하기", for: .normal)
     }
     
-    private var errorLabel = ErrorLabel()
+    private var errorLabel = ErrorLabelComponent()
     
     override func configureVC() {
         navigationItem.title = "아이디를 입력해주세요"

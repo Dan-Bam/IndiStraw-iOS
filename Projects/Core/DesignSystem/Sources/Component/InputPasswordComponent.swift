@@ -28,7 +28,7 @@ public class InputPasswordComponent: UIView {
         $0.setTitle("확인하기", for: .normal)
     }
     
-    public let errorLabel = ErrorLabel()
+    public let errorLabel = ErrorLabelComponent()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

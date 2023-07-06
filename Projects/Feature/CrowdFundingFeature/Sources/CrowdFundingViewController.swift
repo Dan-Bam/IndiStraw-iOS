@@ -92,7 +92,7 @@ class CrowdFundingViewController: BaseVC<CrowdFundingViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 14)
     }
     
-    private let descriptionImageView = ImageViewPageControl().then {
+    private let descriptionImageView = ImageViewPageControlComponent().then {
         $0.layer.cornerRadius = 10
     }
     
