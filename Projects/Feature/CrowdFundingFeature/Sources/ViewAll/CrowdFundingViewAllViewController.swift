@@ -6,13 +6,15 @@ import RxCocoa
 
 class CrowdFundingViewAllViewController: BaseVC<CrowdFundingViewAllViewModel> {
     private let disposeBag = DisposeBag()
+    
+    var fundingListData = BehaviorRelay<[FundingDataList]>(value: [])
+    
     private let crowdFundingListTableView = UITableView().then {
         $0.rowHeight = 154
         $0.backgroundColor = .black
         $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
     }
     
-    var fundingListData = BehaviorRelay<[FundingDataList]>(value: [])
     
     override func configureVC() {
         viewModel.requestCrowdFundingList()
@@ -25,7 +27,7 @@ class CrowdFundingViewAllViewController: BaseVC<CrowdFundingViewAllViewModel> {
             .asDriver()
             .drive(crowdFundingListTableView.rx.items(
                 cellIdentifier: CrowdFundingCell.identifier,
-                cellType: CrowdFundingCell.self)) { (row, data, cell) in
+                cellType: CrowdFundingCell.self)) { (_, data, cell) in
                     cell.configure(model: data)
                 }.disposed(by: disposeBag)
     }
