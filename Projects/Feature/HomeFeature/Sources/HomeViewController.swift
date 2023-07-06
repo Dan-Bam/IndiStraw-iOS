@@ -85,7 +85,18 @@ class HomeViewController: BaseVC<HomeViewModel> {
         segmentedControl.setDividerImage(image, forLeftSegmentState: .selected, rightSegmentState: .normal, barMetrics: .default)
     }
     
-    func bindUI() {
+    private func addSegmentedControlUnderLinde() {
+        let width = (segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)) - 18
+        let height: CGFloat = 2.0
+        let xPosition = CGFloat(segmentedControl.selectedSegmentIndex) * width
+        print(xPosition)
+        let yPosition = segmentedControl.bounds.size.height + 23 - height
+        let frame = CGRect(x: xPosition + 9, y: yPosition, width: width, height: height)
+        underlineView.frame = frame
+        segmentedControl.addSubview(underlineView)
+    }
+    
+    private func bindUI() {
         moviesData
             .asDriver()
             .drive(moviesCollectionView.rx.items(
@@ -135,16 +146,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         bindUI()
         moviesCollectionView.delegate = self
         removeBackgroundAndDidiver()
-        
-        let width = (segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)) - 18
-        let height: CGFloat = 2.0
-        print("width = \(width)")
-        let xPosition = CGFloat(segmentedControl.selectedSegmentIndex) * width
-        print(xPosition)
-        let yPosition = segmentedControl.bounds.size.height + 23 - height
-        let frame = CGRect(x: xPosition + 9, y: yPosition, width: width, height: height)
-        underlineView.frame = frame
-        segmentedControl.addSubview(underlineView)
+        addSegmentedControlUnderLinde()
         
         moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
     }
