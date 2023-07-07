@@ -213,6 +213,11 @@ extension HomeViewController {
                 cell.configure(model: data)
             }.disposed(by: disposeBag)
         
+        moviesCollectionView.rx.modelSelected(MoviesModel.self)
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushMovieDetailVC()
+            }.disposed(by: disposeBag)
+        
         fundingData
             .asDriver()
             .drive(crowdFundingTableView.rx.items(

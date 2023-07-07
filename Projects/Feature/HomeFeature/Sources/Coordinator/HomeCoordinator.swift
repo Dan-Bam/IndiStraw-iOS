@@ -1,5 +1,6 @@
 import Foundation
 import BaseFeature
+import MoviesDetailFeature
 import ProfileFeature
 import CrowdFundingFeature
 
@@ -13,6 +14,8 @@ public class HomeCoordinator: BaseCoordinator {
     
     public override func navigate(to step: IndiStrawStep) {
         switch step {
+        case .movieDetailISRequired:
+            movieDetailISRequired()
         case .crowdFundingDetailIsRequired(let idx):
             crowdFundingIsRequired(idx: idx)
         case .crowdFundingListIsRequired:
@@ -26,6 +29,12 @@ public class HomeCoordinator: BaseCoordinator {
 }
 
 extension HomeCoordinator {
+    func movieDetailISRequired() {
+        let vc = MoviesDetailCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
+    }
     func crowdFundingIsRequired(idx: Int) {
         let vc = CrowdFundingCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
