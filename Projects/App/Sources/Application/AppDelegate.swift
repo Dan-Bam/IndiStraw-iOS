@@ -1,7 +1,6 @@
 import UIKit
 import Swinject
 import JwtStore
-import AuthDomain
 
 @main
 public class AppDelegate: UIResponder, UIApplicationDelegate {
