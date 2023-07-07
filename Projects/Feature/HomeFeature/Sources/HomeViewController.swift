@@ -215,6 +215,7 @@ extension HomeViewController {
         
         moviesCollectionView.rx.modelSelected(MoviesModel.self)
             .bind(with: self) { owner, _ in
+                print("asdf")
                 owner.viewModel.pushMovieDetailVC()
             }.disposed(by: disposeBag)
         
