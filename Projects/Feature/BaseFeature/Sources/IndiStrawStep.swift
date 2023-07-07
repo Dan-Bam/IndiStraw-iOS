@@ -28,7 +28,7 @@ public enum IndiStrawStep {
     case popViewIsRequired
     
     //home
-    case movieDetailISRequired
+    case movieDetailISRequired(idx: Int)
     case crowdFundingDetailIsRequired(idx: Int)
     case crowdFundingListIsRequired
     case crowdFunding
