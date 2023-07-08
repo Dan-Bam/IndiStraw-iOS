@@ -3,12 +3,17 @@ import Alamofire
 import RouterDomain
 
 enum HomeTarget {
+    case requestPopularMoviesList
     case requestCrowdFundingList
 }
 
 extension HomeTarget: BaseRouter {
     var baseURL: String {
-        return "https://port-0-indistraw-msa-server-dihik2mlj29oc6u.sel4.cloudtype.app/api/v1"
+        switch self {
+        case .requestPopularMoviesList:
+            return "http://3.38.100.249:8001/api/v1"
+        default: return "https://port-0-indistraw-msa-server-dihik2mlj29oc6u.sel4.cloudtype.app/api/v1"
+        }
     }
     
     var header: RouterDomain.HeaderType {
@@ -25,19 +30,15 @@ extension HomeTarget: BaseRouter {
     
     var path: String {
         switch self {
-        default: return "/crowdfunding/popular/list"
+        case .requestPopularMoviesList: return "/movie/"
+        case .requestCrowdFundingList: return "/crowdfunding/popular/list"
         }
     }
     
     var parameters: RequestParams {
         switch self {
-        default: return .requestPlain
-//        case .requestCrowdFundingList(let request):
-//            let query: [String : Any] = [
-//                "page": request.page,
-//                "size": request.size,
-//            ]
-//            return .query(query)
+        case .requestCrowdFundingList, .requestPopularMoviesList:
+            return .requestPlain
         }
     }
     

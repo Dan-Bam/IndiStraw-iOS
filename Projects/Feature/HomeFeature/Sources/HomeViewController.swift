@@ -19,8 +19,6 @@ var bannerImageSources = [
 ]
 
 class HomeViewController: BaseVC<HomeViewModel> {
-    var moviesData = BehaviorRelay<[MoviesModel]>(value: [])
-    var fundingData = BehaviorRelay<[FundingList]>(value: [])
     
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
@@ -98,21 +96,14 @@ class HomeViewController: BaseVC<HomeViewModel> {
         removeBackgroundAndDidiver()
         addSegmentedControlUnderLinde()
         
-        moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
+//        moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.crowdFundingTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
-        
-        viewModel.requestCrowdFundingList { [weak self] result in
-            switch result {
-            case .success(let dataArray):
-                self?.fundingData.accept(dataArray)
-            case .failure:
-                return
-            }
-        }
+        viewModel.requestPopularMoviesList()
+        viewModel.requestCrowdFundingList()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -205,7 +196,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController {
     private func bindUI() {
-        moviesData
+        viewModel.moviesData
             .asDriver()
             .drive(moviesCollectionView.rx.items(
                 cellIdentifier: MoviesCell.identifier,
@@ -213,12 +204,12 @@ extension HomeViewController {
                 cell.configure(model: data)
             }.disposed(by: disposeBag)
         
-        moviesCollectionView.rx.modelSelected(MoviesModel.self)
+        moviesCollectionView.rx.modelSelected(PopularMoviesModel.self)
             .bind(with: self) { owner, arg in
 //                owner.viewModel.pushMovieDetailVC(idx: arg.movieIdx)
             }.disposed(by: disposeBag)
         
-        fundingData
+        viewModel.fundingData
             .asDriver()
             .drive(crowdFundingTableView.rx.items(
                 cellIdentifier: CrowdFundingCell.identifier,

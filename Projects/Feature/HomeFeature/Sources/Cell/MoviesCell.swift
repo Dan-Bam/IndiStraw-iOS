@@ -25,7 +25,7 @@ class MoviesCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(model: MoviesModel) {
-        moviesImageView.kf.setImage(with: URL(string: model.imageUrl))
+    func configure(model: PopularMoviesModel) {
+        moviesImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
     }
 }
