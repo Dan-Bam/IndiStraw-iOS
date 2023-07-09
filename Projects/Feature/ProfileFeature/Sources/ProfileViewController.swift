@@ -30,7 +30,6 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
     }
     
     private let userNameLabel = UILabel().then {
-        $0.text = "민도현님"
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.bold.font(size: 20)
     }
@@ -41,6 +40,12 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         settingButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.pushSettingVC()
+            }.disposed(by: disposeBag)
+        
+        viewModel.requestProfileName()
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, name in
+                owner.userNameLabel.text = name
             }.disposed(by: disposeBag)
     }
     
