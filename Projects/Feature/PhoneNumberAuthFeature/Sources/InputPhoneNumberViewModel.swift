@@ -1,7 +1,6 @@
 import Foundation
 import BaseFeature
 import Alamofire
-import AuthDomain
 import JwtStore
 
 public class InputPhoneNumberViewModel: BaseViewModel {

@@ -1,6 +1,6 @@
 import UIKit
 import Alamofire
-import AuthDomain
+import RouterDomain
 import BaseFeature
 
 enum EditProfileTarget {
@@ -13,7 +13,7 @@ extension EditProfileTarget: BaseRouter {
         return "https://port-0-indistraw-msa-server-dihik2mlj29oc6u.sel4.cloudtype.app/api/v1"
     }
     
-    var header: AuthDomain.HeaderType {
+    var header: RouterDomain.HeaderType {
         switch self {
         case .searchProfileInfo: return .withToken
         case .editProfile: return .withToken

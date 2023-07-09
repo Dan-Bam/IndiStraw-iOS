@@ -1,11 +1,12 @@
 import UIKit
 
-public class ErrorLabel: UILabel {
+class HighlightCell: UICollectionViewCell {
+    static let identifier = "HighlightCell"
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        textColor = DesignSystemAsset.Colors.red.color
-        font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+        self.layer.cornerRadius = 5
     }
     
     required init?(coder: NSCoder) {

@@ -19,12 +19,12 @@ public class InputPhoneNumberComponent: UIView {
     
     var timerDisposable: Disposable?
     
-    public let inputPhoneNumberTextField = TextFieldBox().then {
+    public let inputPhoneNumberTextField = TextFieldBoxComponent().then {
         $0.keyboardType = .numberPad
         $0.setPlaceholer(text: "전화번호")
     }
     
-    let inputAuthNumberTextField = TextFieldBox().then {
+    let inputAuthNumberTextField = TextFieldBoxComponent().then {
         $0.keyboardType = .numberPad
         $0.setPlaceholer(text: "인증번호")
     }
@@ -34,7 +34,7 @@ public class InputPhoneNumberComponent: UIView {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
-    public let errorLabel = ErrorLabel()
+    public let errorLabel = ErrorLabelComponent()
     
     public let continueButton = ButtonComponent().then {
         $0.tag = 0

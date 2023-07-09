@@ -7,10 +7,12 @@ let project = Project.makeModule(
     dependencies: [
         .Feature.BaseFeature,
         .Feature.ProfileFeature,
+        .Feature.MoviesDetailFeature,
+        .Feature.CrowdFundingFeature,
         .Feature.AddMoviesFeature,
         
         .Core.DesignSystem,
-        .Domain.AuthDomain,
+        .Domain.RouterDomain,
         .Shared.Utility,
         .Shared.GlobalThirdPartyLib
     ]

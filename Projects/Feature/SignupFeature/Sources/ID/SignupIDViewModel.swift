@@ -1,10 +1,8 @@
 import UIKit
 import BaseFeature
-import AuthDomain
 import Alamofire
 
 class SignupIDViewModel: BaseViewModel {
-    
     var image: UIImage?
     var name: String
     var phoneNumber: String

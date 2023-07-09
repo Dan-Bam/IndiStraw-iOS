@@ -9,7 +9,7 @@ import RxCocoa
 class FindIdViewController: BaseVC<FindIdViewModel> {
     private let disposeBag = DisposeBag()
     
-    private let inputIdTextField = TextFieldBox().then {
+    private let inputIdTextField = TextFieldBoxComponent().then {
         $0.isEnabled = false
     }
     

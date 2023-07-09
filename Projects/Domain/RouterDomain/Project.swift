@@ -2,7 +2,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "AuthDomain",
+    name: "RouterDomain",
     product: .staticLibrary,
     dependencies: [
         .Core.JwtStore,

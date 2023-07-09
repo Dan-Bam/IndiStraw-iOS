@@ -20,11 +20,13 @@ let project = Project.makeModule(
         .Feature.SelectPhotoFeature,
         .Feature.AddressFeature,
         .Feature.AddMoviesFeature,
+        .Feature.MoviesDetailFeature,
+        .Feature.CrowdFundingFeature,
         
         .Core.JwtStore,
         .Core.DesignSystem,
         
-        .Domain.AuthDomain,
+        .Domain.RouterDomain,
         
         .Shared.Utility,
         .Shared.GlobalThirdPartyLib

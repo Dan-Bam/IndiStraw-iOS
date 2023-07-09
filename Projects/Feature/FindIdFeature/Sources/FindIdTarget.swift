@@ -1,13 +1,13 @@
 import UIKit
 import Alamofire
-import AuthDomain
+import RouterDomain
 
 enum FindIdTarget {
     case findId(FindIdModelEncodable)
 }
 
 extension FindIdTarget: BaseRouter {
-    var header: AuthDomain.HeaderType {
+    var header: RouterDomain.HeaderType {
         switch self {
         case .findId: return .notHeader
         }

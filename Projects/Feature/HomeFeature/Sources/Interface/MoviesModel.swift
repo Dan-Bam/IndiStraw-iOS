@@ -1,7 +1,6 @@
 import Foundation
 
-struct MovieesModel: Codable {
+struct MoviesModel: Codable {
     var movieIdx = UUID().uuidString
     var imageUrl: String
-    
 }

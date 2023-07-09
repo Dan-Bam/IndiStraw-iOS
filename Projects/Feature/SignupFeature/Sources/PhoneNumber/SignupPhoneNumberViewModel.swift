@@ -1,6 +1,5 @@
 import Foundation
 import BaseFeature
-import AuthDomain
 import Alamofire
 
 class SignupPhoneNumberViewModel: BaseViewModel {

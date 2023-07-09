@@ -23,7 +23,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     
     var isImageChanged = false
     
-    private let errorLabel = ErrorLabel()
+    private let errorLabel = ErrorLabelComponent()
     
     private let continueButton = ButtonComponent().then {
         $0.setTitle("계속하기", for: .normal)

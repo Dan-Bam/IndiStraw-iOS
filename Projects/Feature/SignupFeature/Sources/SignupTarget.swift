@@ -1,6 +1,6 @@
 import UIKit
 import Alamofire
-import AuthDomain
+import RouterDomain
 import BaseFeature
 
 enum SignupTarget {
@@ -17,7 +17,7 @@ extension SignupTarget: BaseRouter {
         return "https://port-0-indistraw-msa-server-dihik2mlj29oc6u.sel4.cloudtype.app/api/v1"
     }
     
-    var header: AuthDomain.HeaderType {
+    var header: RouterDomain.HeaderType {
         switch self {
         case .uploadImage: return .multiPart
         default: return .notHeader

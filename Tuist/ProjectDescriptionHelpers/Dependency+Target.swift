@@ -22,6 +22,8 @@ public extension TargetDependency.Feature {
     static let SelectPhotoFeature = TargetDependency.feature(name: "SelectPhotoFeature")
     static let AddressFeature = TargetDependency.feature(name: "AddressFeature")
     static let AddMoviesFeature = TargetDependency.feature(name: "AddMoviesFeature")
+    static let MoviesDetailFeature = TargetDependency.feature(name: "MoviesDetailFeature")
+    static let CrowdFundingFeature = TargetDependency.feature(name: "CrowdFundingFeature")
 }
 
 public extension TargetDependency.Core {
@@ -30,7 +32,7 @@ public extension TargetDependency.Core {
 }
 
 public extension TargetDependency.Domain {
-    static let AuthDomain = TargetDependency.domain(name: "AuthDomain")
+    static let RouterDomain = TargetDependency.domain(name: "RouterDomain")
 }
 
 public extension TargetDependency.Shared {
