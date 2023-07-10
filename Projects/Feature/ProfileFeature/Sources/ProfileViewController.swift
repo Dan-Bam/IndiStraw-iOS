@@ -11,8 +11,6 @@ enum ContentSizeKey {
 }
 
 class ProfileViewController: BaseVC<ProfileViewModel> {
-//    var moviesData = BehaviorRelay<[MoviesModel]>(value: [])
-    
     private let disposeBag = DisposeBag()
     
     private let settingButton = UIBarButtonItem().then {
@@ -111,18 +109,8 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
             .bind(to: fundingTableView.rx.items(
                 cellIdentifier: FundingCell.identifier,
                 cellType: FundingCell.self)) { (_, data, cell) in
-                    print("data")
                     cell.configure(model: data)
             }.disposed(by: disposeBag)
-        
-//        viewModel.reqeustMyFunding()
-//            .asDriver(onErrorJustReturn: [])
-//            .drive(to: fundingTableView.rx.items(
-//                cellIdentifier: FundingCell.identifier,
-//                cellType: FundingCell.self)) { (_, data, cell) in
-//                    print("data")
-//                    cell.configure(model: data)
-//            }.disposed(by: disposeBag)
         
         movieSegmentedControl.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
