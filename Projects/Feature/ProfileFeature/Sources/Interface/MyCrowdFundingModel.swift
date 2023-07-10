@@ -1,10 +1,4 @@
-//Decodable
-struct CrowdFundingResponse: Decodable {
-    var isLast: Bool
-    var list: [FundingList]
-}
-
-struct FundingList: Decodable {
+struct MyCrowdFundingModel: Decodable {
     var idx: Int
     var title: String
     var description: String

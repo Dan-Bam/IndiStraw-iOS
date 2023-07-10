@@ -2,11 +2,12 @@ import UIKit
 import Alamofire
 import RouterDomain
 
-enum HomeTarget {
-    case requestCrowdFundingList
+enum ProfileTarget {
+    case requestProfileName
+    case requestMyFunding
 }
 
-extension HomeTarget: BaseRouter {
+extension ProfileTarget: BaseRouter {
     var baseURL: String {
         return "https://port-0-indistraw-msa-server-dihik2mlj29oc6u.sel4.cloudtype.app/api/v1"
     }
@@ -25,7 +26,8 @@ extension HomeTarget: BaseRouter {
     
     var path: String {
         switch self {
-            default: return "/crowdfunding/popular/list"
+        case .requestMyFunding: return "/crowdfunding/my"
+            default: return "/account/info"
         }
     }
     
