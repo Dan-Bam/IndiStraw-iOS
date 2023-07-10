@@ -1,4 +1,4 @@
-struct FundingModel: Decodable {
+struct MyCrowdFundingModel: Decodable {
     var idx: Int
     var title: String
     var description: String

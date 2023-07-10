@@ -6,6 +6,10 @@ import Then
 import RxSwift
 import RxCocoa
 
+enum ContentSizeKey {
+    static let key = "contentSize"
+}
+
 class ProfileViewController: BaseVC<ProfileViewModel> {
 //    var moviesData = BehaviorRelay<[MoviesModel]>(value: [])
     
@@ -91,16 +95,6 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         fundingSegUnderlineView.frame = fundingSegmentedControl.addSegmentedControlUnderLinde()
         fundingSegmentedControl.addSubview(fundingSegUnderlineView)
         
-        viewModel.reqeustMyFunding()
-        
-//        moviesData
-//            .asDriver()
-//            .drive(moviesCollectionView.rx.items(
-//                cellIdentifier: MoviesCell.identifier,
-//                cellType: MoviesCell.self)) { (row, data, cell) in
-//                    cell.configure(imageUrl: data.imageUrl)
-//            }.disposed(by: disposeBag)
-        
         settingButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.pushSettingVC()
@@ -111,14 +105,24 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
             .bind(with: self) { owner, name in
                 owner.userNameLabel.text = name + "님"
             }.disposed(by: disposeBag)
-        
-        viewModel.myFundingListData
-            .asDriver()
-            .drive(fundingTableView.rx.items(
+
+        viewModel.reqeustMyFunding()
+            .observe(on: MainScheduler.instance)
+            .bind(to: fundingTableView.rx.items(
                 cellIdentifier: FundingCell.identifier,
-                cellType: FundingCell.self)) { (row, data, cell) in
+                cellType: FundingCell.self)) { (_, data, cell) in
+                    print("data")
                     cell.configure(model: data)
-                }.disposed(by: disposeBag)
+            }.disposed(by: disposeBag)
+        
+//        viewModel.reqeustMyFunding()
+//            .asDriver(onErrorJustReturn: [])
+//            .drive(to: fundingTableView.rx.items(
+//                cellIdentifier: FundingCell.identifier,
+//                cellType: FundingCell.self)) { (_, data, cell) in
+//                    print("data")
+//                    cell.configure(model: data)
+//            }.disposed(by: disposeBag)
         
         movieSegmentedControl.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
@@ -153,11 +157,33 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
             }.disposed(by: disposeBag)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.fundingTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.fundingTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == ContentSizeKey.key {
+            if object is UITableView {
+                if let newValue = change?[.newKey] as? CGSize {
+                    print(newValue)
+                    fundingTableView.snp.updateConstraints {
+                        $0.height.equalTo(newValue.height + 50)
+                    }
+                }
+            }
+        }
+    }
+    
     override func addView() {
         view.addSubviews(
             profileImageButton, userNameLabel,
             movieSegmentedControl, moviesCollectionView,
-            fundingSegmentedControl
+            fundingSegmentedControl, fundingTableView
         )
     }
     
@@ -189,6 +215,12 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
             $0.top.equalTo(moviesCollectionView.snp.bottom).offset(44)
             $0.leading.equalToSuperview().inset(15)
             $0.height.equalTo(23)
+        }
+        
+        fundingTableView.snp.makeConstraints {
+            $0.top.equalTo(fundingSegmentedControl.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
 }

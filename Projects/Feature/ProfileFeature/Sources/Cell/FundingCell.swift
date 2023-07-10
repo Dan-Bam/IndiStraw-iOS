@@ -5,7 +5,7 @@ import Then
 import Kingfisher
 
 class FundingCell: UITableViewCell {
-    static let identifier = "CrowdFundingCell"
+    static let identifier = "FundingCell"
     
     private let component = CrowdFundingViewComponent()
     
@@ -42,7 +42,7 @@ class FundingCell: UITableViewCell {
         }
     }
     
-    func configure(model data: FundingModel) {
+    func configure(model data: MyCrowdFundingModel) {
         component.configure(
             title: data.title,
             description: data.description,

@@ -8,19 +8,22 @@ import RxCocoa
 class ProfileViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     
-    var myFundingListData = BehaviorRelay<[FundingModel]>(value: [])
-    
-    func reqeustMyFunding() {
-        AF.request(ProfileTarget.requestMyFunding,
-                   interceptor: JwtRequestInterceptor(jwtStore: container))
-        .validate()
-        .responseDecodable(of: [FundingModel].self) { [weak self] response in
-            switch response.result {
-            case .success(let data):
-                self?.myFundingListData.accept(data)
-            case .failure(let error):
-                print("Error - MyFunding = \(error.localizedDescription)")
+    func reqeustMyFunding() -> Observable<[MyCrowdFundingModel]> {
+        return Observable.create { [weak self] (observer) -> Disposable in
+            AF.request(ProfileTarget.requestMyFunding,
+                       interceptor: JwtRequestInterceptor(jwtStore: self!.container))
+            .validate()
+            .responseDecodable(of: [MyCrowdFundingModel].self) { response in
+                switch response.result {
+                case .success(let data):
+                    print(data)
+                    observer.onNext(data)
+                case .failure(let error):
+                    print("Error - MyFunding = \(error.localizedDescription)")
+                    observer.onError(error)
+                }
             }
+            return Disposables.create()
         }
     }
     
@@ -32,7 +35,6 @@ class ProfileViewModel: BaseViewModel {
             .responseDecodable(of: ProfileModel.self) { response in
                 switch response.result {
                 case .success(let data):
-                    print(data)
                     observer.onNext(data.name)
                 case .failure(let error):
                     print("Error - ProfileName = \(error.localizedDescription)")

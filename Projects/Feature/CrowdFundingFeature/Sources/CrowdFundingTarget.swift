@@ -28,7 +28,7 @@ extension CrowdFundingTarget: BaseRouter {
         switch self {
         case .requestCrowdFundingDetail(let idx):
             return "/crowdfunding/\(idx)"
-        case .requestCrowdFundingList(let data):
+        case .requestCrowdFundingList:
             return "/crowdfunding/list"
         }
     }
