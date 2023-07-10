@@ -3,8 +3,8 @@ import Then
 import SnapKit
 import Kingfisher
 
-class MoviesCell: UICollectionViewCell {
-    static let identifier = "MoviesCell"
+public class MoviesCell: UICollectionViewCell {
+    public static let identifier = "MoviesCell"
     
     private let moviesImageView = UIImageView()
     
@@ -25,7 +25,7 @@ class MoviesCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(model: MoviesModel) {
-        moviesImageView.kf.setImage(with: URL(string: model.imageUrl))
+    public func configure(imageUrl: String) {
+        moviesImageView.kf.setImage(with: URL(string: imageUrl))
     }
 }

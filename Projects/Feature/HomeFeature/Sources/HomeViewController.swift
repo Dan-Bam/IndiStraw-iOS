@@ -106,7 +106,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
             .drive(moviesCollectionView.rx.items(
                 cellIdentifier: MoviesCell.identifier,
                 cellType: MoviesCell.self)) { (row, data, cell) in
-                cell.configure(model: data)
+                    cell.configure(imageUrl: data.imageUrl)
             }.disposed(by: disposeBag)
         
         fundingData

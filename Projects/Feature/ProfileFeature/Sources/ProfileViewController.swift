@@ -48,6 +48,16 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         $0.layer.cornerRadius = 1
     }
     
+    lazy var moviesCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 12
+        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.backgroundColor = .black
+        view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
+        return view
+    }()
+    
     override func configureVC() {
         navigationItem.rightBarButtonItem = settingButton
         segmentedControl.removeBackgroundAndDidiver()
@@ -86,7 +96,7 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
     override func addView() {
         view.addSubviews(
             profileImageButton, userNameLabel,
-            segmentedControl
+            segmentedControl, moviesCollectionView
         )
     }
     
@@ -106,6 +116,12 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
             $0.top.equalTo(userNameLabel.snp.bottom).offset(30)
             $0.leading.equalToSuperview().inset(15)
             $0.height.equalTo(23)
+        }
+        
+        moviesCollectionView.snp.makeConstraints {
+            $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(150)
         }
     }
 }
