@@ -90,7 +90,7 @@ public class CrowdFundingViewComponent: UIView {
         title: String,
         description: String,
         thumbnailUrl: String,
-        percentage: Int
+        percentage: Double
     ) {
         fundingTitleLabel.text = title
         fundingDescriptionLabel.text = description

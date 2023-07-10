@@ -12,6 +12,7 @@ public class MoviesCell: UICollectionViewCell {
         super.init(frame: frame)
         
         self.layer.cornerRadius = 10
+        self.backgroundColor = .gray
         
         self.addSubview(moviesImageView)
         

@@ -7,6 +7,8 @@ import RxSwift
 import RxCocoa
 
 class ProfileViewController: BaseVC<ProfileViewModel> {
+//    var moviesData = BehaviorRelay<[MoviesModel]>(value: [])
+    
     private let disposeBag = DisposeBag()
     
     private let settingButton = UIBarButtonItem().then {
@@ -34,7 +36,7 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         $0.font = DesignSystemFontFamily.Suit.bold.font(size: 20)
     }
     
-    private let segmentedControl = UISegmentedControl(items: ["최근시청", "출연작품"]).then {
+    private let movieSegmentedControl = UISegmentedControl(items: ["최근시청", "출연작품"]).then {
         $0.selectedSegmentIndex = 0
         $0.setTitleTextAttributes([
             .foregroundColor: DesignSystemAsset.Colors.darkGray.color,
@@ -43,7 +45,7 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
     }
     
-    private let underlineView = UIView().then {
+    private let movieSegUnderlineView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
         $0.layer.cornerRadius = 1
     }
@@ -58,12 +60,46 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         return view
     }()
     
+    private let fundingSegmentedControl = UISegmentedControl(items: ["크라우드 펀딩", "마이 펀딩"]).then {
+        $0.selectedSegmentIndex = 0
+        $0.setTitleTextAttributes([
+            .foregroundColor: DesignSystemAsset.Colors.darkGray.color,
+            .font: DesignSystemFontFamily.Suit.semiBold.font(size: 16)
+        ], for: .normal)
+        $0.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+    }
+    
+    private let fundingSegUnderlineView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
+        $0.layer.cornerRadius = 1
+    }
+    
+    private let fundingTableView = UITableView().then {
+        $0.rowHeight = 154
+        $0.backgroundColor = .black
+        $0.register(FundingCell.self, forCellReuseIdentifier: FundingCell.identifier)
+    }
+    
     override func configureVC() {
         navigationItem.rightBarButtonItem = settingButton
-        segmentedControl.removeBackgroundAndDidiver()
+        movieSegmentedControl.removeBackgroundAndDidiver()
+        fundingSegmentedControl.removeBackgroundAndDidiver()
         
-        underlineView.frame = segmentedControl.addSegmentedControlUnderLinde()
-        segmentedControl.addSubview(underlineView)
+        movieSegUnderlineView.frame = movieSegmentedControl.addSegmentedControlUnderLinde()
+        movieSegmentedControl.addSubview(movieSegUnderlineView)
+        
+        fundingSegUnderlineView.frame = fundingSegmentedControl.addSegmentedControlUnderLinde()
+        fundingSegmentedControl.addSubview(fundingSegUnderlineView)
+        
+        viewModel.reqeustMyFunding()
+        
+//        moviesData
+//            .asDriver()
+//            .drive(moviesCollectionView.rx.items(
+//                cellIdentifier: MoviesCell.identifier,
+//                cellType: MoviesCell.self)) { (row, data, cell) in
+//                    cell.configure(imageUrl: data.imageUrl)
+//            }.disposed(by: disposeBag)
         
         settingButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -76,16 +112,42 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
                 owner.userNameLabel.text = name + "님"
             }.disposed(by: disposeBag)
         
-        segmentedControl.rx.selectedSegmentIndex.changed
+        viewModel.myFundingListData
+            .asDriver()
+            .drive(fundingTableView.rx.items(
+                cellIdentifier: FundingCell.identifier,
+                cellType: FundingCell.self)) { (row, data, cell) in
+                    cell.configure(model: data)
+                }.disposed(by: disposeBag)
+        
+        
+        
+        movieSegmentedControl.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
-                let underlineFinalXPosition = ((self.segmentedControl.bounds.width / CGFloat(self.segmentedControl.numberOfSegments)) * CGFloat(self.segmentedControl.selectedSegmentIndex)) + 9
+                let underlineFinalXPosition = ((self.movieSegmentedControl.bounds.width / CGFloat(self.movieSegmentedControl.numberOfSegments)) * CGFloat(self.movieSegmentedControl.selectedSegmentIndex)) + 9
                 UIView.animate(
                     withDuration: 0.1,
                     animations: {
-                        self.underlineView.frame.origin.x = underlineFinalXPosition
+                        self.movieSegUnderlineView.frame.origin.x = underlineFinalXPosition
                     }
                 )
-                switch owner.segmentedControl.selectedSegmentIndex {
+                switch owner.movieSegmentedControl.selectedSegmentIndex {
+
+                default:
+                    return
+                }
+            }.disposed(by: disposeBag)
+        
+        fundingSegmentedControl.rx.selectedSegmentIndex.changed
+            .bind(with: self) { owner, _ in
+                let underlineFinalXPosition = ((self.fundingSegmentedControl.bounds.width / CGFloat(self.fundingSegmentedControl.numberOfSegments)) * CGFloat(self.fundingSegmentedControl.selectedSegmentIndex)) + 9
+                UIView.animate(
+                    withDuration: 0.1,
+                    animations: {
+                        self.fundingSegUnderlineView.frame.origin.x = underlineFinalXPosition
+                    }
+                )
+                switch owner.fundingSegmentedControl.selectedSegmentIndex {
 
                 default:
                     return
@@ -96,7 +158,8 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
     override func addView() {
         view.addSubviews(
             profileImageButton, userNameLabel,
-            segmentedControl, moviesCollectionView
+            movieSegmentedControl, moviesCollectionView,
+            fundingSegmentedControl
         )
     }
     
@@ -112,16 +175,22 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
             $0.centerX.equalToSuperview()
         }
         
-        segmentedControl.snp.makeConstraints {
+        movieSegmentedControl.snp.makeConstraints {
             $0.top.equalTo(userNameLabel.snp.bottom).offset(30)
             $0.leading.equalToSuperview().inset(15)
             $0.height.equalTo(23)
         }
         
         moviesCollectionView.snp.makeConstraints {
-            $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
+            $0.top.equalTo(movieSegmentedControl.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(150)
+        }
+        
+        fundingSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(moviesCollectionView.snp.bottom).offset(44)
+            $0.leading.equalToSuperview().inset(15)
+            $0.height.equalTo(23)
         }
     }
 }

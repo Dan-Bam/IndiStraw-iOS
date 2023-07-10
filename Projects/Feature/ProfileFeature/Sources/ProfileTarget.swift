@@ -4,6 +4,7 @@ import RouterDomain
 
 enum ProfileTarget {
     case requestProfileName
+    case requestMyFunding
 }
 
 extension ProfileTarget: BaseRouter {
@@ -25,6 +26,7 @@ extension ProfileTarget: BaseRouter {
     
     var path: String {
         switch self {
+        case .requestMyFunding: return "/crowdfunding/my"
             default: return "/account/info"
         }
     }
