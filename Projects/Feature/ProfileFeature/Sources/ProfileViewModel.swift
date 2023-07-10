@@ -11,18 +11,16 @@ class ProfileViewModel: BaseViewModel {
     var myFundingListData = BehaviorRelay<[FundingModel]>(value: [])
     
     func reqeustMyFunding() {
-            AF.request(ProfileTarget.requestMyFunding,
-                       interceptor: JwtRequestInterceptor(jwtStore: container))
-            .validate()
-            .responseDecodable(of: [FundingModel].self) { [weak self] response in
-                switch response.result {
-                case .success(let data):
-                    print(data)
-                    self?.myFundingListData.accept(data)
-                case .failure(let error):
-                    
-                    print("Error - MyFunding = \(error.localizedDescription)")
-                }
+        AF.request(ProfileTarget.requestMyFunding,
+                   interceptor: JwtRequestInterceptor(jwtStore: container))
+        .validate()
+        .responseDecodable(of: [FundingModel].self) { [weak self] response in
+            switch response.result {
+            case .success(let data):
+                self?.myFundingListData.accept(data)
+            case .failure(let error):
+                print("Error - MyFunding = \(error.localizedDescription)")
+            }
         }
     }
     

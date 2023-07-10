@@ -120,8 +120,6 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
                     cell.configure(model: data)
                 }.disposed(by: disposeBag)
         
-        
-        
         movieSegmentedControl.rx.selectedSegmentIndex.changed
             .bind(with: self) { owner, _ in
                 let underlineFinalXPosition = ((self.movieSegmentedControl.bounds.width / CGFloat(self.movieSegmentedControl.numberOfSegments)) * CGFloat(self.movieSegmentedControl.selectedSegmentIndex)) + 9
