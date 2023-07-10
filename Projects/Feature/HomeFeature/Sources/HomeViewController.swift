@@ -90,15 +90,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.backgroundColor = .black
     }
     
-    private func removeBackgroundAndDidiver() {
-        let image = UIImage()
-        segmentedControl.setBackgroundImage(image, for: .normal, barMetrics: .default)
-        segmentedControl.setBackgroundImage(image, for: .selected, barMetrics: .default)
-        segmentedControl.setBackgroundImage(image, for: .highlighted, barMetrics: .default)
-        
-        segmentedControl.setDividerImage(image, forLeftSegmentState: .selected, rightSegmentState: .normal, barMetrics: .default)
-    }
-    
     private func addSegmentedControlUnderLinde() {
         let width = (segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)) - 18
         let height: CGFloat = 2.0
@@ -163,10 +154,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
         navigationItem.rightBarButtonItem = profileButton
         bindUI()
         moviesCollectionView.delegate = self
-        removeBackgroundAndDidiver()
-        addSegmentedControlUnderLinde()
+        segmentedControl.removeBackgroundAndDidiver()
         
-        moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
+        underlineView.frame = segmentedControl.addSegmentedControlUnderLinde()
+        segmentedControl.addSubview(underlineView)
+        
+//        moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
     }
     
     override func viewWillAppear(_ animated: Bool) {
