@@ -88,13 +88,64 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.backgroundColor = .black
     }
     
+    private func bindUI() {
+        moviesData
+            .asDriver()
+            .drive(moviesCollectionView.rx.items(
+                cellIdentifier: MoviesCell.identifier,
+                cellType: MoviesCell.self)) { (row, data, cell) in
+                    cell.configure(imageUrl: data.imageUrl)
+            }.disposed(by: disposeBag)
+        
+        fundingData
+            .asDriver()
+            .drive(crowdFundingTableView.rx.items(
+                cellIdentifier: CrowdFundingCell.identifier,
+                cellType: CrowdFundingCell.self)) { (row, data, cell) in
+                    cell.configure(model: data)
+                }.disposed(by: disposeBag)
+
+        crowdFundingTableView.rx.modelSelected(FundingList.self)
+            .bind(with: self) { owner, arg in
+                owner.viewModel.pushCrowdFundingDetailVC(idx: arg.idx)
+            }.disposed(by: disposeBag)
+        
+        segmentedControl.rx.selectedSegmentIndex.changed
+            .bind(with: self) { owner, _ in
+                let underlineFinalXPosition = ((self.segmentedControl.bounds.width / CGFloat(self.segmentedControl.numberOfSegments)) * CGFloat(self.segmentedControl.selectedSegmentIndex)) + 9
+                UIView.animate(
+                    withDuration: 0.1,
+                    animations: {
+                        self.underlineView.frame.origin.x = underlineFinalXPosition
+                    }
+                )
+                switch owner.segmentedControl.selectedSegmentIndex {
+
+                default:
+                    return
+                }
+            }.disposed(by: disposeBag)
+        
+        profileButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushProfileVC()
+            }.disposed(by: disposeBag)
+        
+        crowdFundingViewAllButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushCrowdFundingListVC()
+            }.disposed(by: disposeBag)
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.rightBarButtonItem = profileButton
         bindUI()
         moviesCollectionView.delegate = self
-        removeBackgroundAndDidiver()
-        addSegmentedControlUnderLinde()
+        segmentedControl.removeBackgroundAndDidiver()
+        
+        underlineView.frame = segmentedControl.addSegmentedControlUnderLinde()
+        segmentedControl.addSubview(underlineView)
         
 //        moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
     }

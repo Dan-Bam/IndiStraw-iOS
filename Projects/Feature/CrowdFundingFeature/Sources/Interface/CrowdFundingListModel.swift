@@ -13,7 +13,7 @@ struct FundingList: Decodable {
     var idx: Int
     var title: String
     var description: String
-    var percentage: Int
+    var percentage: Double
     var thumbnailUrl: String
     var status: String
 }
