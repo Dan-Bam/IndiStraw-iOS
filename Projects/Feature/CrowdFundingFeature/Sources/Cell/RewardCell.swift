@@ -8,9 +8,10 @@ import Utility
 class RewardCell: UITableViewCell {
     static let identifier = "RewardCell"
     
-    private let remainingDay = BasePaddingButton(padding: UIEdgeInsets(
+    private let rewardTotalCountButton = BasePaddingButton(padding: UIEdgeInsets(
         top: 1, left: 5, bottom: 1, right: 5)
     ).then {
+        $0.isEnabled = false
         $0.clipsToBounds = true
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
@@ -58,7 +59,7 @@ class RewardCell: UITableViewCell {
     
     private func addView() {
         contentView.addSubviews(
-            remainingDay, rewardTitleLabel,
+            rewardTotalCountButton, rewardTitleLabel,
             rewardDescriptionLabel, rewardPriceLabel
         )
     }
@@ -80,7 +81,7 @@ class RewardCell: UITableViewCell {
             $0.bottom.equalToSuperview().inset(18)
         }
         
-        remainingDay.snp.makeConstraints {
+        rewardTotalCountButton.snp.makeConstraints {
             $0.top.equalTo(rewardDescriptionLabel.snp.bottom).offset(25)
             $0.leading.equalTo(rewardPriceLabel.snp.trailing).offset(8)
             $0.bottom.equalToSuperview().inset(18)
@@ -93,6 +94,6 @@ extension RewardCell {
         rewardTitleLabel.text = model.title
         rewardDescriptionLabel.text = model.description
         rewardPriceLabel.text = "\(model.price.setMoneyType())원"
-        remainingDay.setTitle("\(model.totalCount)" + "개 남음", for: .normal)
+        rewardTotalCountButton.setTitle("\(model.totalCount)" + "개 남음", for: .normal)
     }
 }
