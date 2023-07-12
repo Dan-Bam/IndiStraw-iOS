@@ -67,17 +67,17 @@ class RewardCell: UITableViewCell {
     private func setLayout() {
         rewardTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(8)
-            $0.leading.trailing.equalToSuperview().inset(12)
+            $0.leading.trailing.equalToSuperview().inset(10)
         }
         
         rewardDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(rewardTitleLabel.snp.bottom).offset(4)
-            $0.leading.trailing.equalToSuperview().inset(12)
+            $0.leading.trailing.equalToSuperview().inset(10)
         }
         
         rewardPriceLabel.snp.makeConstraints {
             $0.top.equalTo(rewardDescriptionLabel.snp.bottom).offset(25)
-            $0.leading.equalToSuperview().inset(12)
+            $0.leading.equalToSuperview().inset(10)
             $0.bottom.equalToSuperview().inset(18)
         }
         
