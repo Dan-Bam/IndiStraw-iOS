@@ -17,6 +17,7 @@ class HomeViewModel: BaseViewModel {
                    interceptor: JwtRequestInterceptor(jwtStore: container))
         .validate()
         .responseDecodable(of: [PopularMoviesModel].self) { [weak self] response in
+            print(self?.container.getToken(type: .accessToken))
             switch response.result {
             case .success(let data):
                 self?.moviesData.accept(data)

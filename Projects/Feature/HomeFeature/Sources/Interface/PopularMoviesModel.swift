@@ -1,11 +1,11 @@
 import Foundation
 
 struct PopularMoviesModel: Codable {
-    var id: Int
+    var movieIdx: Int
     var thumbnailUrl: String
     
     enum CodingKeys: String, CodingKey {
-        case id
+        case movieIdx = "movie_idx"
         case thumbnailUrl = "thumbnail_url"
     }
 }
