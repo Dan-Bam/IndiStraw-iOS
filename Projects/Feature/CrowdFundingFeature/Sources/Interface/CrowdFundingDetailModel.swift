@@ -22,12 +22,14 @@ struct Writer: Decodable {
 struct Amount: Decodable {
     var targetAmount: Int
     var totalAmount: Int
-    var percentage: Int
+    var percentage: Double
 }
 
 struct Reward: Decodable {
+    var idx: Int
     var title: String
     var description: String
     var price: Int
-    var imageUrl: String
+    var totalCount: Int
+    var imageList: [String]
 }

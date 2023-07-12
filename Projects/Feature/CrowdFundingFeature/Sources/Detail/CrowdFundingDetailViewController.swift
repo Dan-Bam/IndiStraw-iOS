@@ -322,7 +322,7 @@ extension CrowdFundingDetailViewController {
         descriptionImageView.configure(imageList: model.imageList)
     }
     
-    private func setPercentageTextFont(percentage: Int) {
+    private func setPercentageTextFont(percentage: Double) {
         let attributeString = NSMutableAttributedString()
         
         let items: [(text: String, attributes: [NSAttributedString.Key: Any])] = [
