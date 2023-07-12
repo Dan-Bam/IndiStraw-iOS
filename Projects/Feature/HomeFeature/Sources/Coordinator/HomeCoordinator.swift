@@ -14,8 +14,8 @@ public class HomeCoordinator: BaseCoordinator {
     
     public override func navigate(to step: IndiStrawStep) {
         switch step {
-        case .movieDetailISRequired:
-            movieDetailISRequired()
+        case .movieDetailIsRequired(let movieIdx):
+            movieDetailIsRequired(movieIdx: movieIdx)
         case .crowdFundingDetailIsRequired(let idx):
             crowdFundingIsRequired(idx: idx)
         case .crowdFundingListIsRequired:
@@ -29,12 +29,13 @@ public class HomeCoordinator: BaseCoordinator {
 }
 
 extension HomeCoordinator {
-    func movieDetailISRequired() {
+    func movieDetailIsRequired(movieIdx: Int) {
         let vc = MoviesDetailCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
-        vc.start()
+        vc.startMoviesDetailCoordinator(movieIdx: movieIdx)
     }
+    
     func crowdFundingIsRequired(idx: Int) {
         let vc = CrowdFundingCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self

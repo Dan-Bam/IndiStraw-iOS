@@ -1,11 +1,11 @@
 import UIKit
 import BaseFeature
+import DesignSystem
 import SnapKit
 import Then
 import RxSwift
 import RxCocoa
 import RxGesture
-import DesignSystem
 
 enum ContentSizeKey {
     static let key = "contentSize"
@@ -42,7 +42,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
         $0.layer.cornerRadius = 1
     }
-
+    
     private let segmentedControl = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
         $0.selectedSegmentIndex = 0
         $0.setTitleTextAttributes([
@@ -105,11 +105,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
         viewModel.requestPopularMoviesList()
         viewModel.requestCrowdFundingList()
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         self.crowdFundingTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
-
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
@@ -126,7 +126,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-
+        
         contentView.addSubviews(
             bannerImageView, segmentedControl,
             moviesCollectionView, moviesViewAllButton,
@@ -139,7 +139,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-
+        
         contentView.snp.makeConstraints {
             $0.centerX.width.top.bottom.equalToSuperview()
         }
@@ -155,7 +155,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.leading.equalToSuperview().inset(15)
             $0.height.equalTo(23)
         }
-
+        
         moviesCollectionView.snp.makeConstraints {
             $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
@@ -167,12 +167,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.centerY.equalTo(segmentedControl)
             $0.trailing.equalToSuperview().inset(15)
         }
-
+        
         crowdFundingTitleLabel.snp.makeConstraints {
             $0.top.equalTo(moviesCollectionView.snp.bottom).offset(26)
             $0.leading.equalToSuperview().inset(15)
         }
-
+        
         crowdFundingTableView.snp.makeConstraints {
             $0.top.equalTo(crowdFundingTitleLabel.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview()
@@ -202,11 +202,12 @@ extension HomeViewController {
                 cellIdentifier: MoviesCell.identifier,
                 cellType: MoviesCell.self)) { (row, data, cell) in
                     cell.configure(imageUrl: data.thumbnailUrl)
-            }.disposed(by: disposeBag)
+                }.disposed(by: disposeBag)
         
         moviesCollectionView.rx.modelSelected(PopularMoviesModel.self)
-            .bind(with: self) { owner, arg in
-//                owner.viewModel.pushMovieDetailVC(idx: arg.movieIdx)
+            .bind(with: self) { owner, model in
+                print("idx = \(model.movieIdx)")
+                owner.viewModel.pushMovieDetailVC(idx: model.movieIdx)
             }.disposed(by: disposeBag)
         
         viewModel.fundingData
@@ -216,7 +217,7 @@ extension HomeViewController {
                 cellType: CrowdFundingCell.self)) { (row, data, cell) in
                     cell.configure(model: data)
                 }.disposed(by: disposeBag)
-
+        
         crowdFundingTableView.rx.modelSelected(FundingList.self)
             .bind(with: self) { owner, arg in
                 owner.viewModel.pushCrowdFundingDetailVC(idx: arg.idx)
@@ -232,7 +233,7 @@ extension HomeViewController {
                     }
                 )
                 switch owner.segmentedControl.selectedSegmentIndex {
-
+                    
                 default:
                     return
                 }

@@ -17,7 +17,6 @@ class HomeViewModel: BaseViewModel {
                    interceptor: JwtRequestInterceptor(jwtStore: container))
         .validate()
         .responseDecodable(of: [PopularMoviesModel].self) { [weak self] response in
-            print(self?.container.getToken(type: .accessToken))
             switch response.result {
             case .success(let data):
                 self?.moviesData.accept(data)
@@ -42,7 +41,7 @@ class HomeViewModel: BaseViewModel {
     }
     
     func pushMovieDetailVC(idx: Int) {
-        coordinator.navigate(to: .movieDetailISRequired(idx: idx))
+        coordinator.navigate(to: .movieDetailIsRequired(idx: idx))
     }
     
     func pushCrowdFundingDetailVC(idx: Int) {
