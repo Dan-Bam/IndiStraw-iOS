@@ -153,7 +153,7 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
         
         viewModel.requestCrowdFundingDetailList()
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, model in
+            .bind(with: self) { owner, model in
                 owner.attachmentBehaviorRelay.accept(model.imageList)
                 owner.rewardBehaviorRelay.accept(model.reward)
                 

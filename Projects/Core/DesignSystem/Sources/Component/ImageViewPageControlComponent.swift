@@ -40,6 +40,7 @@ public class ImageViewPageControlComponent: UIView {
                 pagecontrolImageView.rx.gesture(.swipe(direction: .left)).asObservable(),
                 pagecontrolImageView.rx.gesture(.swipe(direction: .right)).asObservable()
             )
+            .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, gesture in
                 guard let gesture = gesture as? UISwipeGestureRecognizer else { return }
                 
@@ -57,6 +58,7 @@ public class ImageViewPageControlComponent: UIView {
                     duration: 0.3,
                     options: .transitionCrossDissolve,
                     animations: {
+                        print(owner.pageControl.currentPage)
                         owner.pagecontrolImageView.kf.setImage(with: URL(
                             string: owner.imageDataSources.value[owner.pageControl.currentPage])
                         )
@@ -87,10 +89,10 @@ public class ImageViewPageControlComponent: UIView {
 public extension ImageViewPageControlComponent {
     func configure(imageList: [String]) {
         imageDataSources.accept(imageList)
+        pageControl.numberOfPages = imageList.count
         guard imageList.count < 1 else {
             pagecontrolImageView.kf.setImage(with: URL(string: imageList[0]))
             return
         }
-        pageControl.numberOfPages = imageList.count
     }
 }
