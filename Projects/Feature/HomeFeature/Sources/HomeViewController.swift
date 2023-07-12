@@ -57,6 +57,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 12
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .black
         view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
         return view
@@ -158,7 +159,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         
         moviesCollectionView.snp.makeConstraints {
             $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(150)
         }
         
