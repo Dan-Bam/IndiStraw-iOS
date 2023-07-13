@@ -81,7 +81,17 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.textColor = .white
     }
     
+    private let fundingSwitch = UISwitch().then {
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = $0.bounds.height / 2
+        $0.onTintColor = DesignSystemAsset.Colors.mainColor.color
+    }
     
+    private let otherImageTitleLabel = UILabel().then {
+        $0.text = "추가 이미지"
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
+    }
     
     private let continueButton = ButtonComponent().then {
         $0.setTitle("계속하기", for: .normal)
@@ -103,13 +113,16 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             thumbnailTitleLabel, thumbnailWrapperView,
             movieTitleLabel, movieRegisterButton,
             subjectTitleLabel, subjectTextField,
-            descriptionTitleLabel, descriptionTextView, fundingTitleLabel, fundingTextLabel,
-            continueButton
+            descriptionTitleLabel, descriptionTextView,
+            fundingTitleLabel, fundingTextLabel,
+            continueButton, otherImageTitleLabel
         )
         
         thumbnailWrapperView.addSubviews(
             thumbnailDescriptionLabel, thumbnailImageUploadButton
         )
+        
+        fundingTextLabel.addSubview(fundingSwitch)
     }
     
     override func setLayout() {
@@ -186,8 +199,20 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.height.equalTo(54)
         }
         
+        fundingSwitch.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(13)
+            $0.width.equalTo(52
+            )
+        }
+        
+        otherImageTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(fundingTextLabel.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().inset(15)
+        }
+        
         continueButton.snp.makeConstraints {
-            $0.top.equalTo(fundingTextLabel.snp.bottom)
+            $0.top.equalTo(otherImageTitleLabel.snp.bottom)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.bottom.equalToSuperview().inset(79)
             $0.height.equalTo(54)
@@ -197,8 +222,9 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
 
 extension CreateMoviesViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
+        
         if textView.text == "크라우드 펀딩을 사용하셨나요?" {
-            textView.text = nil
+            textView.text = ""
         }
     }
     
@@ -206,7 +232,6 @@ extension CreateMoviesViewController: UITextViewDelegate {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = "크라우드 펀딩을 사용하셨나요?"
             textView.textColor = .lightGray
-//            updateCountLabel(characterCount: 0)
         }
     }
 }
