@@ -89,6 +89,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.backgroundColor = .black
     }
     
+    private let createMovieButton = UIButton().then {
+        $0.setTitleColor(.white, for: .normal)
+        $0.setTitle("영화 생성", for: .normal)
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.rightBarButtonItem = profileButton
@@ -202,7 +207,7 @@ extension HomeViewController {
             .drive(moviesCollectionView.rx.items(
                 cellIdentifier: MoviesCell.identifier,
                 cellType: MoviesCell.self)) { (row, data, cell) in
-                    cell.configure(imageUrl: data.imageUrl)
+                    cell.configure(imageUrl: data.thumbnailUrl)
                 }.disposed(by: disposeBag)
         
         moviesCollectionView.rx.modelSelected(PopularAndRecommendMoviesModel.self)
