@@ -16,7 +16,7 @@ class AddressViewController: BaseVC<AddressViewModel> {
         $0.attributedPlaceholder = NSAttributedString(
             string: $0.placeholder!,
             attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
-        $0.addLeftPadding()
+        $0.addLeftPadding(padding: 10)
     }
     
     private let searchButton = UIButton().then {
