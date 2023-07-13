@@ -10,16 +10,18 @@ class HomeViewModel: BaseViewModel {
     var crowdFundingCurrentPage = 0
     
     var fundingData = BehaviorRelay<[FundingList]>(value: [])
-    var moviesData = BehaviorRelay<[PopularMoviesModel]>(value: [])
+    var popularMoviesData = BehaviorRelay<[PopularAndRecommendMoviesModel]>(value: [])
+    var recommendMoviesData = BehaviorRelay<[PopularAndRecommendMoviesModel]>(value: [])
+    var watchHistoryMoviesData = BehaviorRelay<[WatchHistorydMoviesModel]>(value: [])
     
     func requestPopularMoviesList() {
         AF.request(HomeTarget.requestPopularMoviesList,
                    interceptor: JwtRequestInterceptor(jwtStore: container))
         .validate()
-        .responseDecodable(of: [PopularMoviesModel].self) { [weak self] response in
+        .responseDecodable(of: [PopularAndRecommendMoviesModel].self) { [weak self] response in
             switch response.result {
             case .success(let data):
-                self?.moviesData.accept(data)
+                self?.popularMoviesData.accept(data)
             case .failure(let error):
                 print("Error - PopularMovies = \(error.localizedDescription)")
             }

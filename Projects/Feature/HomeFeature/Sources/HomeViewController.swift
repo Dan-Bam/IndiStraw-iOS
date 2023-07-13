@@ -197,7 +197,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController {
     private func bindUI() {
-        viewModel.moviesData
+        viewModel.popularMoviesData
             .asDriver()
             .drive(moviesCollectionView.rx.items(
                 cellIdentifier: MoviesCell.identifier,
@@ -205,7 +205,7 @@ extension HomeViewController {
                     cell.configure(imageUrl: data.imageUrl)
                 }.disposed(by: disposeBag)
         
-        moviesCollectionView.rx.modelSelected(PopularMoviesModel.self)
+        moviesCollectionView.rx.modelSelected(PopularAndRecommendMoviesModel.self)
             .bind(with: self) { owner, model in
                 print("idx = \(model.movieIdx)")
                 owner.viewModel.pushMovieDetailVC(idx: model.movieIdx)
