@@ -6,6 +6,10 @@ import DesignSystem
 import Utility
 
 class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
+    private let scrollView = UIScrollView()
+    
+    private let contentView = UIView()
+    
     private let thumbnailTitleLabel = UILabel().then {
         $0.text = "썸네일"
         $0.textColor = .white
@@ -66,16 +70,31 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.text = "소개글을 입력해 주세요."
     }
     
+    private let fundingTitleLabel = UILabel().then {
+        $0.text = "펀딩 여부"
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
+    }
+    
+    private let fundingTextLabel = TextFieldBoxComponent().then {
+        $0.textColor = .white
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     override func addView() {
-        view.addSubviews(
+        view.addSubview(
+            scrollView
+        )
+        
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(
             thumbnailTitleLabel, thumbnailWrapperView,
             movieTitleLabel, movieRegisterButton,
             subjectTitleLabel, subjectTextField,
-            descriptionTitleLabel, descriptionTextField
+            descriptionTitleLabel, descriptionTextField, fundingTitleLabel, fundingTextLabel
         )
         
         thumbnailWrapperView.addSubviews(
@@ -84,6 +103,14 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
     }
     
     override func setLayout() {
+        scrollView.snp.makeConstraints {
+            $0.top.bottom.width.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.edges.width.equalToSuperview()
+        }
+        
         thumbnailTitleLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(29)
             $0.leading.equalToSuperview().inset(15)
@@ -136,6 +163,17 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.top.equalTo(descriptionTitleLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(80)
+        }
+        
+        fundingTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(descriptionTextField.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().inset(15)
+        }
+        
+        fundingTextLabel.snp.makeConstraints {
+            $0.top.equalTo(fundingTitleLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
         }
     }
 }
