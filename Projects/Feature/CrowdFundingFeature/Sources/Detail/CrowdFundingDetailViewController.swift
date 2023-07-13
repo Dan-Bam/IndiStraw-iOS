@@ -120,7 +120,7 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
     
     private let rewardListTableView = UITableView().then {
         $0.backgroundColor = .black
-        $0.rowHeight = 116
+        $0.rowHeight = 120
         $0.register(RewardCell.self, forCellReuseIdentifier: RewardCell.identifier)
     }
 
@@ -153,7 +153,7 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
         
         viewModel.requestCrowdFundingDetailList()
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, model in
+            .bind(with: self) { owner, model in
                 owner.attachmentBehaviorRelay.accept(model.imageList)
                 owner.rewardBehaviorRelay.accept(model.reward)
                 
@@ -322,7 +322,7 @@ extension CrowdFundingDetailViewController {
         descriptionImageView.configure(imageList: model.imageList)
     }
     
-    private func setPercentageTextFont(percentage: Int) {
+    private func setPercentageTextFont(percentage: Double) {
         let attributeString = NSMutableAttributedString()
         
         let items: [(text: String, attributes: [NSAttributedString.Key: Any])] = [
