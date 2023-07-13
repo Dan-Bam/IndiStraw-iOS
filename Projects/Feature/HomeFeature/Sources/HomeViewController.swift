@@ -1,11 +1,11 @@
 import UIKit
 import BaseFeature
+import DesignSystem
 import SnapKit
 import Then
 import RxSwift
 import RxCocoa
 import RxGesture
-import DesignSystem
 
 enum ContentSizeKey {
     static let key = "contentSize"
@@ -19,8 +19,6 @@ var bannerImageSources = [
 ]
 
 class HomeViewController: BaseVC<HomeViewModel> {
-    var moviesData = BehaviorRelay<[MoviesModel]>(value: [])
-    var fundingData = BehaviorRelay<[FundingList]>(value: [])
     
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
@@ -44,8 +42,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
         $0.layer.cornerRadius = 1
     }
-
-    private let segmentedControl = UISegmentedControl(items: ["최근", "추천", "인기"]).then {
+    
+    private let segmentedControl = UISegmentedControl(items: ["인기", "추천", "최신"]).then {
         $0.selectedSegmentIndex = 0
         $0.setTitleTextAttributes([
             .foregroundColor: DesignSystemAsset.Colors.darkGray.color,
@@ -59,6 +57,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 12
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .black
         view.register(MoviesCell.self, forCellWithReuseIdentifier: MoviesCell.identifier)
         return view
@@ -90,65 +89,6 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.backgroundColor = .black
     }
     
-    private func addSegmentedControlUnderLinde() {
-        let width = (segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)) - 18
-        let height: CGFloat = 2.0
-        let xPosition = CGFloat(segmentedControl.selectedSegmentIndex) * width
-        let yPosition = segmentedControl.bounds.size.height + 23 - height
-        let frame = CGRect(x: xPosition + 9, y: yPosition, width: width, height: height)
-        underlineView.frame = frame
-        segmentedControl.addSubview(underlineView)
-    }
-    
-    private func bindUI() {
-        moviesData
-            .asDriver()
-            .drive(moviesCollectionView.rx.items(
-                cellIdentifier: MoviesCell.identifier,
-                cellType: MoviesCell.self)) { (row, data, cell) in
-                    cell.configure(imageUrl: data.imageUrl)
-            }.disposed(by: disposeBag)
-        
-        fundingData
-            .asDriver()
-            .drive(crowdFundingTableView.rx.items(
-                cellIdentifier: CrowdFundingCell.identifier,
-                cellType: CrowdFundingCell.self)) { (row, data, cell) in
-                    cell.configure(model: data)
-                }.disposed(by: disposeBag)
-
-        crowdFundingTableView.rx.modelSelected(FundingList.self)
-            .bind(with: self) { owner, arg in
-                owner.viewModel.pushCrowdFundingDetailVC(idx: arg.idx)
-            }.disposed(by: disposeBag)
-        
-        segmentedControl.rx.selectedSegmentIndex.changed
-            .bind(with: self) { owner, _ in
-                let underlineFinalXPosition = ((self.segmentedControl.bounds.width / CGFloat(self.segmentedControl.numberOfSegments)) * CGFloat(self.segmentedControl.selectedSegmentIndex)) + 9
-                UIView.animate(
-                    withDuration: 0.1,
-                    animations: {
-                        self.underlineView.frame.origin.x = underlineFinalXPosition
-                    }
-                )
-                switch owner.segmentedControl.selectedSegmentIndex {
-
-                default:
-                    return
-                }
-            }.disposed(by: disposeBag)
-        
-        profileButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.viewModel.pushProfileVC()
-            }.disposed(by: disposeBag)
-        
-        crowdFundingViewAllButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.viewModel.pushCrowdFundingListVC()
-            }.disposed(by: disposeBag)
-    }
-    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.rightBarButtonItem = profileButton
@@ -158,28 +98,19 @@ class HomeViewController: BaseVC<HomeViewModel> {
         
         underlineView.frame = segmentedControl.addSegmentedControlUnderLinde()
         segmentedControl.addSubview(underlineView)
-        
-//        moviesData.accept([MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg"), MoviesModel(imageUrl: "https://www.kukinews.com/data/kuk/image/2022/05/18/kuk202205180005.680x.0.jpg")])
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.crowdFundingTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
-        
-        viewModel.requestCrowdFundingList { [weak self] result in
-            switch result {
-            case .success(let dataArray):
-                self?.fundingData.accept(dataArray)
-            case .failure:
-                return
-            }
-        }
+        viewModel.requestPopularMoviesList()
+        viewModel.requestCrowdFundingList()
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         self.crowdFundingTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
-
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
@@ -196,7 +127,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-
+        
         contentView.addSubviews(
             bannerImageView, segmentedControl,
             moviesCollectionView, moviesViewAllButton,
@@ -209,7 +140,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-
+        
         contentView.snp.makeConstraints {
             $0.centerX.width.top.bottom.equalToSuperview()
         }
@@ -225,10 +156,10 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.leading.equalToSuperview().inset(15)
             $0.height.equalTo(23)
         }
-
+        
         moviesCollectionView.snp.makeConstraints {
             $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(150)
         }
         
@@ -237,12 +168,12 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.centerY.equalTo(segmentedControl)
             $0.trailing.equalToSuperview().inset(15)
         }
-
+        
         crowdFundingTitleLabel.snp.makeConstraints {
             $0.top.equalTo(moviesCollectionView.snp.bottom).offset(26)
             $0.leading.equalToSuperview().inset(15)
         }
-
+        
         crowdFundingTableView.snp.makeConstraints {
             $0.top.equalTo(crowdFundingTitleLabel.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview()
@@ -261,5 +192,81 @@ class HomeViewController: BaseVC<HomeViewModel> {
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 109, height: collectionView.frame.height)
+    }
+}
+
+extension HomeViewController {
+    private func bindUI() {
+        viewModel.popularMoviesData
+            .asDriver()
+            .drive(moviesCollectionView.rx.items(
+                cellIdentifier: MoviesCell.identifier,
+                cellType: MoviesCell.self)) { (row, data, cell) in
+                    cell.configure(imageUrl: data.imageUrl)
+                }.disposed(by: disposeBag)
+        
+        moviesCollectionView.rx.modelSelected(PopularAndRecommendMoviesModel.self)
+            .bind(with: self) { owner, model in
+                print("idx = \(model.movieIdx)")
+                owner.viewModel.pushMovieDetailVC(idx: model.movieIdx)
+            }.disposed(by: disposeBag)
+        
+        viewModel.fundingData
+            .asDriver()
+            .drive(crowdFundingTableView.rx.items(
+                cellIdentifier: CrowdFundingCell.identifier,
+                cellType: CrowdFundingCell.self)) { (row, data, cell) in
+                    cell.configure(model: data)
+                }.disposed(by: disposeBag)
+        
+        crowdFundingTableView.rx.modelSelected(FundingList.self)
+            .bind(with: self) { owner, arg in
+                owner.viewModel.pushCrowdFundingDetailVC(idx: arg.idx)
+            }.disposed(by: disposeBag)
+        
+        segmentedControl.rx.selectedSegmentIndex.changed
+            .bind(with: self) { owner, _ in
+                let underlineFinalXPosition = ((self.segmentedControl.bounds.width / CGFloat(self.segmentedControl.numberOfSegments)) * CGFloat(self.segmentedControl.selectedSegmentIndex)) + 9
+                UIView.animate(
+                    withDuration: 0.1,
+                    animations: {
+                        self.underlineView.frame.origin.x = underlineFinalXPosition
+                    }
+                )
+                switch owner.segmentedControl.selectedSegmentIndex {
+                    
+                default:
+                    return
+                }
+            }.disposed(by: disposeBag)
+        
+        profileButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushProfileVC()
+            }.disposed(by: disposeBag)
+        
+        crowdFundingViewAllButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushCrowdFundingListVC()
+            }.disposed(by: disposeBag)
+    }
+    
+    private func removeBackgroundAndDidiver() {
+        let image = UIImage()
+        segmentedControl.setBackgroundImage(image, for: .normal, barMetrics: .default)
+        segmentedControl.setBackgroundImage(image, for: .selected, barMetrics: .default)
+        segmentedControl.setBackgroundImage(image, for: .highlighted, barMetrics: .default)
+        
+        segmentedControl.setDividerImage(image, forLeftSegmentState: .selected, rightSegmentState: .normal, barMetrics: .default)
+    }
+    
+    private func addSegmentedControlUnderLinde() {
+        let width = (segmentedControl.bounds.size.width / CGFloat(segmentedControl.numberOfSegments)) - 18
+        let height: CGFloat = 2.0
+        let xPosition = CGFloat(segmentedControl.selectedSegmentIndex) * width
+        let yPosition = segmentedControl.bounds.size.height + 23 - height
+        let frame = CGRect(x: xPosition + 9, y: yPosition, width: width, height: height)
+        underlineView.frame = frame
+        segmentedControl.addSubview(underlineView)
     }
 }

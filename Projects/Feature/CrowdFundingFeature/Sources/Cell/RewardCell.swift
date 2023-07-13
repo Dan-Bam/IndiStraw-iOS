@@ -3,14 +3,20 @@ import DesignSystem
 import SnapKit
 import Then
 import Kingfisher
+import Utility
 
 class RewardCell: UITableViewCell {
     static let identifier = "RewardCell"
     
-    private let rewardImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
+    private let rewardTotalCountButton = BasePaddingButton(padding: UIEdgeInsets(
+        top: 1, left: 5, bottom: 1, right: 5)
+    ).then {
+        $0.isEnabled = false
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 3
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
+        $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
+        $0.setTitleColor(DesignSystemAsset.Colors.purple2.color, for: .normal)
+        $0.layer.cornerRadius = 5
     }
     
     private let rewardTitleLabel = UILabel().then {
@@ -53,42 +59,41 @@ class RewardCell: UITableViewCell {
     
     private func addView() {
         contentView.addSubviews(
-            rewardImageView, rewardTitleLabel,
+            rewardTotalCountButton, rewardTitleLabel,
             rewardDescriptionLabel, rewardPriceLabel
         )
     }
     
     private func setLayout() {
-        rewardImageView.snp.makeConstraints {
-            $0.top.leading.bottom.equalToSuperview().inset(8)
-            $0.width.equalTo(100)
-        }
-        
         rewardTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(rewardImageView.snp.top)
-            $0.leading.equalTo(rewardImageView.snp.trailing).offset(8)
-            $0.trailing.equalToSuperview().inset(11)
+            $0.top.equalToSuperview().inset(8)
+            $0.leading.trailing.equalToSuperview().inset(10)
         }
         
         rewardDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(rewardTitleLabel.snp.bottom).offset(4)
-            $0.leading.equalTo(rewardTitleLabel)
-            $0.trailing.equalToSuperview().inset(14)
+            $0.leading.trailing.equalToSuperview().inset(10)
         }
         
         rewardPriceLabel.snp.makeConstraints {
-            $0.top.equalTo(rewardDescriptionLabel.snp.bottom).offset(12)
-            $0.leading.equalTo(rewardTitleLabel)
-            $0.bottom.equalToSuperview().inset(20)
+            $0.top.equalTo(rewardDescriptionLabel.snp.bottom).offset(25)
+            $0.leading.equalToSuperview().inset(10)
+            $0.bottom.equalToSuperview().inset(18)
+        }
+        
+        rewardTotalCountButton.snp.makeConstraints {
+            $0.top.equalTo(rewardDescriptionLabel.snp.bottom).offset(25)
+            $0.leading.equalTo(rewardPriceLabel.snp.trailing).offset(8)
+            $0.bottom.equalToSuperview().inset(18)
         }
     }
 }
 
 extension RewardCell {
     func configure(model: Reward) {
-        rewardImageView.kf.setImage(with: URL(string: model.imageUrl))
         rewardTitleLabel.text = model.title
         rewardDescriptionLabel.text = model.description
         rewardPriceLabel.text = "\(model.price.setMoneyType())원"
+        rewardTotalCountButton.setTitle("\(model.totalCount)" + "개 남음", for: .normal)
     }
 }
