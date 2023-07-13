@@ -8,6 +8,7 @@ import RxSwift
 import RxCocoa
 
 class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
+    private let addOtherImageBehaviorRelay = BehaviorRelay<[String]>(value: [])
     private let disposeBag = DisposeBag()
     
     private let scrollView = UIScrollView()
@@ -132,7 +133,14 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         
         addOtherImageButton.rx.tap
             .bind(with: self) { owner, _ in
-                
+                owner.present(owner.imagePicker, animated: true)
+            }.disposed(by: disposeBag)
+        
+        addOtherImageBehaviorRelay
+            .asDriver()
+            .drive(addOtherImageCollectionView.rx.items(cellIdentifier: AddOtherFundingImageCell.identifier,
+                                                        cellType: AddOtherFundingImageCell.self)) { row, data, cell in
+                cell.configure(imageUrl: data)
             }.disposed(by: disposeBag)
     }
     
@@ -280,5 +288,30 @@ extension CreateMoviesViewController: UITextViewDelegate {
             textView.text = "크라우드 펀딩을 사용하셨나요?"
             textView.textColor = .lightGray
         }
+    }
+}
+
+extension CreateMoviesViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        var newImage: UIImage? = nil
+        
+        if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            newImage = possibleImage
+        } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            newImage = possibleImage
+        }
+        
+        
+        
+//        switch picker.restorationIdentifier {
+//        case PickerKey.first:
+//            self.addFirstImageButton.setImage(newImage, for: .normal)
+//        case PickerKey.second:
+//            self.addSecondImageButton.setImage(newImage, for: .normal)
+//        default:
+//            return
+//        }
+        
+        picker.dismiss(animated: true, completion: nil)
     }
 }

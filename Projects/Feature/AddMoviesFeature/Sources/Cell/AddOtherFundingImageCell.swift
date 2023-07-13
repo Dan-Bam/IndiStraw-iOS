@@ -2,6 +2,7 @@ import UIKit
 import SnapKit
 import Then
 import DesignSystem
+import Kingfisher
 
 class AddOtherFundingImageCell: UICollectionViewCell {
     static let identifier = "AddOtherFundingImageCell"
@@ -34,5 +35,9 @@ class AddOtherFundingImageCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(imageUrl: String) {
+        otherImageView.kf.setImage(with: URL(string: imageUrl))
     }
 }
