@@ -8,7 +8,8 @@ import RxSwift
 import RxCocoa
 
 class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
-    private let addOtherImageBehaviorRelay = BehaviorRelay<[String]>(value: [])
+    private let addOtherImageBehaviorRelay = BehaviorRelay<[UIImage]>(value: [])
+    
     private let disposeBag = DisposeBag()
     
     private let scrollView = UIScrollView()
@@ -114,7 +115,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
     lazy var addOtherImageCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 12
+        flowLayout.minimumLineSpacing = 8
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .black
@@ -130,6 +131,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         navigationController?.navigationBar.prefersLargeTitles = false
         
         descriptionTextView.delegate = self
+        imagePicker.delegate = self
         
         addOtherImageButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -140,7 +142,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             .asDriver()
             .drive(addOtherImageCollectionView.rx.items(cellIdentifier: AddOtherFundingImageCell.identifier,
                                                         cellType: AddOtherFundingImageCell.self)) { row, data, cell in
-                cell.configure(imageUrl: data)
+                cell.configure(image: data)
             }.disposed(by: disposeBag)
     }
     
@@ -311,6 +313,11 @@ extension CreateMoviesViewController: UIImagePickerControllerDelegate, UINavigat
 //        default:
 //            return
 //        }
+        
+        var value = addOtherImageBehaviorRelay.value
+        value.append(newImage!)
+        addOtherImageBehaviorRelay.accept(value)
+        
         
         picker.dismiss(animated: true, completion: nil)
     }

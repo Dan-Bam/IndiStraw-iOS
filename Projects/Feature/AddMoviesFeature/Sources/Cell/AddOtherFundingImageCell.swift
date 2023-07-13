@@ -8,10 +8,14 @@ class AddOtherFundingImageCell: UICollectionViewCell {
     static let identifier = "AddOtherFundingImageCell"
     
     private let otherImageView = UIImageView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10
         $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
     }
     
     private let ImageRemoveButton = UIButton().then {
+        $0.clipsToBounds = true
+        $0.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
         $0.layer.cornerRadius = 10
     }
     
@@ -23,21 +27,24 @@ class AddOtherFundingImageCell: UICollectionViewCell {
         )
         
         otherImageView.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview().inset(4)
-            $0.leading.bottom.equalToSuperview()
+//            $0.top.trailing.equalToSuperview().inset(4)
+            $0.top.leading.bottom.equalToSuperview()
+            $0.width.equalTo(162)
+            $0.height.equalTo(300)
+//            $0.height.equalToSuperview()
         }
         
-        ImageRemoveButton.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview()
-            $0.size.equalTo(20)
-        }
+//        ImageRemoveButton.snp.makeConstraints {
+//            $0.top.trailing.equalToSuperview()
+//            $0.size.equalTo(20)
+//        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(imageUrl: String) {
-        otherImageView.kf.setImage(with: URL(string: imageUrl))
+    func configure(image: UIImage) {
+        otherImageView.image = image
     }
 }
