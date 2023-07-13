@@ -9,6 +9,7 @@ let project = Project.makeModule(
         .Feature.ProfileFeature,
         .Feature.MoviesDetailFeature,
         .Feature.CrowdFundingFeature,
+        .Feature.AddMoviesFeature,
         
         .Core.DesignSystem,
         .Domain.RouterDomain,

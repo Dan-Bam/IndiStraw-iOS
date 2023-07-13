@@ -24,7 +24,7 @@ public class TextFieldBoxComponent: UITextField {
         textColor = DesignSystemAsset.Colors.gray.color
         addView()
         setLayout()
-        addLeftPadding()
+        addLeftPadding(padding: 10)
         
         eyeIconButton.rx.tap
             .bind(with: self) { owner, _ in

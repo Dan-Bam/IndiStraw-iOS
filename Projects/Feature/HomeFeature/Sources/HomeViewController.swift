@@ -89,6 +89,11 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.backgroundColor = .black
     }
     
+    private let createMovieButton = UIButton().then {
+        $0.setTitleColor(.white, for: .normal)
+        $0.setTitle("영화 생성", for: .normal)
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.rightBarButtonItem = profileButton
@@ -132,7 +137,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
             bannerImageView, segmentedControl,
             moviesCollectionView, moviesViewAllButton,
             crowdFundingTitleLabel, crowdFundingTableView,
-            crowdFundingViewAllButton
+            crowdFundingViewAllButton, createMovieButton
         )
     }
     
@@ -186,6 +191,10 @@ class HomeViewController: BaseVC<HomeViewModel> {
             $0.centerY.equalTo(crowdFundingTitleLabel)
             $0.trailing.equalToSuperview().inset(15)
         }
+        
+        createMovieButton.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview().inset(3)
+        }
     }
 }
 
@@ -202,7 +211,7 @@ extension HomeViewController {
             .drive(moviesCollectionView.rx.items(
                 cellIdentifier: MoviesCell.identifier,
                 cellType: MoviesCell.self)) { (row, data, cell) in
-                    cell.configure(imageUrl: data.imageUrl)
+                    cell.configure(imageUrl: data.thumbnailUrl)
                 }.disposed(by: disposeBag)
         
         moviesCollectionView.rx.modelSelected(PopularAndRecommendMoviesModel.self)
@@ -210,7 +219,7 @@ extension HomeViewController {
                 print("idx = \(model.movieIdx)")
                 owner.viewModel.pushMovieDetailVC(idx: model.movieIdx)
             }.disposed(by: disposeBag)
-        
+        ;
         viewModel.fundingData
             .asDriver()
             .drive(crowdFundingTableView.rx.items(
@@ -248,6 +257,11 @@ extension HomeViewController {
         crowdFundingViewAllButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.pushCrowdFundingListVC()
+            }.disposed(by: disposeBag)
+        
+        createMovieButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushCreateMovieVC()
             }.disposed(by: disposeBag)
     }
     

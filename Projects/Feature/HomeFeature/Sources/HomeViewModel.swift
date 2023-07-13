@@ -28,6 +28,34 @@ class HomeViewModel: BaseViewModel {
         }
     }
     
+    func requestRecommendMoviesList() {
+        AF.request(HomeTarget.requestToRecommendMoviesList,
+                   interceptor: JwtRequestInterceptor(jwtStore: container))
+        .validate()
+        .responseDecodable(of: [PopularAndRecommendMoviesModel].self) { [weak self] response in
+            switch response.result {
+            case .success(let data):
+                self?.recommendMoviesData.accept(data)
+            case .failure(let error):
+                print("Error - PopularMovies = \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func requestWatchHistoryMoviesList() {
+        AF.request(HomeTarget.reqeustToWatchHistoryMoviesList,
+                   interceptor: JwtRequestInterceptor(jwtStore: container))
+        .validate()
+        .responseDecodable(of: [WatchHistorydMoviesModel].self) { [weak self] response in
+            switch response.result {
+            case .success(let data):
+                self?.watchHistoryMoviesData.accept(data)
+            case .failure(let error):
+                print("Error - PopularMovies = \(error.localizedDescription)")
+            }
+        }
+    }
+    
     func requestCrowdFundingList() {
         AF.request(HomeTarget.requestCrowdFundingList,
                    interceptor: JwtRequestInterceptor(jwtStore: container))
@@ -44,6 +72,10 @@ class HomeViewModel: BaseViewModel {
     
     func pushMovieDetailVC(idx: Int) {
         coordinator.navigate(to: .movieDetailIsRequired(idx: idx))
+    }
+    
+    func pushCreateMovieVC() {
+        coordinator.navigate(to: .createMovieVCIsReuiqred)
     }
     
     func pushCrowdFundingDetailVC(idx: Int) {

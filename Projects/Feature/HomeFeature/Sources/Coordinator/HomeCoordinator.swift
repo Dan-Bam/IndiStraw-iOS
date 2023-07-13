@@ -3,6 +3,7 @@ import BaseFeature
 import MoviesDetailFeature
 import ProfileFeature
 import CrowdFundingFeature
+import AddMoviesFeature
 
 public class HomeCoordinator: BaseCoordinator {
     public override func start() {
@@ -16,6 +17,8 @@ public class HomeCoordinator: BaseCoordinator {
         switch step {
         case .movieDetailIsRequired(let movieIdx):
             movieDetailIsRequired(movieIdx: movieIdx)
+        case .createMovieVCIsReuiqred:
+            createMovieVCIsReuiqred()
         case .crowdFundingDetailIsRequired(let idx):
             crowdFundingIsRequired(idx: idx)
         case .crowdFundingListIsRequired:
@@ -34,6 +37,13 @@ extension HomeCoordinator {
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.startMoviesDetailCoordinator(movieIdx: movieIdx)
+    }
+    
+    func createMovieVCIsReuiqred() {
+        let vc = CreateMoviesCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
     }
     
     func crowdFundingIsRequired(idx: Int) {
