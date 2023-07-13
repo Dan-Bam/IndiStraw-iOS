@@ -58,7 +58,6 @@ public class ImageViewPageControlComponent: UIView {
                     duration: 0.3,
                     options: .transitionCrossDissolve,
                     animations: {
-                        print(owner.pageControl.currentPage)
                         owner.pagecontrolImageView.kf.setImage(with: URL(
                             string: owner.imageDataSources.value[owner.pageControl.currentPage])
                         )

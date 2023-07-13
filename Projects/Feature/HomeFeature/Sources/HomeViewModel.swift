@@ -19,7 +19,6 @@ class HomeViewModel: BaseViewModel {
         .responseDecodable(of: [PopularMoviesModel].self) { [weak self] response in
             switch response.result {
             case .success(let data):
-                print("data = \(data)")
                 self?.moviesData.accept(data)
             case .failure(let error):
                 print("Error - PopularMovies = \(error.localizedDescription)")
