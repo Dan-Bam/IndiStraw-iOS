@@ -101,6 +101,17 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
     }
     
+    lazy var addOtherImageCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 12
+        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.showsHorizontalScrollIndicator = false
+        view.backgroundColor = .black
+        view.register(AddOtherFundingImageCell.self, forCellWithReuseIdentifier: AddOtherFundingImageCell.identifier)
+        return view
+    }()
+    
     private let continueButton = ButtonComponent().then {
         $0.setTitle("계속하기", for: .normal)
     }
@@ -124,7 +135,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             descriptionTitleLabel, descriptionTextView,
             fundingTitleLabel, fundingTextLabel,
             continueButton, otherImageTitleLabel,
-            addOtherImageButton
+            addOtherImageButton, addOtherImageCollectionView
         )
         
         thumbnailWrapperView.addSubviews(
@@ -223,6 +234,13 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.top.equalTo(otherImageTitleLabel.snp.bottom).offset(37)
             $0.leading.equalToSuperview().inset(15)
             $0.size.equalTo(60)
+        }
+        
+        addOtherImageCollectionView.snp.makeConstraints {
+            $0.top.equalTo(otherImageTitleLabel.snp.bottom).offset(12)
+            $0.leading.equalTo(addOtherImageButton.snp.trailing).offset(-12)
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(105)
         }
         
         continueButton.snp.makeConstraints {
