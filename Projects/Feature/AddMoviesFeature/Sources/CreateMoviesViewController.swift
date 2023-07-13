@@ -80,6 +80,12 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.textColor = .white
     }
     
+    
+    
+    private let continueButton = ButtonComponent().then {
+        $0.setTitle("계속하기", for: .normal)
+    }
+    
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
@@ -94,7 +100,8 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             thumbnailTitleLabel, thumbnailWrapperView,
             movieTitleLabel, movieRegisterButton,
             subjectTitleLabel, subjectTextField,
-            descriptionTitleLabel, descriptionTextField, fundingTitleLabel, fundingTextLabel
+            descriptionTitleLabel, descriptionTextField, fundingTitleLabel, fundingTextLabel,
+            continueButton
         )
         
         thumbnailWrapperView.addSubviews(
@@ -112,7 +119,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         }
         
         thumbnailTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(29)
+            $0.top.equalToSuperview().inset(29)
             $0.leading.equalToSuperview().inset(15)
         }
         
@@ -173,6 +180,13 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         fundingTextLabel.snp.makeConstraints {
             $0.top.equalTo(fundingTitleLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
+        }
+        
+        continueButton.snp.makeConstraints {
+            $0.top.equalTo(fundingTextLabel.snp.bottom)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.bottom.equalToSuperview().inset(79)
             $0.height.equalTo(54)
         }
     }
