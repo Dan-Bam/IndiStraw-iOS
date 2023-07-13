@@ -36,7 +36,10 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
     }
     
-//    private let movieRegisterButton = UIBu
+    private let movieRegisterButton = UIButton().then {
+        $0.layer.cornerRadius = 10
+        $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
+    }
     
     private let subjectTitleLabel = UILabel().then {
         $0.text = "제목"
@@ -44,10 +47,18 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
     }
     
+    private let subjectTextField = TextFieldBoxComponent().then {
+        $0.setPlaceholer(text: "제목을 입력해 주세요.")
+    }
+    
     private let descriptionTitleLabel = UILabel().then {
         $0.text = "소개"
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
+    }
+    
+    private let descriptionTextField = TextFieldBoxComponent().then {
+        $0.setPlaceholer(text: "소개글을 입력해 주세요.")
     }
     
     override func configureVC() {
@@ -57,7 +68,9 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
     override func addView() {
         view.addSubviews(
             thumbnailTitleLabel, thumbnailWrapperView,
-            movieTitleLabel
+            movieTitleLabel, movieRegisterButton,
+            subjectTitleLabel, subjectTextField,
+            descriptionTitleLabel, descriptionTextField
         )
         
         thumbnailWrapperView.addSubviews(
@@ -91,5 +104,24 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.top.equalTo(thumbnailWrapperView.snp.bottom).offset(28)
             $0.leading.equalToSuperview().inset(15)
         }
+        
+        movieRegisterButton.snp.makeConstraints {
+            $0.top.equalTo(movieTitleLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
+        }
+        
+        subjectTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(movieRegisterButton.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().inset(15)
+        }
+        
+        subjectTextField.snp.makeConstraints {
+            $0.top.equalTo(subjectTitleLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(54)
+        }
+        
+        
     }
 }
