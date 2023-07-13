@@ -29,6 +29,7 @@ public enum IndiStrawStep {
     
     //home
     case movieDetailIsRequired(idx: Int)
+    case createMovieVCIsReuiqred
     case crowdFundingDetailIsRequired(idx: Int)
     case crowdFundingListIsRequired
     case crowdFunding

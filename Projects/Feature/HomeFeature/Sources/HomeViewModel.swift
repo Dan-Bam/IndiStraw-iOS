@@ -74,6 +74,10 @@ class HomeViewModel: BaseViewModel {
         coordinator.navigate(to: .movieDetailIsRequired(idx: idx))
     }
     
+    func pushCreateMovieVC() {
+        coordinator.navigate(to: .createMovieVCIsReuiqred)
+    }
+    
     func pushCrowdFundingDetailVC(idx: Int) {
         coordinator.navigate(to: .crowdFundingDetailIsRequired(idx: idx))
     }
