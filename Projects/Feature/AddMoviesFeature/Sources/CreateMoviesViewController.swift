@@ -27,7 +27,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.font = DesignSystemFontFamily.Suit.semiBold.font(size: 16)
     }
     
-    private let thumbnailImageUploadButton = BasePaddingButton(padding: UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)).then {
+    private let thumbnailImageUploadButton = BasePaddingButton(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12)).then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 20
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
@@ -61,7 +61,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
     }
     
-    private let descriptionTextField = UITextView().then {
+    private let descriptionTextView = UITextView().then {
         $0.textContainerInset = UIEdgeInsets(top: 17, left: 13, bottom: 0, right: 0)
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
         $0.textColor = DesignSystemAsset.Colors.gray.color
@@ -77,6 +77,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
     }
     
     private let fundingTextLabel = TextFieldBoxComponent().then {
+        $0.text = "크라우드 펀딩을 사용하셨나요?"
         $0.textColor = .white
     }
     
@@ -88,6 +89,8 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
     
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
+        
+        descriptionTextView.delegate = self
     }
     
     override func addView() {
@@ -100,7 +103,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             thumbnailTitleLabel, thumbnailWrapperView,
             movieTitleLabel, movieRegisterButton,
             subjectTitleLabel, subjectTextField,
-            descriptionTitleLabel, descriptionTextField, fundingTitleLabel, fundingTextLabel,
+            descriptionTitleLabel, descriptionTextView, fundingTitleLabel, fundingTextLabel,
             continueButton
         )
         
@@ -166,14 +169,14 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.leading.equalToSuperview().inset(15)
         }
         
-        descriptionTextField.snp.makeConstraints {
+        descriptionTextView.snp.makeConstraints {
             $0.top.equalTo(descriptionTitleLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(80)
         }
         
         fundingTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(descriptionTextField.snp.bottom).offset(28)
+            $0.top.equalTo(descriptionTextView.snp.bottom).offset(28)
             $0.leading.equalToSuperview().inset(15)
         }
         
@@ -188,6 +191,22 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.bottom.equalToSuperview().inset(79)
             $0.height.equalTo(54)
+        }
+    }
+}
+
+extension CreateMoviesViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "크라우드 펀딩을 사용하셨나요?" {
+            textView.text = nil
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = "크라우드 펀딩을 사용하셨나요?"
+            textView.textColor = .lightGray
+//            updateCountLabel(characterCount: 0)
         }
     }
 }
