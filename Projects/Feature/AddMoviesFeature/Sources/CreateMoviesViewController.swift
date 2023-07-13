@@ -4,8 +4,12 @@ import SnapKit
 import Then
 import DesignSystem
 import Utility
+import RxSwift
+import RxCocoa
 
 class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
+    private let disposeBag = DisposeBag()
+    
     private let scrollView = UIScrollView()
     
     private let contentView = UIView()
@@ -101,6 +105,11 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
     }
     
+    private let imagePicker = UIImagePickerController().then {
+        $0.sourceType = .photoLibrary
+        $0.allowsEditing = true
+    }
+    
     lazy var addOtherImageCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -120,6 +129,11 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         navigationController?.navigationBar.prefersLargeTitles = false
         
         descriptionTextView.delegate = self
+        
+        addOtherImageButton.rx.tap
+            .bind(with: self) { owner, _ in
+                
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
@@ -238,7 +252,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         
         addOtherImageCollectionView.snp.makeConstraints {
             $0.top.equalTo(otherImageTitleLabel.snp.bottom).offset(12)
-            $0.leading.equalTo(addOtherImageButton.snp.trailing).offset(-12)
+            $0.leading.equalTo(addOtherImageButton.snp.trailing).offset(12)
             $0.trailing.equalToSuperview()
             $0.height.equalTo(105)
         }
