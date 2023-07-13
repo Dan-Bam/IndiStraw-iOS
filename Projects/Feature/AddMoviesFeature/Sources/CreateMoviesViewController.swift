@@ -93,6 +93,14 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
     }
     
+    private let addOtherImageButton = UIButton().then {
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 25)
+        $0.setTitle("+", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.layer.cornerRadius = 30
+        $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
+    }
+    
     private let continueButton = ButtonComponent().then {
         $0.setTitle("계속하기", for: .normal)
     }
@@ -115,7 +123,8 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             subjectTitleLabel, subjectTextField,
             descriptionTitleLabel, descriptionTextView,
             fundingTitleLabel, fundingTextLabel,
-            continueButton, otherImageTitleLabel
+            continueButton, otherImageTitleLabel,
+            addOtherImageButton
         )
         
         thumbnailWrapperView.addSubviews(
@@ -202,8 +211,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         fundingSwitch.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(13)
-            $0.width.equalTo(52
-            )
+            $0.width.equalTo(52)
         }
         
         otherImageTitleLabel.snp.makeConstraints {
@@ -211,12 +219,19 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.leading.equalToSuperview().inset(15)
         }
         
+        addOtherImageButton.snp.makeConstraints {
+            $0.top.equalTo(otherImageTitleLabel.snp.bottom).offset(37)
+            $0.leading.equalToSuperview().inset(15)
+            $0.size.equalTo(60)
+        }
+        
         continueButton.snp.makeConstraints {
-            $0.top.equalTo(otherImageTitleLabel.snp.bottom)
+            $0.top.equalTo(addOtherImageButton.snp.bottom).offset(57)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.bottom.equalToSuperview().inset(79)
             $0.height.equalTo(54)
         }
+        
     }
 }
 
