@@ -57,8 +57,13 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
     }
     
-    private let descriptionTextField = TextFieldBoxComponent().then {
-        $0.setPlaceholer(text: "소개글을 입력해 주세요.")
+    private let descriptionTextField = UITextView().then {
+        $0.textContainerInset = UIEdgeInsets(top: 17, left: 13, bottom: 0, right: 0)
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
+        $0.textColor = DesignSystemAsset.Colors.gray.color
+        $0.layer.cornerRadius = 10
+        $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
+        $0.text = "소개글을 입력해 주세요."
     }
     
     override func configureVC() {
@@ -122,6 +127,15 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.height.equalTo(54)
         }
         
+        descriptionTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(subjectTextField.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().inset(15)
+        }
         
+        descriptionTextField.snp.makeConstraints {
+            $0.top.equalTo(descriptionTitleLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(80)
+        }
     }
 }
