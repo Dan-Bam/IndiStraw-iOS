@@ -5,7 +5,7 @@ import RouterDomain
 enum HomeTarget {
     case requestPopularMoviesList
     case requestToRecommendMoviesList
-    case reqeustToWatchHistoryMoviesList
+    case reqeustToWatchHistoryMoviesList(MovieListRequestModel)
     case requestCrowdFundingList
 }
 
@@ -30,15 +30,21 @@ extension HomeTarget: BaseRouter {
         switch self {
         case .requestPopularMoviesList: return "/movie/popular/"
         case .requestToRecommendMoviesList: return "/movie/recommend/"
-        case .reqeustToWatchHistoryMoviesList: return "/movie/history/"
+        case .reqeustToWatchHistoryMoviesList: return "/movie/"
         case .requestCrowdFundingList: return "/crowdfunding/popular/list"
         }
     }
     
     var parameters: RequestParams {
         switch self {
-        case .requestCrowdFundingList, .requestPopularMoviesList, .requestToRecommendMoviesList, .reqeustToWatchHistoryMoviesList:
+        case .requestCrowdFundingList, .requestPopularMoviesList, .requestToRecommendMoviesList:
             return .requestPlain
+        case .reqeustToWatchHistoryMoviesList(let data):
+            let query: [String: Any] = [
+                "page": data.page,
+                "keyward": data.keyward
+            ]
+            return .query(query)
         }
     }
     

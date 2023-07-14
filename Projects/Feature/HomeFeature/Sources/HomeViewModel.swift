@@ -8,11 +8,12 @@ import RxCocoa
 class HomeViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     var crowdFundingCurrentPage = 0
+    var historyMoviesCurrentPage = 0
     
     var fundingData = BehaviorRelay<[FundingList]>(value: [])
     var popularMoviesData = BehaviorRelay<[PopularAndRecommendMoviesModel]>(value: [])
     var recommendMoviesData = BehaviorRelay<[PopularAndRecommendMoviesModel]>(value: [])
-    var watchHistoryMoviesData = BehaviorRelay<[WatchHistorydMoviesModel]>(value: [])
+    var watchHistoryMoviesData = BehaviorRelay<[MovieList]>(value: [])
     
     func requestPopularMoviesList() {
         AF.request(HomeTarget.requestPopularMoviesList,
@@ -43,13 +44,14 @@ class HomeViewModel: BaseViewModel {
     }
     
     func requestWatchHistoryMoviesList() {
-        AF.request(HomeTarget.reqeustToWatchHistoryMoviesList,
+        AF.request(HomeTarget.reqeustToWatchHistoryMoviesList(MovieListRequestModel(page: historyMoviesCurrentPage + 1)),
                    interceptor: JwtRequestInterceptor(jwtStore: container))
         .validate()
-        .responseDecodable(of: [WatchHistorydMoviesModel].self) { [weak self] response in
+        .responseDecodable(of: MovieListResponseModel.self) { [weak self] response in
             switch response.result {
             case .success(let data):
-                self?.watchHistoryMoviesData.accept(data)
+                print(data)
+                self?.watchHistoryMoviesData.accept(data.list)
             case .failure(let error):
                 print("Error - PopularMovies = \(error.localizedDescription)")
             }
