@@ -4,8 +4,14 @@ import SnapKit
 import Then
 import DesignSystem
 import Utility
+import RxSwift
+import RxCocoa
 
 class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
+    private let addOtherImageBehaviorRelay = BehaviorRelay<[UIImage]>(value: [])
+    
+    private let disposeBag = DisposeBag()
+    
     private let scrollView = UIScrollView()
     
     private let contentView = UIView()
@@ -93,6 +99,30 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
     }
     
+    private let addOtherImageButton = UIButton().then {
+        $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 25)
+        $0.setTitle("+", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.layer.cornerRadius = 30
+        $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
+    }
+    
+    private let imagePicker = UIImagePickerController().then {
+        $0.sourceType = .photoLibrary
+        $0.allowsEditing = true
+    }
+    
+    lazy var addOtherImageCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 8
+        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.showsHorizontalScrollIndicator = false
+        view.backgroundColor = .black
+        view.register(AddOtherFundingImageCell.self, forCellWithReuseIdentifier: AddOtherFundingImageCell.identifier)
+        return view
+    }()
+    
     private let continueButton = ButtonComponent().then {
         $0.setTitle("계속하기", for: .normal)
     }
@@ -101,6 +131,19 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         navigationController?.navigationBar.prefersLargeTitles = false
         
         descriptionTextView.delegate = self
+        imagePicker.delegate = self
+        
+        addOtherImageButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.present(owner.imagePicker, animated: true)
+            }.disposed(by: disposeBag)
+        
+        addOtherImageBehaviorRelay
+            .asDriver()
+            .drive(addOtherImageCollectionView.rx.items(cellIdentifier: AddOtherFundingImageCell.identifier,
+                                                        cellType: AddOtherFundingImageCell.self)) { row, data, cell in
+                cell.configure(image: data)
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
@@ -115,7 +158,8 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             subjectTitleLabel, subjectTextField,
             descriptionTitleLabel, descriptionTextView,
             fundingTitleLabel, fundingTextLabel,
-            continueButton, otherImageTitleLabel
+            continueButton, otherImageTitleLabel,
+            addOtherImageButton, addOtherImageCollectionView
         )
         
         thumbnailWrapperView.addSubviews(
@@ -202,8 +246,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         fundingSwitch.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(13)
-            $0.width.equalTo(52
-            )
+            $0.width.equalTo(52)
         }
         
         otherImageTitleLabel.snp.makeConstraints {
@@ -211,12 +254,26 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.leading.equalToSuperview().inset(15)
         }
         
+        addOtherImageButton.snp.makeConstraints {
+            $0.top.equalTo(otherImageTitleLabel.snp.bottom).offset(37)
+            $0.leading.equalToSuperview().inset(15)
+            $0.size.equalTo(60)
+        }
+        
+        addOtherImageCollectionView.snp.makeConstraints {
+            $0.top.equalTo(otherImageTitleLabel.snp.bottom).offset(12)
+            $0.leading.equalTo(addOtherImageButton.snp.trailing).offset(12)
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(105)
+        }
+        
         continueButton.snp.makeConstraints {
-            $0.top.equalTo(otherImageTitleLabel.snp.bottom)
+            $0.top.equalTo(addOtherImageButton.snp.bottom).offset(57)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.bottom.equalToSuperview().inset(79)
             $0.height.equalTo(54)
         }
+        
     }
 }
 
@@ -233,5 +290,35 @@ extension CreateMoviesViewController: UITextViewDelegate {
             textView.text = "크라우드 펀딩을 사용하셨나요?"
             textView.textColor = .lightGray
         }
+    }
+}
+
+extension CreateMoviesViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        var newImage: UIImage? = nil
+        
+        if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            newImage = possibleImage
+        } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            newImage = possibleImage
+        }
+        
+        
+        
+//        switch picker.restorationIdentifier {
+//        case PickerKey.first:
+//            self.addFirstImageButton.setImage(newImage, for: .normal)
+//        case PickerKey.second:
+//            self.addSecondImageButton.setImage(newImage, for: .normal)
+//        default:
+//            return
+//        }
+        
+        var value = addOtherImageBehaviorRelay.value
+        value.append(newImage!)
+        addOtherImageBehaviorRelay.accept(value)
+        
+        
+        picker.dismiss(animated: true, completion: nil)
     }
 }

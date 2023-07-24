@@ -310,7 +310,8 @@ extension CrowdFundingDetailViewController {
         fundingImageView.kf.setImage(with: URL(string: model.thumbnailUrl))
         writerLabel.text = "진행자: " + model.writer.name
         fundingTitleLabel.text = model.title
-        setPercentageTextFont(percentage: model.amount.percentage)
+        setPercentageTextFont(percentage: (model.amount.percentage == 0) ?
+                              "0%" : String(format: "%.2f", model.amount.percentage) + "%")
         remainingDayLabel.text = "D-" + "\(model.remainingDay)"
         setTotalAmountTextFont(totalAmount: model.amount.totalAmount, targetAmount: model.amount.targetAmount)
         
@@ -322,11 +323,11 @@ extension CrowdFundingDetailViewController {
         descriptionImageView.configure(imageList: model.imageList)
     }
     
-    private func setPercentageTextFont(percentage: Double) {
+    private func setPercentageTextFont(percentage: String) {
         let attributeString = NSMutableAttributedString()
         
         let items: [(text: String, attributes: [NSAttributedString.Key: Any])] = [
-            ("\(percentage)", [.font: DesignSystemFontFamily.Suit.bold.font(size: 18)]),
+            (percentage, [.font: DesignSystemFontFamily.Suit.bold.font(size: 18)]),
             ("%", [.font: DesignSystemFontFamily.Suit.medium.font(size: 12)]),
             ("달성", [.font: DesignSystemFontFamily.Suit.regular.font(size: 14)])
         ]

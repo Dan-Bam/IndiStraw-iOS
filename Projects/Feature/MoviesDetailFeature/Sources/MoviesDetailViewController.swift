@@ -3,6 +3,7 @@ import BaseFeature
 import DesignSystem
 import SnapKit
 import Then
+import AVKit
 
 class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
     private let thumbnailImageView = UIImageView().then {
@@ -15,18 +16,11 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
     }
     
     private let movieTitleLabel = UILabel().then {
-        $0.text = "스파이더맨"
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.semiBold.font(size: 18)
     }
     
     private let movieDescriptionLabel = UILabel().then {
-        $0.text = """
-        스파이더맨은 스티브 딧코가 창작한 마블 코믹스의 슈퍼 히어로이
-        다. 그는 1962년 8월의 어메이징 판타지15호에 처음 등장했다.그
-        는 마블 코믹스에서 출판한 만화책뿐만 아니라 마블 유니버스를 배
-        경으로 한 여러영화, tv프로이다.
-        """
         $0.numberOfLines = 0
         $0.textColor = DesignSystemAsset.Colors.gray.color
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 12)

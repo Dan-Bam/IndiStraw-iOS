@@ -99,7 +99,6 @@ public class CrowdFundingViewComponent: UIView {
             self.fundingProgressView.setProgress(0.7, animated: true)
             self.fundingProgressView.progress = Float(percentage) / 100
         }
-        fundingPercentageLabel.text = "\(percentage)%"
+        fundingPercentageLabel.text = (percentage == 0) ? "0%" : String(format: "%.2f", percentage) + "%"
     }
-    
 }

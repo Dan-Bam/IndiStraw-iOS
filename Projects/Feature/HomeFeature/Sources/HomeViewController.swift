@@ -43,7 +43,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.layer.cornerRadius = 1
     }
     
-    private let segmentedControl = UISegmentedControl(items: ["인기", "추천", "최신"]).then {
+    private let segmentedControl = UISegmentedControl(items: ["최신"]).then {
         $0.selectedSegmentIndex = 0
         $0.setTitleTextAttributes([
             .foregroundColor: DesignSystemAsset.Colors.darkGray.color,
@@ -108,7 +108,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.crowdFundingTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
-        viewModel.requestPopularMoviesList()
+        viewModel.requestWatchHistoryMoviesList()
         viewModel.requestCrowdFundingList()
     }
     
@@ -206,15 +206,16 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController {
     private func bindUI() {
-        viewModel.popularMoviesData
+        viewModel.watchHistoryMoviesData
             .asDriver()
             .drive(moviesCollectionView.rx.items(
                 cellIdentifier: MoviesCell.identifier,
                 cellType: MoviesCell.self)) { (row, data, cell) in
+                    print(data)
                     cell.configure(imageUrl: data.thumbnailUrl)
                 }.disposed(by: disposeBag)
         
-        moviesCollectionView.rx.modelSelected(PopularAndRecommendMoviesModel.self)
+        moviesCollectionView.rx.modelSelected(WatchHistorydMoviesModel.self)
             .bind(with: self) { owner, model in
                 print("idx = \(model.movieIdx)")
                 owner.viewModel.pushMovieDetailVC(idx: model.movieIdx)
