@@ -30,6 +30,6 @@ struct Reward: Decodable {
     var title: String
     var description: String
     var price: Int
-    var totalCount: Int
+    var totalCount: Int?
     var imageList: [String]
 }
