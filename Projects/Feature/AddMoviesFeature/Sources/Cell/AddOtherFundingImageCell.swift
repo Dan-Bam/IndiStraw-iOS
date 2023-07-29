@@ -6,11 +6,13 @@ import RxSwift
 import RxCocoa
 
 protocol RemoveCollectionViewCellHandlerProtocol: AnyObject {
-    func removeImageButtonDidTap()
+    func removeImageButtonDidTap(index: Int)
 }
 
 class AddOtherFundingImageCell: UICollectionViewCell {
     static let identifier = "AddOtherFundingImageCell"
+    
+    private var index = 0
     
     private let disposeBag = DisposeBag()
     
@@ -49,7 +51,7 @@ class AddOtherFundingImageCell: UICollectionViewCell {
         
         ImageRemoveButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.delegate?.removeImageButtonDidTap()
+                owner.delegate?.removeImageButtonDidTap(index: owner.index)
             }.disposed(by: disposeBag)
     }
     
@@ -59,5 +61,9 @@ class AddOtherFundingImageCell: UICollectionViewCell {
     
     func configure(image: UIImage) {
         otherImageView.image = image
+    }
+    
+    func setRowIdx(row index: Int) {
+        self.index = index
     }
 }

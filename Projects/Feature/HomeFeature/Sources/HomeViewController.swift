@@ -211,7 +211,6 @@ extension HomeViewController {
             .drive(moviesCollectionView.rx.items(
                 cellIdentifier: MoviesCell.identifier,
                 cellType: MoviesCell.self)) { (row, data, cell) in
-                    print(data)
                     cell.configure(imageUrl: data.thumbnailUrl)
                 }.disposed(by: disposeBag)
         

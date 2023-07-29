@@ -7,7 +7,8 @@ import Utility
 import RxSwift
 import RxCocoa
 
-class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
+class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
+                                  RemoveCollectionViewCellHandlerProtocol {
     private let addOtherImageBehaviorRelay = BehaviorRelay<[UIImage]>(value: [])
     
     private let disposeBag = DisposeBag()
@@ -143,8 +144,10 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             .asDriver()
             .drive(addOtherImageCollectionView.rx.items(
                 cellIdentifier: AddOtherFundingImageCell.identifier,
-                cellType: AddOtherFundingImageCell.self)) { _, data, cell in
+                cellType: AddOtherFundingImageCell.self)) { row, data, cell in
+                    cell.delegate = self
                     cell.configure(image: data)
+                    cell.setRowIdx(row: row)
                 }.disposed(by: disposeBag)
     }
     
@@ -312,5 +315,13 @@ extension CreateMoviesViewController: UIImagePickerControllerDelegate, UINavigat
 extension CreateMoviesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 162, height: collectionView.frame.height)
+    }
+}
+
+extension CreateMoviesViewController {
+    func removeImageButtonDidTap(index: Int) {
+        var value = addOtherImageBehaviorRelay.value
+        value.remove(at: index)
+        addOtherImageBehaviorRelay.accept(value)
     }
 }
