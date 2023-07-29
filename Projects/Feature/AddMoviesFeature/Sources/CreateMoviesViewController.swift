@@ -129,6 +129,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
     
     override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
+        addOtherImageCollectionView.delegate = self
         
         descriptionTextView.delegate = self
         imagePicker.delegate = self
@@ -140,16 +141,15 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
         
         addOtherImageBehaviorRelay
             .asDriver()
-            .drive(addOtherImageCollectionView.rx.items(cellIdentifier: AddOtherFundingImageCell.identifier,
-                                                        cellType: AddOtherFundingImageCell.self)) { row, data, cell in
-                cell.configure(image: data)
-            }.disposed(by: disposeBag)
+            .drive(addOtherImageCollectionView.rx.items(
+                cellIdentifier: AddOtherFundingImageCell.identifier,
+                cellType: AddOtherFundingImageCell.self)) { _, data, cell in
+                    cell.configure(image: data)
+                }.disposed(by: disposeBag)
     }
     
     override func addView() {
-        view.addSubview(
-            scrollView
-        )
+        view.addSubview(scrollView)
         
         scrollView.addSubview(contentView)
         contentView.addSubviews(
@@ -273,13 +273,11 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel> {
             $0.bottom.equalToSuperview().inset(79)
             $0.height.equalTo(54)
         }
-        
     }
 }
 
 extension CreateMoviesViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        
         if textView.text == "크라우드 펀딩을 사용하셨나요?" {
             textView.text = ""
         }
@@ -305,20 +303,25 @@ extension CreateMoviesViewController: UIImagePickerControllerDelegate, UINavigat
         
         
         
-//        switch picker.restorationIdentifier {
-//        case PickerKey.first:
-//            self.addFirstImageButton.setImage(newImage, for: .normal)
-//        case PickerKey.second:
-//            self.addSecondImageButton.setImage(newImage, for: .normal)
-//        default:
-//            return
-//        }
+        //        switch picker.restorationIdentifier {
+        //        case PickerKey.first:
+        //            self.addFirstImageButton.setImage(newImage, for: .normal)
+        //        case PickerKey.second:
+        //            self.addSecondImageButton.setImage(newImage, for: .normal)
+        //        default:
+        //            return
+        //        }
         
         var value = addOtherImageBehaviorRelay.value
         value.append(newImage!)
         addOtherImageBehaviorRelay.accept(value)
         
-        
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension CreateMoviesViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 162, height: collectionView.frame.height)
     }
 }
