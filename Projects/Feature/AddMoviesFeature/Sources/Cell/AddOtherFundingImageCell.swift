@@ -2,9 +2,19 @@ import UIKit
 import SnapKit
 import Then
 import DesignSystem
+import RxSwift
+import RxCocoa
+
+protocol RemoveCollectionViewCellHandlerProtocol: AnyObject {
+    func removeImageButtonDidTap()
+}
 
 class AddOtherFundingImageCell: UICollectionViewCell {
     static let identifier = "AddOtherFundingImageCell"
+    
+    private let disposeBag = DisposeBag()
+    
+    weak var delegate: RemoveCollectionViewCellHandlerProtocol?
     
     private let otherImageView = UIImageView().then {
         $0.clipsToBounds = true
@@ -36,6 +46,11 @@ class AddOtherFundingImageCell: UICollectionViewCell {
             $0.top.trailing.equalToSuperview()
             $0.size.equalTo(20)
         }
+        
+        ImageRemoveButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.delegate?.removeImageButtonDidTap()
+            }.disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {
