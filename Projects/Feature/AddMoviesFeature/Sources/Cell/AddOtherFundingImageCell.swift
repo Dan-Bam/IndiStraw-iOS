@@ -4,6 +4,7 @@ import Then
 import DesignSystem
 import RxSwift
 import RxCocoa
+import Utility
 
 protocol RemoveCollectionViewCellHandlerProtocol: AnyObject {
     func removeImageButtonDidTap(index: Int)
@@ -25,8 +26,7 @@ class AddOtherFundingImageCell: UICollectionViewCell {
     }
     
     private let ImageRemoveButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "xmark"), for: .normal)
-        $0.tintColor = .white
+        $0.setImage(UIImage(systemName: "xmark")?.resized(to: CGSize(width: 11, height: 11))?.withTintColor(.white), for: .normal)
         $0.clipsToBounds = true
         $0.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
         $0.layer.cornerRadius = 10
