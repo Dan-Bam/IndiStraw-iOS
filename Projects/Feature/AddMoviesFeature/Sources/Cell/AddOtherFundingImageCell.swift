@@ -13,6 +13,8 @@ class AddOtherFundingImageCell: UICollectionViewCell {
     }
     
     private let ImageRemoveButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "xmark"), for: .normal)
+        $0.tintColor = .white
         $0.clipsToBounds = true
         $0.backgroundColor = DesignSystemAsset.Colors.lightBlack.color
         $0.layer.cornerRadius = 10
