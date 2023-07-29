@@ -43,7 +43,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.layer.cornerRadius = 1
     }
     
-    private let segmentedControl = UISegmentedControl(items: ["최신"]).then {
+    private let segmentedControl = UISegmentedControl(items: ["인기", "추천", "최신"]).then {
         $0.selectedSegmentIndex = 0
         $0.setTitleTextAttributes([
             .foregroundColor: DesignSystemAsset.Colors.darkGray.color,
@@ -211,7 +211,6 @@ extension HomeViewController {
             .drive(moviesCollectionView.rx.items(
                 cellIdentifier: MoviesCell.identifier,
                 cellType: MoviesCell.self)) { (row, data, cell) in
-                    print(data)
                     cell.configure(imageUrl: data.thumbnailUrl)
                 }.disposed(by: disposeBag)
         
