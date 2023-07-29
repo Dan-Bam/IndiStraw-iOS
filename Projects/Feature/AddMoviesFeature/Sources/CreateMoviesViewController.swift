@@ -301,17 +301,6 @@ extension CreateMoviesViewController: UIImagePickerControllerDelegate, UINavigat
             newImage = possibleImage
         }
         
-        
-        
-        //        switch picker.restorationIdentifier {
-        //        case PickerKey.first:
-        //            self.addFirstImageButton.setImage(newImage, for: .normal)
-        //        case PickerKey.second:
-        //            self.addSecondImageButton.setImage(newImage, for: .normal)
-        //        default:
-        //            return
-        //        }
-        
         var value = addOtherImageBehaviorRelay.value
         value.append(newImage!)
         addOtherImageBehaviorRelay.accept(value)

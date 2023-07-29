@@ -26,9 +26,8 @@ class AddOtherFundingImageCell: UICollectionViewCell {
         )
         
         otherImageView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-//            $0.width.equalTo(162)
+            $0.top.trailing.equalToSuperview().inset(4)
+            $0.leading.bottom.equalToSuperview()
         }
         
         ImageRemoveButton.snp.makeConstraints {
