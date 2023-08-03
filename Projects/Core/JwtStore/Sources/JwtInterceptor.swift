@@ -19,8 +19,9 @@ public class JwtRequestInterceptor: RequestInterceptor {
     }
     
     public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        let accessExpiredTime = jwtStore.getToken(type: .accessTokenExpiredAt).getStringToDate()
-        if accessExpiredTime.compare(Date().addingTimeInterval(32400)) == .orderedDescending {
+        
+        let accessExpiredTime = CustomDateFormatter.shared.getStringToDate(from: jwtStore.getToken(type: .accessTokenExpiredAt))
+        if accessExpiredTime?.compare(Date().addingTimeInterval(32400)) == .orderedDescending {
             completion(.doNotRetryWithError(error))
             return
         }
