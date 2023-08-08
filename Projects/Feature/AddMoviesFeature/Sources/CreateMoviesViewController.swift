@@ -47,7 +47,9 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
     }
     
-    private let movieRegisterButton = UIButton().then {
+    private let movieRegisterButton = TextFieldBoxComponent().then {
+        $0.setLeftICon(image: )
+        $0.setPlaceholer(text: "영화를 등록해 주세요.")
         $0.layer.cornerRadius = 10
         $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
     }

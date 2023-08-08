@@ -50,6 +50,13 @@ public class TextFieldBoxComponent: UITextField {
         )
     }
     
+    public func setLeftICon(image: UIImage) {
+        self.leftViewMode = .always
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        imageView.image = image
+        self.leftView = imageView
+    }
+    
     private func addView() {
         addSubview(eyeIconButton)
     }
