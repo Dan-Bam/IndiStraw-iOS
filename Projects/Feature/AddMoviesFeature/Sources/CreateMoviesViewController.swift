@@ -48,7 +48,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
     }
     
     private let movieRegisterButton = TextFieldBoxComponent().then {
-        $0.setLeftICon(image: )
+        $0.setLeftICon(image: DesignSystemAsset.Images.registMovie.image)
         $0.setPlaceholer(text: "영화를 등록해 주세요.")
         $0.layer.cornerRadius = 10
         $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
