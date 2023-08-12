@@ -7,6 +7,10 @@ import Utility
 import RxSwift
 import RxCocoa
 
+enum MovieDescriptionText {
+    static var placeHolder = "소개글을 입력해 주세요."
+}
+
 class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
                                   RemoveCollectionViewCellHandlerProtocol {
     private let addOtherImageBehaviorRelay = BehaviorRelay<[UIImage]>(value: [])
@@ -34,7 +38,12 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
         $0.font = DesignSystemFontFamily.Suit.semiBold.font(size: 16)
     }
     
-    private let thumbnailImageUploadButton = BasePaddingButton(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12)).then {
+    private let thumbnailImageUploadButton = BasePaddingButton(padding: UIEdgeInsets(
+        top: 3,
+        left: 12,
+        bottom: 3,
+        right: 12
+    )).then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 20
         $0.backgroundColor = DesignSystemAsset.Colors.mainColor.color
@@ -50,6 +59,17 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
     private let movieRegisterButton = UIButton().then {
         $0.layer.cornerRadius = 10
         $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
+    }
+    
+    private let movieRegisterIcon = UIImageView().then {
+        $0.image = DesignSystemAsset.Images.registMovie.image
+        $0.tintColor = .white
+    }
+    
+    private let movieRegisterText = UILabel().then {
+        $0.textColor = DesignSystemAsset.Colors.gray.color
+        $0.text = "영화를 등록해 주세요."
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
     private let subjectTitleLabel = UILabel().then {
@@ -69,12 +89,12 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
     }
     
     private let descriptionTextView = UITextView().then {
+        $0.text = MovieDescriptionText.placeHolder
+        $0.textColor = DesignSystemAsset.Colors.gray.color
         $0.textContainerInset = UIEdgeInsets(top: 17, left: 13, bottom: 0, right: 0)
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
-        $0.textColor = DesignSystemAsset.Colors.gray.color
         $0.layer.cornerRadius = 10
         $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
-        $0.text = "소개글을 입력해 주세요."
     }
     
     private let fundingTitleLabel = UILabel().then {
@@ -84,7 +104,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
     }
     
     private let fundingTextLabel = TextFieldBoxComponent().then {
-        $0.text = "크라우드 펀딩을 사용하셨나요?"
+        $0.text = MovieDescriptionText.placeHolder
         $0.textColor = .white
     }
     
@@ -169,6 +189,10 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
             thumbnailDescriptionLabel, thumbnailImageUploadButton
         )
         
+        movieRegisterButton.addSubviews(
+            movieRegisterIcon, movieRegisterText
+        )
+        
         fundingTextLabel.addSubview(fundingSwitch)
     }
     
@@ -213,6 +237,18 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
             $0.height.equalTo(54)
         }
         
+        movieRegisterIcon.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().inset(13)
+            $0.width.equalTo(20)
+            $0.height.equalTo(12)
+        }
+        
+        movieRegisterText.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(movieRegisterIcon.snp.trailing).offset(8)
+        }
+        
         subjectTitleLabel.snp.makeConstraints {
             $0.top.equalTo(movieRegisterButton.snp.bottom).offset(28)
             $0.leading.equalToSuperview().inset(15)
@@ -249,7 +285,6 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
         fundingSwitch.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(13)
-            $0.width.equalTo(52)
         }
         
         otherImageTitleLabel.snp.makeConstraints {
@@ -281,14 +316,14 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
 
 extension CreateMoviesViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == "크라우드 펀딩을 사용하셨나요?" {
+        if textView.text == MovieDescriptionText.placeHolder {
             textView.text = ""
         }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textView.text = "크라우드 펀딩을 사용하셨나요?"
+            textView.text = MovieDescriptionText.placeHolder
             textView.textColor = .lightGray
         }
     }
