@@ -251,7 +251,6 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
         fundingSwitch.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(13)
-            $0.width.equalTo(52)
         }
         
         otherImageTitleLabel.snp.makeConstraints {
