@@ -56,11 +56,20 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
         $0.font = DesignSystemFontFamily.Suit.regular.font(size: 16)
     }
     
-    private let movieRegisterButton = TextFieldBoxComponent().then {
-        $0.setLeftICon(image: DesignSystemAsset.Images.registMovie.image)
-        $0.setPlaceholer(text: "영화를 등록해 주세요.")
+    private let movieRegisterButton = UIButton().then {
         $0.layer.cornerRadius = 10
         $0.backgroundColor = DesignSystemAsset.Colors.darkgray3.color
+    }
+    
+    private let movieRegisterIcon = UIImageView().then {
+        $0.image = DesignSystemAsset.Images.registMovie.image
+        $0.tintColor = .white
+    }
+    
+    private let movieRegisterText = UILabel().then {
+        $0.textColor = DesignSystemAsset.Colors.gray.color
+        $0.text = "영화를 등록해 주세요."
+        $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
     private let subjectTitleLabel = UILabel().then {
@@ -180,6 +189,10 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
             thumbnailDescriptionLabel, thumbnailImageUploadButton
         )
         
+        movieRegisterButton.addSubviews(
+            movieRegisterIcon, movieRegisterText
+        )
+        
         fundingTextLabel.addSubview(fundingSwitch)
     }
     
@@ -222,6 +235,18 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
             $0.top.equalTo(movieTitleLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(54)
+        }
+        
+        movieRegisterIcon.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().inset(13)
+            $0.width.equalTo(20)
+            $0.height.equalTo(12)
+        }
+        
+        movieRegisterText.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(movieRegisterIcon.snp.trailing).offset(8)
         }
         
         subjectTitleLabel.snp.makeConstraints {
