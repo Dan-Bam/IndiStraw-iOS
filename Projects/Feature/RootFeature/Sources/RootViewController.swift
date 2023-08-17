@@ -5,7 +5,7 @@ import Utility
 import RxCocoa
 import RxSwift
 
-class RootViewController: BaseVC<RootViewModel> {
+public class RootViewController: BaseVC<RootViewModel> {
     private let disposeBag = DisposeBag()
     
     private let logoLabel = UILabel().then {
@@ -24,7 +24,7 @@ class RootViewController: BaseVC<RootViewModel> {
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.regular.font(size: 12)
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         setSignupButtonAttributedTitle()
         
         signinButton.rx.tap
@@ -50,11 +50,11 @@ class RootViewController: BaseVC<RootViewModel> {
         signupButton.setAttributedTitle(attributeString, for: .normal)
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(logoLabel, signinButton, signupButton)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         logoLabel.snp.makeConstraints {
             $0.bottom.equalTo(signinButton.snp.top).offset(-270)
             $0.centerX.equalToSuperview()

@@ -29,6 +29,7 @@ public extension TargetDependency.Feature {
 public extension TargetDependency.Core {
     static let DesignSystem = TargetDependency.core(name: "DesignSystem")
     static let JwtStore = TargetDependency.core(name: "JwtStore")
+    static let CoordinatorControl = TargetDependency.core(name: "CoordinatorControl")
 }
 
 public extension TargetDependency.Domain {
