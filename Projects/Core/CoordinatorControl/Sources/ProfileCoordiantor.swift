@@ -1,5 +1,6 @@
 import BaseFeature
 import SettingFeature
+import ProfileFeature
 
 public class ProfileCoordinator: BaseCoordinator {
     public override func start() {

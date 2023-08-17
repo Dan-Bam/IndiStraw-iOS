@@ -1,6 +1,7 @@
 import BaseFeature
 import PhoneNumberAuthFeature
 import HomeFeature
+import SigninFeature
 
 public class SigninCoordinator: BaseCoordinator {
     public override func start() {

@@ -19,7 +19,7 @@ var bannerImageSources = [
     DesignSystemAsset.Images.testImage.image
 ]
 
-class HomeViewController: BaseVC<HomeViewModel> {
+public class HomeViewController: BaseVC<HomeViewModel> {
     
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
@@ -95,7 +95,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         $0.setTitle("영화 생성", for: .normal)
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.rightBarButtonItem = profileButton
         bindUI()
@@ -108,18 +108,18 @@ class HomeViewController: BaseVC<HomeViewModel> {
         DLog(type: .error, text: "This is Error Test")
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.crowdFundingTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         viewModel.requestWatchHistoryMoviesList()
         viewModel.requestCrowdFundingList()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         self.crowdFundingTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
                 if let newValue = change?[.newKey] as? CGSize {
@@ -132,7 +132,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         }
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
@@ -144,7 +144,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
         )
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
@@ -202,7 +202,7 @@ class HomeViewController: BaseVC<HomeViewModel> {
 }
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 109, height: collectionView.frame.height)
     }
 }

@@ -1,6 +1,7 @@
 import BaseFeature
 import EditProfileFeature
 import PhoneNumberAuthFeature
+import SettingFeature
 
 public class SettingCoordinator: BaseCoordinator {
     public override func start() {

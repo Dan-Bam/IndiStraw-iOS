@@ -15,7 +15,7 @@ enum customButonType {
     static let withdrawal = "회원탈퇴"
 }
 
-class SettingViewController: BaseVC<SettingViewModel> {
+public class SettingViewController: BaseVC<SettingViewModel> {
     private let disposeBag = DisposeBag()
     
     private let editProfileButton = CustomSettingButton().then {
@@ -48,7 +48,7 @@ class SettingViewController: BaseVC<SettingViewModel> {
         $0.configure(type: customButonType.withdrawal)
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         editProfileButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.pushEditProfileVC()
@@ -60,14 +60,14 @@ class SettingViewController: BaseVC<SettingViewModel> {
             }.disposed(by: disposeBag)
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(
             editProfileButton, settingAccountLabel,
             editPasswordButton, editLanguageButton,
             logoutButton, withdrawalButton)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         editProfileButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(149)
             $0.leading.trailing.equalToSuperview().inset(15)
