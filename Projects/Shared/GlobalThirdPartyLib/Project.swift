@@ -12,6 +12,7 @@ let project = Project.makeModule(
         .SPM.Alamofire,
         .SPM.Swinject,
         .SPM.RxGesture,
-        .SPM.Kingfisher
+        .SPM.Kingfisher,
+        .SPM.ColorfulLog
     ]
 )
