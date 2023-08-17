@@ -1,4 +1,5 @@
 import UIKit
+import ColorfulLog
 import BaseFeature
 import DesignSystem
 import SnapKit
@@ -103,6 +104,8 @@ class HomeViewController: BaseVC<HomeViewModel> {
         
         underlineView.frame = segmentedControl.addSegmentedControlUnderLinde()
         segmentedControl.addSubview(underlineView)
+        
+        DLog(type: .error, text: "This is Error Test")
     }
     
     override func viewWillAppear(_ animated: Bool) {
