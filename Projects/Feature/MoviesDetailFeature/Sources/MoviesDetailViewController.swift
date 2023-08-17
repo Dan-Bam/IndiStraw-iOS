@@ -5,7 +5,7 @@ import SnapKit
 import Then
 import AVKit
 
-class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
+public class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
     private let thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Images.testImage.image
     }
@@ -26,7 +26,7 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(
             thumbnailImageView, movieTitleLabel,
             movieDescriptionLabel
@@ -35,7 +35,7 @@ class MoviesDetailViewController: BaseVC<MoviesDetailViewModel> {
         thumbnailImageView.addSubview(playImageIconView)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         thumbnailImageView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(21)
             $0.leading.trailing.equalToSuperview()

@@ -3,7 +3,7 @@ import BaseFeature
 import JwtStore
 import Alamofire
 
-class DetailAddressViewModel: BaseViewModel {
+public class DetailAddressViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     
     func requestToChangeAddress(data: ChangeAddressModel) {

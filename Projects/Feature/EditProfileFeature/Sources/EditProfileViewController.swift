@@ -5,7 +5,7 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 
-class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomSheetProtocol, SelectPhotoProtocol {
+public class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomSheetProtocol, SelectPhotoProtocol {
     private let disposeBag = DisposeBag()
     
     private let component = SelectPhotoViewButton()
@@ -45,7 +45,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
     }
     
     // MARK: - Method
-    override func configureVC() {
+    public override func configureVC() {
         navigationController?.navigationBar.tintColor = .white
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         component.delegate = self
@@ -62,7 +62,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
             }.disposed(by: disposeBag)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         viewModel.requestProfileInfo() { [weak self] result in
             switch result {
             case .success(let data):
@@ -80,7 +80,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
             }.disposed(by: disposeBag)
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(
             component, inputNameTextField,
             inputPhoneNumberTextField, inputAddressTextField,
@@ -89,7 +89,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
         )
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         component.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(22)
             $0.centerX.equalToSuperview()
@@ -134,7 +134,7 @@ class EditProfileViewController: BaseVC<EditProfileViewModel>, presentBottomShee
 }
 
 extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var newImage: UIImage? = nil
         
         if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
@@ -150,7 +150,7 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
 }
 
 extension EditProfileViewController {
-    func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
+    public func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
         switch type {
         case .photo:
             imagePickerController.sourceType = .photoLibrary
@@ -164,7 +164,7 @@ extension EditProfileViewController {
         self.present(imagePickerController, animated: true)
     }
     
-    func presentBottomSheet() {
+    public func presentBottomSheet() {
         let vc = SelectPhotoBottomSheet(delegate: self)
         vc.modalPresentationStyle = .pageSheet
         if let sheet = vc.sheetPresentationController {

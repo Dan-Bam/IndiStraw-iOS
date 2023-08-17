@@ -1,7 +1,8 @@
 import UIKit
 import BaseFeature
+import AddressFeature
 
-class DetailAddressCoordinator: BaseCoordinator {
+public class DetailAddressCoordinator: BaseCoordinator {
     func startDetailAddressCoordinator(zipCode: String, roadAddrPart: String) {
         let vm = DetailAddressViewModel(coordinator: self)
         let vc = DetailAddressViewController(viewModel: vm, zipCode: zipCode, roadAddrPart: roadAddrPart)
@@ -9,7 +10,7 @@ class DetailAddressCoordinator: BaseCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    override func navigate(to step: IndiStrawStep) {
+    public override func navigate(to step: IndiStrawStep) {
         switch step {
         case .popViewIsRequired:
             popViewIsRequired()

@@ -12,7 +12,7 @@ protocol ViewModelType {
     func transform(input: Input) -> Output
 }
 
-class AddressViewModel: BaseViewModel, ViewModelType {
+public class AddressViewModel: BaseViewModel, ViewModelType {
     var disposeBag = DisposeBag()
     
     var addressData = BehaviorRelay<[Juso]>(value: [])

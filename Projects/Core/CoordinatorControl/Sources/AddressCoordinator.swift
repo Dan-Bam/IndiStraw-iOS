@@ -1,4 +1,5 @@
 import BaseFeature
+import AddressFeature
 
 public class AddressCoordinator: BaseCoordinator {
     public override func start() {

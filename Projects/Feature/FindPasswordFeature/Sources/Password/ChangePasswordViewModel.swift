@@ -7,11 +7,11 @@ enum ChangePasswordErrorType: Error {
     case failedRequest
 }
 
-class ChangePasswordViewModel: BaseViewModel {
+public class ChangePasswordViewModel: BaseViewModel {
     
     var phoneNumber: String
     
-    init(coordinator: Coordinator, phoneNumber: String) {
+    public init(coordinator: Coordinator, phoneNumber: String) {
         self.phoneNumber = phoneNumber
         super.init(coordinator: coordinator)
     }
