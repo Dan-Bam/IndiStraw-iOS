@@ -15,21 +15,21 @@ public protocol InputPhoneNumberComponentProtocol: AnyObject {
 public class InputPhoneNumberComponent: UIView {
     public weak var delegate: InputPhoneNumberComponentProtocol?
     
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
-    var timerDisposable: Disposable?
+    private var timerDisposable: Disposable?
     
     public let inputPhoneNumberTextField = TextFieldBoxComponent().then {
         $0.keyboardType = .numberPad
         $0.setPlaceholer(text: "전화번호")
     }
     
-    let inputAuthNumberTextField = TextFieldBoxComponent().then {
+    private let inputAuthNumberTextField = TextFieldBoxComponent().then {
         $0.keyboardType = .numberPad
         $0.setPlaceholer(text: "인증번호")
     }
     
-    let countLabel = UILabel().then {
+    private let countLabel = UILabel().then {
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
@@ -41,7 +41,7 @@ public class InputPhoneNumberComponent: UIView {
         $0.setTitle("계속하기", for: .normal)
     }
     
-    let resendAuthNumberButton = UIButton().then {
+    private let resendAuthNumberButton = UIButton().then {
         $0.setTitle("인증번호가 안오셨나요? 다시받기", for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Suit.medium.font(size: 12)
     }
@@ -55,12 +55,9 @@ public class InputPhoneNumberComponent: UIView {
         bindUI()
         
         continueButton.rx.tap
-            .bind(with: self) { owner, _ in
-                if owner.continueButton.tag == 0 {
-                    owner.checkDuplicationPhoneNumber()
-                } else {
-                    owner.checkAuthCode()
-                }
+            .map { self.continueButton.tag == 0 }
+            .bind(with: self) { owner, bool in
+                bool ? owner.checkDuplicationPhoneNumber() : owner.checkAuthCode()
             }.disposed(by: disposeBag)
         
         resendAuthNumberButton.rx.tap
@@ -150,11 +147,10 @@ public class InputPhoneNumberComponent: UIView {
         
         inputPhoneNumberTextField.rx.text.orEmpty
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count >= 11 }
-            .bind(with: self) { owner, isValid in
-                if isValid {
-                    owner.inputPhoneNumberTextField.isEnabled = false
-                    owner.inputPhoneNumberTextField.resignFirstResponder()
-                }
+            .filter { $0 == true }
+            .bind(with: self) { owner, _ in
+                owner.inputPhoneNumberTextField.isEnabled = false
+                owner.inputPhoneNumberTextField.resignFirstResponder()
             }.disposed(by: disposeBag)
     }
     
@@ -205,7 +201,7 @@ extension InputPhoneNumberComponent{
     private func requestToSendAuthNumber(phoneNumber: String) {
         delegate?.requestToSendAuthNumber(phoneNumber: phoneNumber)
     }
-
+    
     private func resendButtonDidTap() {
         let phoneNumber = inputPhoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         delegate?.resendButtonDidTap(phoneNumber: phoneNumber)
