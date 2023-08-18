@@ -9,4 +9,8 @@ public class SettingViewModel: BaseViewModel {
     func pushChangePassword() {
         coordinator.navigate(to: .phoneNumberAuthIsRequired(type: .changePassword))
     }
+    
+    func setSigninVC() {
+        coordinator.navigate(to: .signinIsRequired)
+    }
 }

@@ -105,7 +105,8 @@ public class HomeViewController: BaseVC<HomeViewModel> {
         underlineView.frame = segmentedControl.addSegmentedControlUnderLinde()
         segmentedControl.addSubview(underlineView)
         
-        DLog(type: .error, text: "This is Error Test")
+        var a = 10
+        print(a)
     }
     
     public override func viewWillAppear(_ animated: Bool) {

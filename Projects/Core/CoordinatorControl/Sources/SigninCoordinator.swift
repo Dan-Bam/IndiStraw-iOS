@@ -11,6 +11,13 @@ public class SigninCoordinator: BaseCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     
+    public func setStart() {
+        let vm = SigninViewModel(coordinator: self)
+        let vc = SigninViewController(viewModel: vm)
+        
+        navigationController.setViewControllers([vc], animated: true)
+    }
+    
     public override func navigate(to step: IndiStrawStep) {
         switch step {
         case .phoneNumberAuthIsRequired(let type):

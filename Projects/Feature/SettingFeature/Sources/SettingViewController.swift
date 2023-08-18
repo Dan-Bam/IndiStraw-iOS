@@ -58,6 +58,12 @@ public class SettingViewController: BaseVC<SettingViewModel> {
             .bind(with: self) { owner, _ in
                 owner.viewModel.pushChangePassword()
             }.disposed(by: disposeBag)
+        
+        logoutButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("asdf")
+                owner.viewModel.setSigninVC()
+            }.disposed(by: disposeBag)
     }
     
     public override func addView() {
