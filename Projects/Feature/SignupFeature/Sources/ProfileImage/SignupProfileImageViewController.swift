@@ -7,21 +7,11 @@ import Utility
 import SelectPhotoFeature
 
 class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, SelectPhotoProtocol, presentBottomSheetProtocol {
-    func presentBottomSheet() {
-        let vc = SelectPhotoBottomSheet(delegate: self)
-        vc.modalPresentationStyle = .pageSheet
-        if let sheet = vc.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
-        }
-        present(vc, animated: true)
-    }
-    
     private let disposeBag = DisposeBag()
     
     private let component = SelectPhotoViewButton()
     
-    var isImageChanged = false
+    private var isImageChanged = false
     
     private let errorLabel = ErrorLabelComponent()
     
@@ -92,5 +82,17 @@ extension SignupProfileImageViewController: UIImagePickerControllerDelegate, UIN
         
         picker.dismiss(animated: true, completion: nil)
         isImageChanged = true
+    }
+}
+
+extension SignupProfileImageViewController {
+    func presentBottomSheet() {
+        let vc = SelectPhotoBottomSheet(delegate: self)
+        vc.modalPresentationStyle = .pageSheet
+        if let sheet = vc.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(vc, animated: true)
     }
 }
