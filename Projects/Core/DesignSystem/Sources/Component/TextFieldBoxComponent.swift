@@ -29,11 +29,9 @@ public class TextFieldBoxComponent: UITextField {
         eyeIconButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.iconTaped.toggle()
-                owner.isSecureTextEntry =  owner.iconTaped ? false : true
+                owner.isSecureTextEntry = owner.iconTaped ? false : true
             }.disposed(by: disposeBag)
     }
-    
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

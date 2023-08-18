@@ -61,7 +61,6 @@ public class SettingViewController: BaseVC<SettingViewModel> {
         
         logoutButton.rx.tap
             .bind(with: self) { owner, _ in
-                print("asdf")
                 owner.viewModel.setSigninVC()
             }.disposed(by: disposeBag)
     }
@@ -110,7 +109,6 @@ public class SettingViewController: BaseVC<SettingViewModel> {
         }
     }
 }
-
 
 extension CALayer {
     func addBorder(_ arr_edge: [UIRectEdge], color: UIColor, width: CGFloat) {

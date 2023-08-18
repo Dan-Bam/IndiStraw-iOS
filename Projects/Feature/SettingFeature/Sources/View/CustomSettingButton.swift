@@ -4,7 +4,6 @@ import SnapKit
 import Then
 import DesignSystem
 
-
 class CustomSettingButton: UIButton {
     var type: String?
     
