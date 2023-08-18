@@ -53,9 +53,8 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         component.delegate = self
         
         continueButton.rx.tap
-            .map { self.isImageChanged }
-            .bind(with: self) { owner, isChanged in
-                let image = isChanged ? owner.component.photoImageButton.currentImage : nil
+            .bind(with: self) { owner, _ in
+                let image = owner.isImageChanged ? owner.component.photoImageButton.currentImage : nil
                 owner.viewModel.pushInputIDVC(image: image)
             }.disposed(by: disposeBag)
     }
