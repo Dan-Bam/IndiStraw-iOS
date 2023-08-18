@@ -25,7 +25,7 @@ public class ChangePasswordViewController: BaseVC<ChangePasswordViewModel>, Inpu
 extension ChangePasswordViewController {
     public func isValidPassword(password: String) {
         guard viewModel.isValidPassword(password: password) else {
-            component.errorLabel.text = "숫자와 대소문자, 특수문자를 포함해주세요."
+            component.changeErrorText(text: "숫자와 대소문자, 특수문자를 포함해주세요.")
             component.isValidPassword = false
             return
         }
@@ -37,9 +37,9 @@ extension ChangePasswordViewController {
             case .success:
                 self?.viewModel.popToRootVC()
             case .failure(.sameAsExistingPassword):
-                self?.component.errorLabel.text = "기존 비밀번호와 같은 비밀번호입니다."
+                self?.component.changeErrorText(text: "기존 비밀번호와 같은 비밀번호입니다.")
             case .failure(.failedRequest):
-                self?.component.errorLabel.text = "비밀번호 변경에 실패했습니다."
+                self?.component.changeErrorText(text: "비밀번호 변경에 실패했습니다.")
             }
         }
     }
