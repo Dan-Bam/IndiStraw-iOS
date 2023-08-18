@@ -34,7 +34,7 @@ public class InputPhoneNumberComponent: UIView {
         $0.font = DesignSystemFontFamily.Suit.medium.font(size: 14)
     }
     
-    public let errorLabel = ErrorLabelComponent()
+    private let errorLabel = ErrorLabelComponent()
     
     public let continueButton = ButtonComponent().then {
         $0.tag = 0
@@ -98,6 +98,10 @@ public class InputPhoneNumberComponent: UIView {
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(54)
         }
+    }
+    
+    public func changeErrorText(text: String?) {
+        errorLabel.text = text
     }
     
     public func updateAuthNumberTextFieldLayout() {

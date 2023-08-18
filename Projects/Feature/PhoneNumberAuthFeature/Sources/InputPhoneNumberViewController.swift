@@ -49,11 +49,11 @@ extension InputPhoneNumberViewController {
             case .success:
                 self?.requestToSendAuthNumber(phoneNumber: phoneNumber)
             case .failure(.cantFindPhoneNumber):
-                self?.component.errorLabel.text = "등록되지 않은 전화번호 입니다."
+                self?.component.changeErrorText(text: "등록되지 않은 전화번호 입니다.")
             case .failure(.duplicatePhoneNumber):
-                self?.component.errorLabel.text = "중복된 전화번호 입니다."
+                self?.component.changeErrorText(text: "중복된 전화번호 입니다.")
             default:
-                self?.component.errorLabel.text = "인증에 실패했습니다."
+                self?.component.changeErrorText(text: "인증에 실패했습니다.")
             }
         }
     }
@@ -64,16 +64,16 @@ extension InputPhoneNumberViewController {
             case .success:
                 DispatchQueue.main.async {
                     self?.component.continueButton.tag = 1
-                    self?.component.errorLabel.text = nil
+                    self?.component.changeErrorText(text: nil)
                     self?.navigationItem.title = "인증번호를 입력해 주세요."
                     self?.component.continueButton.setTitle("인증번호 확인", for: .normal)
                     self?.component.updateAuthNumberTextFieldLayout()
                     self?.component.setupPossibleBackgroundTimer()
                 }
             case .failure(.tooManyRequestException):
-                self?.component.errorLabel.text = "최대 요청 횟수를 초과했습니다. 한 시간 후에 시도해주세요."
+                self?.component.changeErrorText(text: "최대 요청 횟수를 초과했습니다. 한 시간 후에 시도해주세요.")
             case .failure(.cantSendAuthNumber):
-                self?.component.errorLabel.text = "인증번호 요청을 실패했습니다."
+                self?.component.changeErrorText(text: "인증번호 요청을 실패했습니다.")
             }
         }
     }
@@ -84,9 +84,9 @@ extension InputPhoneNumberViewController {
             case .success:
                 self?.component.setupPossibleBackgroundTimer()
             case .failure(.cantSendAuthNumber):
-                self?.component.errorLabel.text = "인증번호 전송에 실패했습니다."
+                self?.component.changeErrorText(text: "인증번호 전송에 실패했습니다.")
             case .failure(.tooManyRequestException):
-                self?.component.errorLabel.text = "최대 요청횟수를 초과했습니다. 1시간 후에 다시 시도해주세요."
+                self?.component.changeErrorText(text: "최대 요청횟수를 초과했습니다. 1시간 후에 다시 시도해주세요.")
             }
         }
     }
@@ -106,9 +106,9 @@ extension InputPhoneNumberViewController {
                     
                 }
             case .failure(.cantSendAuthNumber):
-                self.component.errorLabel.text = "인증번호가 틀렸습니다."
+                self.component.changeErrorText(text: "인증번호가 틀렸습니다.")
             case .failure(.tooManyRequestException):
-                self.component.errorLabel.text = "최대 인증확인 요청 횟수를 초과했습니다. 1시간 후에 다시 시도해주세요"
+                self.component.changeErrorText(text: "최대 인증확인 요청 횟수를 초과했습니다. 1시간 후에 다시 시도해주세요")
             }
         }
     }
