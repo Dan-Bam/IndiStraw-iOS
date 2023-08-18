@@ -1,10 +1,11 @@
 import Foundation
 import BaseFeature
+import FindPasswordFeature
 
-public class FindIdCoordinator: BaseCoordinator {
-    public func startFindIdCoordinator(phoneNumber: String) {
-        let vm = FindIdViewModel(coordinator: self)
-        let vc = FindIdViewController(viewModel: vm, phoneNumber: phoneNumber)
+public class ChangePasswordCoordinator: BaseCoordinator {
+    public func startChangePasswordCoordinator(phoneNumber: String) {
+        let vm = ChangePasswordViewModel(coordinator: self, phoneNumber: phoneNumber)
+        let vc = ChangePasswordViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
     }
@@ -19,7 +20,7 @@ public class FindIdCoordinator: BaseCoordinator {
     }
 }
 
-extension FindIdCoordinator {
+extension ChangePasswordCoordinator {
     func popToRootIsRequired() {
         navigationController.popToRootViewController(animated: true)
     }

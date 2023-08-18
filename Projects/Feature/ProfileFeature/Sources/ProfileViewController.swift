@@ -10,7 +10,7 @@ enum ContentSizeKey {
     static let key = "contentSize"
 }
 
-class ProfileViewController: BaseVC<ProfileViewModel> {
+public class ProfileViewController: BaseVC<ProfileViewModel> {
     private let disposeBag = DisposeBag()
     
     private let settingButton = UIBarButtonItem().then {
@@ -82,7 +82,7 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         $0.register(FundingCell.self, forCellReuseIdentifier: FundingCell.identifier)
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationItem.rightBarButtonItem = settingButton
         movieSegmentedControl.removeBackgroundAndDidiver()
         fundingSegmentedControl.removeBackgroundAndDidiver()
@@ -145,16 +145,16 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
             }.disposed(by: disposeBag)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.fundingTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         self.fundingTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
                 if let newValue = change?[.newKey] as? CGSize {
@@ -167,7 +167,7 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         }
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(
             profileImageButton, userNameLabel,
             movieSegmentedControl, moviesCollectionView,
@@ -175,7 +175,7 @@ class ProfileViewController: BaseVC<ProfileViewModel> {
         )
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         profileImageButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(17)
             $0.centerX.equalToSuperview()

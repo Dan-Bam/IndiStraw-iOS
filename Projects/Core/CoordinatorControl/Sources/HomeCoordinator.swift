@@ -1,9 +1,9 @@
-import Foundation
 import BaseFeature
 import MoviesDetailFeature
 import ProfileFeature
 import CrowdFundingFeature
 import AddMoviesFeature
+import HomeFeature
 
 public class HomeCoordinator: BaseCoordinator {
     public override func start() {

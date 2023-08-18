@@ -13,7 +13,7 @@ enum ContentSizeKey {
     static let key = "contentSize"
 }
 
-class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
+public class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
     var disposeBag = DisposeBag()
     
     var attachmentBehaviorRelay = BehaviorRelay<[String]>(value: [])
@@ -128,7 +128,7 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
         $0.setTitle("펀딩하기", for: .normal)
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         attachmentBehaviorRelay
             .asDriver()
@@ -147,7 +147,7 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
                 }.disposed(by: disposeBag)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         self.attachmentListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         self.rewardListTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
         
@@ -161,12 +161,12 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
             }.disposed(by: disposeBag)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         self.attachmentListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
         self.rewardListTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ContentSizeKey.key {
             if object is UITableView {
                 attachmentListTableView.snp.updateConstraints {
@@ -184,7 +184,7 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
         }
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
@@ -201,7 +201,7 @@ class CrowdFundingDetailViewController: BaseVC<CrowdFundingDetailViewModel> {
         )
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }

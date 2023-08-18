@@ -4,7 +4,7 @@ import BaseFeature
 import RxSwift
 import RxCocoa
 
-class CrowdFundingViewAllViewController: BaseVC<CrowdFundingViewAllViewModel> {
+public class CrowdFundingViewAllViewController: BaseVC<CrowdFundingViewAllViewModel> {
     private let disposeBag = DisposeBag()
     
     var fundingListData = BehaviorRelay<[FundingList]>(value: [])
@@ -15,7 +15,7 @@ class CrowdFundingViewAllViewController: BaseVC<CrowdFundingViewAllViewModel> {
         $0.register(CrowdFundingCell.self, forCellReuseIdentifier: CrowdFundingCell.identifier)
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         crowdFundingListTableView.rx.modelSelected(FundingList.self)
             .bind(with: self) { owner, arg in
                 owner.viewModel.pushCrowdFundingDetailVC(idx: arg.idx)
@@ -36,11 +36,11 @@ class CrowdFundingViewAllViewController: BaseVC<CrowdFundingViewAllViewModel> {
                 }.disposed(by: disposeBag)
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubview(crowdFundingListTableView)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         crowdFundingListTableView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }

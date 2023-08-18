@@ -1,12 +1,16 @@
 import Foundation
 import BaseFeature
 
-class SettingViewModel: BaseViewModel {
+public class SettingViewModel: BaseViewModel {
     func pushEditProfileVC() {
         coordinator.navigate(to: .editProfileIsRequired)
     }
     
     func pushChangePassword() {
         coordinator.navigate(to: .phoneNumberAuthIsRequired(type: .changePassword))
+    }
+    
+    func setSigninVC() {
+        coordinator.navigate(to: .signinIsRequired)
     }
 }

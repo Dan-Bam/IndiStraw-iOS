@@ -5,7 +5,7 @@ import JwtStore
 import RxSwift
 import RxCocoa
 
-class HomeViewModel: BaseViewModel {
+public class HomeViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     var crowdFundingCurrentPage = 0
     var historyMoviesCurrentPage = 0

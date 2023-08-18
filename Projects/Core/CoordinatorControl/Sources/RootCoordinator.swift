@@ -2,6 +2,7 @@ import UIKit
 import BaseFeature
 import SigninFeature
 import SignupFeature
+import RootFeature
 
 public class RootCoordinator: BaseCoordinator {
     public override func start() {

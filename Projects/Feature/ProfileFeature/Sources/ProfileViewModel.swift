@@ -5,7 +5,7 @@ import JwtStore
 import RxSwift
 import RxCocoa
 
-class ProfileViewModel: BaseViewModel {
+public class ProfileViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     
     func reqeustMyFunding() -> Observable<[MyCrowdFundingModel]> {

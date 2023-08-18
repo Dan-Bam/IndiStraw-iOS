@@ -3,7 +3,7 @@ import BaseFeature
 import RxSwift
 import RxCocoa
 
-class AddressViewController: BaseVC<AddressViewModel> {
+public class AddressViewController: BaseVC<AddressViewModel> {
     private let disposeBag = DisposeBag()
     
     private let searchTextField = UITextField().then {
@@ -57,19 +57,19 @@ class AddressViewController: BaseVC<AddressViewModel> {
             }.disposed(by: disposeBag)
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationItem.titleView = searchTextField
         navigationItem.titleView?.backgroundColor = .black
         
         bind()
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(searchTextField, addressTableView)
         searchTextField.addSubview(searchButton)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         searchTextField.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(24)
             $0.width.equalTo(308)

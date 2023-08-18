@@ -6,7 +6,7 @@ import Then
 import RxSwift
 import RxCocoa
 
-class FindIdViewController: BaseVC<FindIdViewModel> {
+public class FindIdViewController: BaseVC<FindIdViewModel> {
     private let disposeBag = DisposeBag()
     
     private let inputIdTextField = TextFieldBoxComponent().then {
@@ -19,7 +19,7 @@ class FindIdViewController: BaseVC<FindIdViewModel> {
     
     var phoneNumber: String
     
-    init(viewModel: FindIdViewModel, phoneNumber: String) {
+    public init(viewModel: FindIdViewModel, phoneNumber: String) {
         self.phoneNumber = phoneNumber
         
         super.init(viewModel: viewModel)
@@ -29,7 +29,7 @@ class FindIdViewController: BaseVC<FindIdViewModel> {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationItem.title = "현재 아이디"
         
         viewModel.requestToFindId(phoneNumber: phoneNumber) { [weak self] result in
@@ -48,11 +48,11 @@ class FindIdViewController: BaseVC<FindIdViewModel> {
         
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(inputIdTextField, confirmButton)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         inputIdTextField.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(96)
             $0.leading.trailing.equalToSuperview().inset(32)

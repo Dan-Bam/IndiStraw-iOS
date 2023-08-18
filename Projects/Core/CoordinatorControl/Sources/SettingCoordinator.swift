@@ -1,6 +1,7 @@
 import BaseFeature
 import EditProfileFeature
 import PhoneNumberAuthFeature
+import SettingFeature
 
 public class SettingCoordinator: BaseCoordinator {
     public override func start() {
@@ -16,6 +17,8 @@ public class SettingCoordinator: BaseCoordinator {
             editProfileIsRequired()
         case .phoneNumberAuthIsRequired(let type):
             phoneNumberAuthIsRequired(type: type)
+        case .signinIsRequired:
+            signinIsRequired()
         default:
             return
         }
@@ -33,5 +36,10 @@ extension SettingCoordinator {
     func phoneNumberAuthIsRequired(type: InputPhoneNumberType) {
         let vc = InputPhoneNumberCoordinator(navigationController: navigationController)
         vc.startInputPhoneNumberCoordinator(type: type, title: "전화번호 변경")
+    }
+    
+    func signinIsRequired() {
+        let vc = SigninCoordinator(navigationController: navigationController)
+        vc.setStart()
     }
 }

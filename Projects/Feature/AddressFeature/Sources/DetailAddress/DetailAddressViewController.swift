@@ -6,7 +6,7 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 
-class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
+public class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
     private let disposeBag = DisposeBag()
     
     var zipCode: String
@@ -36,7 +36,7 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
         $0.setTitle("확인하기", for: .normal)
     }
     
-    init(viewModel: DetailAddressViewModel, zipCode: String, roadAddrPart: String) {
+    public init(viewModel: DetailAddressViewModel, zipCode: String, roadAddrPart: String) {
         self.zipCode = zipCode
         self.roadAddrPart = roadAddrPart
         
@@ -51,7 +51,7 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         confirmButton.rx.tap
             .bind(with: self) { owner, _ in
                 let detailAddress = owner.inputDetailAddressTextField.text!
@@ -65,7 +65,7 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
             }.disposed(by: disposeBag)
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(
             nowAddressLabel, zipCodeLabel,
             roadAddrPartLabel, inputDetailAddressTextField,
@@ -73,7 +73,7 @@ class DetailAddressViewController: BaseVC<DetailAddressViewModel> {
         )
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         nowAddressLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(44)
             $0.leading.equalToSuperview().inset(32)

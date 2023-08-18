@@ -2,11 +2,9 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: Environment.appName,
-    platform: .iOS,
-    product: .app,
+    name: "CoordinatorControl",
+    product: .framework,
     dependencies: [
-        .Feature.BaseFeature,
         .Feature.RootFeature,
         .Feature.SigninFeature,
         .Feature.SignupFeature,
@@ -23,15 +21,8 @@ let project = Project.makeModule(
         .Feature.MoviesDetailFeature,
         .Feature.CrowdFundingFeature,
         
-        .Core.JwtStore,
-        .Core.DesignSystem,
-        .Core.CoordinatorControl,
-        
-        .Domain.RouterDomain,
-        
-        .Shared.Utility,
-        .Shared.GlobalThirdPartyLib
+        .Shared.GlobalThirdPartyLib,
+        .Shared.Utility
     ],
-    resources: ["Resources/**"],
-    infoPlist: .file(path: "Support/Info.plist")
+    resources: ["Resources/**"]
 )

@@ -5,7 +5,7 @@ import RxSwift
 import RxCocoa
 import Alamofire
 
-class CrowdFundingViewAllViewModel: BaseViewModel {
+public class CrowdFundingViewAllViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     let fundingListCurrentPage = 0
     

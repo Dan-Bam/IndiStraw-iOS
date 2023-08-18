@@ -1,6 +1,7 @@
 import BaseFeature
 import PhoneNumberAuthFeature
 import HomeFeature
+import SigninFeature
 
 public class SigninCoordinator: BaseCoordinator {
     public override func start() {
@@ -8,6 +9,13 @@ public class SigninCoordinator: BaseCoordinator {
         let vc = SigninViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    public func setStart() {
+        let vm = SigninViewModel(coordinator: self)
+        let vc = SigninViewController(viewModel: vm)
+        
+        navigationController.setViewControllers([vc], animated: true)
     }
     
     public override func navigate(to step: IndiStrawStep) {

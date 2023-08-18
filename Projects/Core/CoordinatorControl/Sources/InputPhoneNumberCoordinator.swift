@@ -2,6 +2,7 @@ import Foundation
 import BaseFeature
 import FindIdFeature
 import FindPasswordFeature
+import PhoneNumberAuthFeature
 
 public class InputPhoneNumberCoordinator: BaseCoordinator {
     public func startInputPhoneNumberCoordinator(type: InputPhoneNumberType, title: String) {

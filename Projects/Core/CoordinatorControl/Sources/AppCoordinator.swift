@@ -2,7 +2,6 @@ import UIKit
 import Alamofire
 import JwtStore
 import BaseFeature
-import RootFeature  
 import HomeFeature
 
 open class AppCoordinator: Coordinator {

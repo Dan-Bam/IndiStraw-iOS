@@ -47,7 +47,7 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
                 case .success:
                     self?.presentBottomSheet()
                 case .failure(.failedRequest):
-                    self?.component.errorLabel.text = "회원가입에 실패했습니다."
+                    self?.component.changeErrorText(text: "회원가입에 실패했습니다.")
                 }
             }
     }
@@ -79,7 +79,7 @@ extension SignupPasswordViewController {
 extension SignupPasswordViewController {
     func isValidPassword(password: String) {
         guard viewModel.isValidPassword(password: password) else {
-            component.errorLabel.text = "숫자와 대소문자, 특수문자를 포함해주세요."
+            component.changeErrorText(text: "숫자와 대소문자, 특수문자를 포함해주세요.")
             component.isValidPassword = false
             return
         }
@@ -95,7 +95,7 @@ extension SignupPasswordViewController {
                         data: data
                     )
                 case .failure:
-                    self?.component.errorLabel.text = "회원가입에 실패했습니다."
+                    self?.component.changeErrorText(text: "회원가입에 실패했습니다.")
                 }
             }
         } else {

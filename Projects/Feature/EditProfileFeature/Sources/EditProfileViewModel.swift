@@ -4,7 +4,7 @@ import Alamofire
 import JwtStore
 import Swinject
 
-class EditProfileViewModel: BaseViewModel {
+public class EditProfileViewModel: BaseViewModel {
     var container = DIContainer.shared.resolve(JwtStore.self)!
     
     var profileUrl: String?

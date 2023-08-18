@@ -2,7 +2,7 @@ import Foundation
 import BaseFeature
 import Alamofire
 
-class FindIdViewModel: BaseViewModel {
+public class FindIdViewModel: BaseViewModel {
     func requestToFindId(
         phoneNumber: String,
         completion: @escaping (Result<FindIdModelDecodable, Error>) -> Void = { _ in }) {

@@ -5,12 +5,12 @@ import RxCocoa
 import Alamofire
 import JwtStore
 
-class CrowdFundingDetailViewModel: BaseViewModel {
+public class CrowdFundingDetailViewModel: BaseViewModel {
     let container = DIContainer.shared.resolve(JwtStore.self)!
     var crowdFundingCurrentPage = -1
     var idx: Int
     
-    init(coordinator: Coordinator, idx: Int) {
+    public init(coordinator: Coordinator, idx: Int) {
         self.idx = idx
         super.init(coordinator: coordinator)
     }

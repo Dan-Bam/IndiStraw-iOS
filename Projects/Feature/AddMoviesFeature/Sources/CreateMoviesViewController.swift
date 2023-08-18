@@ -11,7 +11,7 @@ enum MovieDescriptionText {
     static var placeHolder = "소개글을 입력해 주세요."
 }
 
-class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
+public class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
                                   RemoveCollectionViewCellHandlerProtocol {
     private let addOtherImageBehaviorRelay = BehaviorRelay<[UIImage]>(value: [])
     
@@ -148,7 +148,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
         $0.setTitle("계속하기", for: .normal)
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationController?.navigationBar.prefersLargeTitles = false
         addOtherImageCollectionView.delegate = self
         
@@ -171,7 +171,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
                 }.disposed(by: disposeBag)
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubview(scrollView)
         
         scrollView.addSubview(contentView)
@@ -196,7 +196,7 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
         fundingTextLabel.addSubview(fundingSwitch)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         scrollView.snp.makeConstraints {
             $0.top.bottom.width.equalTo(view.safeAreaLayoutGuide)
         }
@@ -315,13 +315,13 @@ class CreateMoviesViewController: BaseVC<CreateMoviesViewModel>,
 }
 
 extension CreateMoviesViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
+    public func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == MovieDescriptionText.placeHolder {
             textView.text = ""
         }
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
+    public func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = MovieDescriptionText.placeHolder
             textView.textColor = .lightGray
@@ -330,7 +330,7 @@ extension CreateMoviesViewController: UITextViewDelegate {
 }
 
 extension CreateMoviesViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var newImage: UIImage? = nil
         
         if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
@@ -348,7 +348,7 @@ extension CreateMoviesViewController: UIImagePickerControllerDelegate, UINavigat
 }
 
 extension CreateMoviesViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 162, height: collectionView.frame.height)
     }
 }

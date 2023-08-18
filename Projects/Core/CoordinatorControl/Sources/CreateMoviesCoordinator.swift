@@ -1,4 +1,5 @@
 import BaseFeature
+import AddMoviesFeature
 
 public class CreateMoviesCoordinator: BaseCoordinator {
     public override func start() {

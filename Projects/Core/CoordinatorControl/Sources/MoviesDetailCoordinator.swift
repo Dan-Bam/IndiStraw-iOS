@@ -1,4 +1,5 @@
 import BaseFeature
+import MoviesDetailFeature
 
 public class MoviesDetailCoordinator: BaseCoordinator {
     public func startMoviesDetailCoordinator(movieIdx: Int) {
