@@ -15,7 +15,13 @@ public class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>,
     var phoneNumber: String
     var profileImage: UIImage?
     
-    public init(viewModel: SignupPasswordViewModel, id: String, name: String, phoneNumber: String, profileImage: UIImage?) {
+    public init(
+        viewModel: SignupPasswordViewModel,
+        id: String,
+        name: String,
+        phoneNumber: String,
+        profileImage: UIImage?
+    ) {
         self.id = id
         self.name = name
         self.phoneNumber = phoneNumber
