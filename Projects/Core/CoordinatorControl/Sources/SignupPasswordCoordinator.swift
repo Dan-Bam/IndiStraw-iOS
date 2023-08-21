@@ -1,5 +1,6 @@
 import UIKit
 import BaseFeature
+import SignupFeature
 
 public class SignupPaswordCoordinator: BaseCoordinator {
     public func startSignupPaswordCoordinator(id: String, name: String, phoneNumber: String, profileImage: UIImage?) {

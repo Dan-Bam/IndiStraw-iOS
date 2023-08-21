@@ -1,5 +1,6 @@
 import Foundation
 import BaseFeature
+import SignupFeature
 
 public class SignupNameCoordinator: BaseCoordinator {
     public override func start() {

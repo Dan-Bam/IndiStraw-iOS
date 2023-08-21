@@ -1,10 +1,11 @@
 import UIKit
 import BaseFeature
+import SignupFeature
 
-public class SignupProfileImageCoordinator: BaseCoordinator {
+public class SignupProfileCoordinator: BaseCoordinator {
     public func startSignupProfileImageCoordinator(name: String, phoneNumber: String) {
-        let vm = SignupProfileImageViewModel(coordinator: self, name: name, phoneNumber: phoneNumber)
-        let vc = SignupProfileImageViewController(viewModel: vm)
+        let vm = SignupProfileViewModel(coordinator: self, name: name, phoneNumber: phoneNumber)
+        let vc = SignupProfileViewController(viewModel: vm)
         
         navigationController.pushViewController(vc, animated: true)
     }
@@ -19,7 +20,7 @@ public class SignupProfileImageCoordinator: BaseCoordinator {
     }
 }
 
-extension SignupProfileImageCoordinator {
+extension SignupProfileCoordinator {
     func inputIDIsRequired(image: UIImage?, name: String, phoneNumber: String) {
         let vc = SignupIDCoordiantor(navigationController: navigationController)
         vc.parentCoordinator = self

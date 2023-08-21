@@ -1,5 +1,6 @@
 import Foundation
 import BaseFeature
+import SignupFeature
 
 class SignupPhoneNumberCoordinator: BaseCoordinator {
     func startSignupPhoneNumberVC(name: String) {
@@ -21,7 +22,7 @@ class SignupPhoneNumberCoordinator: BaseCoordinator {
 
 extension SignupPhoneNumberCoordinator {
     func selectPhotoIsRequired(name: String, phoneNumber: String) {
-        let vc = SignupProfileImageCoordinator(navigationController: navigationController)
+        let vc = SignupProfileCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.startSignupProfileImageCoordinator(name: name, phoneNumber: phoneNumber)

@@ -4,7 +4,8 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 
-class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeButtonDidTapProtocol, InputPasswordComponentProtocol {
+public class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>,
+                                           AllAgreeButtonDidTapProtocol, InputPasswordComponentProtocol {
     
     let bottomSheet = PrivacyBottomSheet()
     let component = InputPasswordComponent()
@@ -14,7 +15,7 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
     var phoneNumber: String
     var profileImage: UIImage?
     
-    init(viewModel: SignupPasswordViewModel, id: String, name: String, phoneNumber: String, profileImage: UIImage?) {
+    public init(viewModel: SignupPasswordViewModel, id: String, name: String, phoneNumber: String, profileImage: UIImage?) {
         self.id = id
         self.name = name
         self.phoneNumber = phoneNumber
@@ -52,17 +53,17 @@ class SignupPasswordViewController: BaseVC<SignupPasswordViewModel>, AllAgreeBut
             }
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationItem.title = "비밀번호를 입력해 주세요."
         bottomSheet.delegate = self
         component.delegate = self
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubview(component)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         component.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -77,7 +78,7 @@ extension SignupPasswordViewController {
 }
 
 extension SignupPasswordViewController {
-    func isValidPassword(password: String) {
+    public func isValidPassword(password: String) {
         guard viewModel.isValidPassword(password: password) else {
             component.changeErrorText(text: "숫자와 대소문자, 특수문자를 포함해주세요.")
             component.isValidPassword = false
@@ -85,7 +86,7 @@ extension SignupPasswordViewController {
         }
     }
     
-    func confirmButtonDidTap(password: String) {
+    public func confirmButtonDidTap(password: String) {
         if let image = profileImage {
             viewModel.requestToUploadImage(image: image, password: password) { [weak self] result in
                 switch result {

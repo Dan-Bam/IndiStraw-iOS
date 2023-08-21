@@ -4,7 +4,7 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 
-class SignupNameViewController: BaseVC<SignupNameViewModel> {
+public class SignupNameViewController: BaseVC<SignupNameViewModel> {
     private let disposeBag = DisposeBag()
     
     private let inputNameTextField = TextFieldBoxComponent().then {
@@ -17,7 +17,7 @@ class SignupNameViewController: BaseVC<SignupNameViewModel> {
     
     private let errorLabel = ErrorLabelComponent()
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationItem.title = "이름을 입력해주세요."
         
         continueButton.rx.tap
@@ -31,11 +31,11 @@ class SignupNameViewController: BaseVC<SignupNameViewModel> {
             }.disposed(by: disposeBag)
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(inputNameTextField, continueButton, errorLabel)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         inputNameTextField.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(171)
             $0.leading.trailing.equalToSuperview().inset(32)

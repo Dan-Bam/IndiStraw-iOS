@@ -6,7 +6,8 @@ import RxCocoa
 import Utility
 import SelectPhotoFeature
 
-class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, SelectPhotoProtocol, presentBottomSheetProtocol {
+public class SignupProfileViewController: BaseVC<SignupProfileViewModel>,
+                                               SelectPhotoProtocol, presentBottomSheetProtocol {
     private let disposeBag = DisposeBag()
     
     private let component = SelectPhotoViewButton()
@@ -22,7 +23,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     private let imagePickerController = UIImagePickerController()
     
     // MARK: - Method
-    func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
+    public func selectionPhotoBottomSheetButtonDidTap(type: PhotoType) {
         switch type {
         case .photo:
             imagePickerController.sourceType = .photoLibrary
@@ -36,7 +37,7 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
         self.present(imagePickerController, animated: true)
     }
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationItem.title = "프로필 이미지를 선택해주세요."
         
         imagePickerController.delegate = self
@@ -49,11 +50,11 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
             }.disposed(by: disposeBag)
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubviews(component, continueButton)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         component.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(54)
             $0.centerX.equalToSuperview()
@@ -69,8 +70,8 @@ class SignupProfileImageViewController: BaseVC<SignupProfileImageViewModel>, Sel
     }
 }
 
-extension SignupProfileImageViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+extension SignupProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var newImage: UIImage? = nil
         
         if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
@@ -85,8 +86,8 @@ extension SignupProfileImageViewController: UIImagePickerControllerDelegate, UIN
     }
 }
 
-extension SignupProfileImageViewController {
-    func presentBottomSheet() {
+extension SignupProfileViewController {
+    public func presentBottomSheet() {
         let vc = SelectPhotoBottomSheet(delegate: self)
         vc.modalPresentationStyle = .pageSheet
         if let sheet = vc.sheetPresentationController {
