@@ -5,20 +5,21 @@ import RxSwift
 import RxCocoa
 import Utility
 
-class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel>, InputPhoneNumberComponentProtocol  {
+public class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel>,
+                                              InputPhoneNumberComponentProtocol  {
     let component = InputPhoneNumberComponent()
     
-    override func configureVC() {
+    public override func configureVC() {
         navigationItem.title = "전화번호를 입력해주세요."
         
         component.delegate = self
     }
     
-    override func addView() {
+    public override func addView() {
         view.addSubview(component)
     }
     
-    override func setLayout() {
+    public override func setLayout() {
         component.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -26,7 +27,7 @@ class SignupPhoneNumberViewController: BaseVC<SignupPhoneNumberViewModel>, Input
 }
 
 extension SignupPhoneNumberViewController {
-    func checkDuplicationPhoneNumber(phoneNumber: String) {
+    public func checkDuplicationPhoneNumber(phoneNumber: String) {
         viewModel.requestToCheckDuplicationPhoneNumber(phoneNumber: phoneNumber) { [weak self] result in
             switch result {
             case .success:
@@ -39,7 +40,7 @@ extension SignupPhoneNumberViewController {
         }
     }
     
-    func requestToSendAuthNumber(phoneNumber: String) {
+    public func requestToSendAuthNumber(phoneNumber: String) {
         viewModel.requestToSendAuthNumber(phoneNumber: phoneNumber) { [weak self] response in
             switch response {
             case .success:
@@ -57,7 +58,7 @@ extension SignupPhoneNumberViewController {
         }
     }
 
-    func resendButtonDidTap(phoneNumber: String) {
+    public func resendButtonDidTap(phoneNumber: String) {
         viewModel.requestToSendAuthNumber(phoneNumber: phoneNumber) { [weak self] result in
             switch result {
             case .success:
@@ -70,7 +71,7 @@ extension SignupPhoneNumberViewController {
         }
     }
     
-    func checkAuthCode(authCode: String, phoneNumber: String) {
+    public func checkAuthCode(authCode: String, phoneNumber: String) {
         viewModel.requestToCheckAuthNumber(authCode: authCode, phoneNumber: phoneNumber) { [weak self] result in
             switch result {
             case .success:

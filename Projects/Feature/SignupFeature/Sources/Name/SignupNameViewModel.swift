@@ -1,7 +1,7 @@
 import Foundation
 import BaseFeature
 
-class SignupNameViewModel: BaseViewModel {
+public class SignupNameViewModel: BaseViewModel {
     func pushInputPhoneNumberVC(name: String) {
         coordinator.navigate(to: .inputPhoneNumberIsRequired(name: name))
     }

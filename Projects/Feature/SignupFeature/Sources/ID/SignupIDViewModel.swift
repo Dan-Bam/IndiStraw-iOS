@@ -2,12 +2,12 @@ import UIKit
 import BaseFeature
 import Alamofire
 
-class SignupIDViewModel: BaseViewModel {
+public class SignupIDViewModel: BaseViewModel {
     var image: UIImage?
     var name: String
     var phoneNumber: String
     
-    init(coordinator: Coordinator, image: UIImage?, name: String, phoneNumber: String) {
+    public init(coordinator: Coordinator, image: UIImage?, name: String, phoneNumber: String) {
         self.image = image
         self.name = name
         self.phoneNumber = phoneNumber

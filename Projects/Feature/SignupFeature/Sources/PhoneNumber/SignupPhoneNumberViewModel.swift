@@ -2,10 +2,10 @@ import Foundation
 import BaseFeature
 import Alamofire
 
-class SignupPhoneNumberViewModel: BaseViewModel {
+public class SignupPhoneNumberViewModel: BaseViewModel {
     var name: String
     
-    init(coordinator: Coordinator, name: String) {
+    public init(coordinator: Coordinator, name: String) {
         self.name = name
         super.init(coordinator: coordinator)
     }
